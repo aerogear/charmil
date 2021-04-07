@@ -1,4 +1,4 @@
-package cmd
+package pkg
 
 import (
 	"fmt"
@@ -6,15 +6,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var removeCmd = &cobra.Command{
-	Use:   "Remove Extension",
+var installCmd = &cobra.Command{
+	Use:   "Install Extension",
 	Short: "",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("remove called")
+		fmt.Println("install called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(removeCmd)
+	rootCmd.AddCommand(installCmd)
 }

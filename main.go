@@ -1,7 +1,7 @@
 package main
 
-import "charmil/cmd"
+import "charmil/pkg"
 
 func main() {
-	cmd.Execute()
+	pkg.Execute()
 }
