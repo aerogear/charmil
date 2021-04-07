@@ -23,7 +23,6 @@ TODO more info
 
 `$ charmil extensions remove <name>@<version>`
 
-`$ charmil extentions <name>@<version> <commands>` # installed extensions will become child of rootCLI (need review)
 
 ## Getting started
 
