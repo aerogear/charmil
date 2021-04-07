@@ -29,7 +29,12 @@ TODO
 
 ### Creating registry of CLIs
 
-TODO - we need example
+TODO - we need example but not fully featured. Some good start
+
+
+For full example of registry look into:
+https://aerogear.github.io/charmil/registry/example/registry.json
+
 
 ## Architecture
 
