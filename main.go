@@ -1,7 +1,7 @@
 package main
 
-import "charmil/pkg"
+import "github.com/aerogear/charmil/cmd"
 
 func main() {
-	pkg.Execute()
+	cmd.Execute()
 }
