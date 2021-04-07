@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// removeCmd represents the remove command
-var removeCmd = &cobra.Command{
+// RemoveCmd represents the remove command
+var RemoveCmd = &cobra.Command{
 	Use:   "remove",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -22,15 +22,15 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	extensionsCmd.AddCommand(removeCmd)
+	ExtensionsCmd.AddCommand(RemoveCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// removeCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// RemoveCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// removeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// RemoveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
