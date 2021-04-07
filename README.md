@@ -1,12 +1,35 @@
 # cobra-cmd-hub
 
-## Deliverables
+Framework for building command line plugins on top of Golang Cobra Library that allows developers to install and use other (even non golang CLIs) as extensions.
 
-- Use a CLI plugin as an extension in some CLI
-- Link multiple CLI's together
-- Registry Manager containing the list and metadata of CLI's
-- Github repo/pages based remote index servers for plugins which will contain docs, metadata of the plugin
-- Framework that will be able to read these remote index servers
+TODO more info
+
+## Cobra commands provided by framework
+
+TODO
+
+rootCLI extensions list
+
+rootCLI extensions installed # list installed ones
+
+rootCLI extensions install <name>@<version>
+  
+## Getting started
+
+### Adding library to your existing CLI
+
+TODO
+
+### Creating registry of CLIs
+
+TODO - we need example
+
+## Architecture
+
+TODO diagram
+
+
+======= ALL bellow doesn't make sense to be in the readme IMHO ===
 
 ## Registery CLI
 
