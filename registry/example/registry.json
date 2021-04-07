@@ -1,9 +1,11 @@
-[{
-  "name": "ODO",
-  "description": "OpenShift Developer CLI",
-  "binaries":{
-    "darwin-amd64":"https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-darwin-amd64",
-    "linux-arm64":"https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-linux-arm64"
+[
+  {
+    "name": "ODO",
+    "description": "OpenShift Developer CLI",
+    "binaries": {
+      "darwin-amd64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-darwin-amd64",
+      "linux-arm64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-linux-arm64"
+    },
+    "dependencies": {}
   }
-  "dependencies": {},
- }]
+]
