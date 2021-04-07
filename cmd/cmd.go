@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/aerogear/charmil/cmd/extensions"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -35,7 +36,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
+	rootCmd.AddCommand(extensions.ExtensionsCmd)
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

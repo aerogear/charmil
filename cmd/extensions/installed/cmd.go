@@ -1,4 +1,4 @@
-package cmd
+package installed
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ExtensionsCmd represents the extensions command
-var ExtensionsCmd = &cobra.Command{
-	Use:   "extensions",
+// InstalledCmd represents the installed command
+var InstalledCmd = &cobra.Command{
+	Use:   "installed",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -17,20 +17,18 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("extensions called")
+		fmt.Println("installed called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(ExtensionsCmd)
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// ExtensionsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// InstalledCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// ExtensionsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// InstalledCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

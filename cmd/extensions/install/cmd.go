@@ -1,4 +1,4 @@
-package cmd
+package install
 
 import (
 	"fmt"
@@ -22,8 +22,6 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	ExtensionsCmd.AddCommand(InstallCmd)
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
