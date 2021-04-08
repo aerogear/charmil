@@ -1,7 +1,5 @@
 # Charmil
 
-> TODO Logo
-
 Framework for building command line plugins on top of Golang Cobra Library that allows developers to install and use other (even non golang CLIs) as extensions.
 Charmil will let you control your cobra based CLIs and extend them without embeeding any plugin code into your CLI.
 
