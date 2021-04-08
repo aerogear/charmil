@@ -9,7 +9,7 @@ Charmil will let you control your cobra based CLIs and extend them without embee
 
 Visit the [Charmil Documentation](docs/src)
 
-## Working
+## How it works
 
 ![working](docs/images/architecture2.png)
 
