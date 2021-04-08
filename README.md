@@ -23,7 +23,7 @@ Charmil will let you control your cobra based CLIs and extend them without embee
 
 Include Charmil in your CLI by doing `$ go get -u github.com/aerogear/charmil`
 
-## Commands that will be added to your CLI by Charmil
+#### Commands that will be added to your CLI by Charmil
 
 1. List all the available extensions
    > `$ yourCLi extensions list`
@@ -40,11 +40,6 @@ You can import charmil in your CLI, which will provide you all the extensions ou
 
 After installing the extension, users can use the features of that plugin without writing code for that particular feature which that plugin provides.
 
-1. Downloader pkg - It will download the binaries of plugins. Binaries may be zip / tar.gz. We need to extract them.
-2. Installer pkg - It will download and install a plugin. It will also support upgrade and remove plugins.
-3. Index pkg - Get All indexes, add, update or remove a index.
-4. Search Package - Search for packages via name, description locally and globally.
-
 ### Creating registry of CLIs
 
 > TODO
@@ -57,5 +52,10 @@ https://aerogear.github.io/charmil/registry/example/registry.json
 A remote index server (github repo / pages) for a plugin will contain the metadata, docs etc. The Developers will be able to push their plugins / index servers, so that they will be publicly available to download as per use in CLI.
 
 ## Architecture
+
+1. Downloader pkg - It will download the binaries of plugins. Binaries may be zip / tar.gz. We need to extract them.
+2. Installer pkg - It will download and install a plugin. It will also support upgrade and remove plugins.
+3. Index pkg - Get All indexes, add, update or remove a index.
+4. Search Package - Search for packages via name, description locally and globally.
 
 ![architecture](mockups/architecture3.png)
