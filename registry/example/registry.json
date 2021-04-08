@@ -2,11 +2,38 @@
   {
     "name": "ODO",
     "description": "OpenShift Developer CLI",
-    "version": "v1",
-    "homepage": "https://www.example.com",
+    "version": "v2.0.7",
+    "homepage": "https://developers.redhat.com/products/odo/overview",
     "binaries": {
       "darwin-amd64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-darwin-amd64",
       "linux-arm64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-linux-arm64"
+    },
+    "dependencies": {},
+    "tags": [],
+    "license": "MIT"
+  },
+  {
+    "name": "OC",
+    "description": "OpenShift CLI",
+    "version": "v4.6",
+    "homepage": "https://docs.openshift.com/container-platform/4.6/cli_reference/openshift_cli/getting-started-cli.html",
+    "binaries": {
+      "linux": "https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.6/linux/oc.tar.gz",
+      "macosx": "https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.6/macosx/oc.tar.gz",
+      "windows": "https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.6/windows/oc.zip"
+    },
+    "dependencies": {},
+    "tags": [],
+    "license": "MIT"
+  },
+  {
+    "name": "kubectl",
+    "description": "Kubernetes command-line tool: kubectl",
+    "version": "v1.21.0",
+    "homepage": "https://kubernetes.io/docs/reference/kubectl/",
+    "binaries": {
+      "darwin-amd64": "https://dl.k8s.io/release/v1.21.0/bin/darwin/amd64/kubectl",
+      "linux-amd64": "https://dl.k8s.io/release/v1.21.0/bin/linux/amd64/kubectl"
     },
     "dependencies": {},
     "tags": [],
