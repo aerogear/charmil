@@ -2,10 +2,14 @@
   {
     "name": "ODO",
     "description": "OpenShift Developer CLI",
+    "version": "v1",
+    "homepage": "https://www.example.com",
     "binaries": {
       "darwin-amd64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-darwin-amd64",
       "linux-arm64": "https://mirror.openshift.com/pub/openshift-v4/clients/odo/v2.0.7/odo-linux-arm64"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "tags": [],
+    "license": "MIT"
   }
 ]
