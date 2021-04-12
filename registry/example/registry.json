@@ -38,5 +38,19 @@
     "dependencies": {},
     "tags": [],
     "license": "MIT"
+  },
+  {
+    "name": "kaf",
+    "description": "Modern CLI for Apache Kafka, written in Go.",
+    "version": "v0.1.39",
+    "homepage": "https://github.com/birdayz/kaf",
+    "binaries": {
+      "darwin-amd64": "https://github.com/birdayz/kaf/releases/download/v0.1.39/kaf_0.1.39_Darwin_x86_64.tar.gz",
+      "linux-amd64": "https://github.com/birdayz/kaf/releases/download/v0.1.39/kaf_0.1.39_Linux_x86_64.tar.gz",
+      "windows": "https://github.com/birdayz/kaf/releases/download/v0.1.39/kaf_0.1.39_Windows_x86_64.tar.gz"
+    },
+    "dependencies": {},
+    "tags": [],
+    "license": "Apache License"
   }
 ]
