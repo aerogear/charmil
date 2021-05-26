@@ -1,0 +1,42 @@
+commands:
+  # - 
+  #   name: copy
+  #   mapsTo:
+  #     name: git
+  #     subcommand: clone
+  #     args:
+  #       - repository_url
+  #   shortDescription: "Copy a remote Git directory to your local filesystem"
+  #   usage: '
+  #   $ git-helper copy git@github.com:spf13/cobra.git
+  #   '
+  #   flags:
+  #     -
+  #       name: debug
+  #       mapsTo: verbose
+  #       description: "Debug mode"
+  #       alias: d
+  #       type: bool
+  #       defaultValue: false
+  #     - 
+  #       name: prog
+  #       mapsTo: progress
+  #       description: "show copy progress"
+  #       type: bool
+  #       defaultValue: false
+  #     - 
+  #       name: 'level'
+  #       mapsTo: 'depth'
+  #       description: create a shallow copy of that level
+  #       type: int
+  
+  - 
+    name: telldate
+    mapsTo:
+      name: date
+      subcommand: -u
+      # args:
+      #   - repository_url
+    shortDescription: "tell date time"
+    usage: '
+    '

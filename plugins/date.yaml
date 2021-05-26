@@ -1,0 +1,12 @@
+commands:
+  - 
+    name: telldate
+    mapsTo:
+      name: date
+      subcommand: -u
+      # args:
+      #   - repository_url
+    shortDescription: "tell date time"
+    usage: '
+    '
+    
