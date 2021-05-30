@@ -1,7 +1,7 @@
 package main
 
-import "github.com/aerogear/charmil/cmd"
+import "fmt"
 
 func main() {
-	cmd.Execute()
+	fmt.Print("Welcome to Charmil!")
 }
