@@ -4,7 +4,6 @@ Provide wrapper structure without any strong dependency on Cobra. Plugin Core ba
 ## Architecture & Working
 1. An Host CLI in which commands need to be embedded
 2. A Minimal YAML file defining the commands of the plugin CLI.
-
     ```yaml
     commands:
     - 
@@ -30,7 +29,10 @@ Provide wrapper structure without any strong dependency on Cobra. Plugin Core ba
 ## pros
 - Access to huge market. We can onboard all the CLI's into this framework no matter they are made with golang, bash, python etc.
 - Easy onboarding of plugins. A minimal configuration yaml file to be made, providing the details about using the commands, arguments and flags.
+- While creating the yaml file for plugins, we are indirectly documenting the plugin
 
-## cons
+## challenges
 - Wrapping the binaries may give performance issues
 - Assuming that user's system has CLI installed which is to be embedded (we should be able to solve this)
+- We can use CLI's binary to solve above issue
+- Some CLI's will only be available for specific operating systems
