@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	pkg "github.com/aerogear/charmil/pkg/pluginloader"
+	"github.com/aerogear/charmil/pkg/pluginloader"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ func main() {
 		SilenceUsage: true,
 	}
 
-	cmd.AddCommand(pkg.InstallCmd)
+	pluginloader.LoadCommands(cmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)

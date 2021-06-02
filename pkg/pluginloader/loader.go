@@ -2,7 +2,6 @@ package pluginloader
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -10,23 +9,51 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// wrapping the yarn command and creating a cobra command
-var InstallCmd = &cobra.Command{
-	Use:   "install",
-	Short: "install a package",
-	Long:  ``,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Install command called")
+// TODO:
+// Unmarshal the YAML
+// Extract the commands using plugin.go (command structure)
 
-		args = append([]string{"add"}, args...)
-		fmt.Println(args)
+// Create a Cobra Command
+func createCommand(cmdStruct *CommandConfig) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     cmdStruct.Name,
+		Short:   cmdStruct.ShortDescription,
+		Example: cmdStruct.Examples,
+		Args:    cobra.ExactArgs(len(cmdStruct.MapsTo.Args)),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			args = append([]string{cmdStruct.MapsTo.Subcommand}, args...)
+			c := exec.Command(cmdStruct.MapsTo.Name, args...)
+			c.Stdin = os.Stdin
+			c.Stdout = os.Stdout
+			var buf bytes.Buffer
+			c.Stderr = io.MultiWriter(os.Stderr, &buf)
+			return c.Run()
+		},
+	}
 
-		c := exec.Command("yarn", args...)
-		c.Stdin = os.Stdin
-		c.Stdout = os.Stdout
-		var buf bytes.Buffer
-		c.Stderr = io.MultiWriter(os.Stderr, &buf)
+	// TODO: add Flags
 
-		return c.Run()
-	},
+	return cmd
+}
+
+// Add the cobra command in Host CLI
+func LoadCommands(cmd *cobra.Command) {
+	dateCommand := createCommand(&CommandConfig{
+		Name:             "whatsup",
+		MapsTo:           ArgsConfig{Name: "date", Subcommand: "-u", Args: []string{}},
+		Flags:            []FlagConfig{},
+		ShortDescription: "Tells date timw",
+		Examples:         "$ host whatsup",
+	})
+
+	yarnCommand := createCommand(&CommandConfig{
+		Name:             "install",
+		MapsTo:           ArgsConfig{Name: "yarn", Subcommand: "add", Args: []string{"package-name"}},
+		Flags:            []FlagConfig{},
+		ShortDescription: "Install a package",
+		Examples:         "$ host install",
+	})
+
+	cmd.AddCommand(dateCommand)
+	cmd.AddCommand(yarnCommand)
 }

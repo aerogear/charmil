@@ -1,15 +1,15 @@
 package pluginloader
 
 type PluginConfig struct {
-	Commands []CommandConfig `yaml:"commands"`
+	Commands []CommandConfig
 }
 
 type CommandConfig struct {
-	Name             string       `yaml:"name"`
-	MapsTo           ArgsConfig   `yaml:"mapsTo"`
-	Flags            []FlagConfig `yaml:"flags"`
-	ShortDescription string       `yaml:"shortDescription"`
-	Examples         string       `yaml:"usage"`
+	Name             string
+	MapsTo           ArgsConfig
+	Flags            []FlagConfig
+	ShortDescription string
+	Examples         string
 }
 
 type ArgsConfig struct {
@@ -19,10 +19,10 @@ type ArgsConfig struct {
 }
 
 type FlagConfig struct {
-	Type         string `yaml:"type"`
-	DefaultValue string `yaml:"defaultValue"`
-	Name         string `yaml:"name"`
-	MapsTo       string `yaml:"mapsTo"`
-	Description  string `yaml:"description"`
-	Alias        string `yaml:"alias"`
+	Type         string
+	DefaultValue string
+	Name         string
+	MapsTo       string
+	Description  string
+	Alias        string
 }
