@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -31,7 +32,22 @@ func createCommand(cmdStruct *CommandConfig) *cobra.Command {
 		},
 	}
 
-	// TODO: add Flags
+	// add Flags
+	if cmdStruct.Flags != nil && len(cmdStruct.Flags) > 0 {
+		for _, f := range cmdStruct.Flags {
+			fs := cmd.Flags()
+			switch f.Type {
+			case "string":
+				fs.StringP(f.Name, f.Alias, f.DefaultValue, f.Description)
+			case "bool":
+				v, _ := strconv.ParseBool(f.DefaultValue)
+				fs.BoolP(f.Name, f.Alias, v, f.Description)
+			case "int":
+				v, _ := strconv.Atoi(f.DefaultValue)
+				fs.IntP(f.Name, f.Alias, v, f.Description)
+			}
+		}
+	}
 
 	return cmd
 }
@@ -42,14 +58,23 @@ func LoadCommands(cmd *cobra.Command) {
 		Name:             "whatsup",
 		MapsTo:           ArgsConfig{Name: "date", Subcommand: "-u", Args: []string{}},
 		Flags:            []FlagConfig{},
-		ShortDescription: "Tells date timw",
+		ShortDescription: "Tells date time",
 		Examples:         "$ host whatsup",
 	})
 
 	yarnCommand := createCommand(&CommandConfig{
-		Name:             "install",
-		MapsTo:           ArgsConfig{Name: "yarn", Subcommand: "add", Args: []string{"package-name"}},
-		Flags:            []FlagConfig{},
+		Name:   "install",
+		MapsTo: ArgsConfig{Name: "yarn", Subcommand: "add", Args: []string{"package-name"}},
+		Flags: []FlagConfig{
+			{
+				Name:         "debug",
+				MapsTo:       "verbose",
+				Description:  "Debug mode",
+				Alias:        "d",
+				Type:         "bool",
+				DefaultValue: "false",
+			},
+		},
 		ShortDescription: "Install a package",
 		Examples:         "$ host install",
 	})
