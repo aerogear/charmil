@@ -1,11 +1,6 @@
-# Charmil
+# Charmil SDK POC
 
-Framework for building command line plugins on top of Golang Cobra Library.
-Charmil will let you control your cobra based CLIs.
+## Build
 
-> NOTE: Project is under construction
-
-## Documentation
-
-Visit the [Charmil Documentation](docs/src)
-
+1. Run `make`
+2. Run `./charmil -h` to list available commands
