@@ -1,9 +1,12 @@
 package pluginloader
 
 import (
+	"flag"
+	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -24,7 +27,8 @@ func createCommandNew(cmdStruct *CommandConfig) *cobra.Command {
 			// TODO: arguments are not typed
 			// append subcommand before the []args
 			args = append([]string{cmdStruct.MapsTo.Subcommand}, args...)
-			return Execute(cmdStruct.MapsTo.Name, args)
+
+			return Execute(cmdStruct, cmdStruct.MapsTo.Name, args)
 		},
 	}
 	addFlags(cmdStruct, cmd)
@@ -32,7 +36,20 @@ func createCommandNew(cmdStruct *CommandConfig) *cobra.Command {
 }
 
 // Execute external process/command
-func Execute(executablePath string, cmdArgs []string) error {
+func Execute(cmdStruct *CommandConfig, executablePath string, cmdArgs []string) error {
+
+	// If command has flags
+	flag.Parse()
+	tail := flag.Args()
+	f := tail[len(tail)-1]
+	if strings.HasPrefix(f, "-") || strings.HasPrefix(f, "--") { // checking last element in the tail array
+		for _, fl := range cmdStruct.Flags {
+			fmt.Println(fl.MapsTo)
+			cmdArgs = append(cmdArgs, "--"+fl.MapsTo) // append flag to arguments
+		}
+	}
+
+	// run the command
 	cmd := exec.Command(executablePath, cmdArgs...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -40,7 +57,6 @@ func Execute(executablePath string, cmdArgs []string) error {
 	return cmd.Run()
 }
 
-// TODO: Wrap flags with plugin's binary.
 // add Flags to the command
 func addFlags(cmdStruct *CommandConfig, cmd *cobra.Command) {
 	if cmdStruct.Flags != nil && len(cmdStruct.Flags) > 0 {
@@ -103,7 +119,25 @@ func LoadCommands(cmd *cobra.Command) {
 		},
 	})
 
+	gitcloneCommand := createCommandNew(&CommandConfig{
+		Name:             "copy",
+		MapsTo:           ArgsConfig{Name: "git", Subcommand: "clone", Args: []string{"repository_url"}},
+		ShortDescription: "Clone a git repository",
+		Examples:         "$ host copy https://github.com/ankithans/codeX",
+		Flags: []FlagConfig{
+			{
+				Name:         "debug",
+				MapsTo:       "verbose",
+				Description:  "Debug mode",
+				Alias:        "d",
+				Type:         "bool",
+				DefaultValue: "false",
+			},
+		},
+	})
+
 	cmd.AddCommand(dateCommand)
 	cmd.AddCommand(yarnCommand)
 	cmd.AddCommand(addCommand)
+	cmd.AddCommand(gitcloneCommand)
 }
