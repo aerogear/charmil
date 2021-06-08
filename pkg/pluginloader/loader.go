@@ -28,7 +28,7 @@ func createCommandNew(cmdStruct *CommandConfig) *cobra.Command {
 			// append subcommand before the []args
 			args = append([]string{cmdStruct.MapsTo.Subcommand}, args...)
 
-			return Execute(cmdStruct, cmdStruct.MapsTo.Name, args)
+			return Execute(cmdStruct.Flags, cmdStruct.MapsTo.Name, args)
 		},
 	}
 	addFlags(cmdStruct, cmd)
@@ -36,16 +36,18 @@ func createCommandNew(cmdStruct *CommandConfig) *cobra.Command {
 }
 
 // Execute external process/command
-func Execute(cmdStruct *CommandConfig, executablePath string, cmdArgs []string) error {
+func Execute(flags []FlagConfig, executablePath string, cmdArgs []string) error {
 
 	// If command has flags
 	flag.Parse()
-	tail := flag.Args()
-	f := tail[len(tail)-1]
-	if strings.HasPrefix(f, "-") || strings.HasPrefix(f, "--") { // checking last element in the tail array
-		for _, fl := range cmdStruct.Flags {
-			fmt.Println(fl.MapsTo)
-			cmdArgs = append(cmdArgs, "--"+fl.MapsTo) // append flag to arguments
+	for _, t := range flag.Args() {
+		if strings.HasPrefix(t, "-") || strings.HasPrefix(t, "--") { // checking if the string is a flag
+			for _, fl := range flags {
+				if strings.Contains(t, fl.Name) || strings.Contains(t, fl.Alias) {
+					fmt.Println(t)
+					cmdArgs = append(cmdArgs, "--"+fl.MapsTo) // append flag to arguments
+				}
+			}
 		}
 	}
 
@@ -115,6 +117,14 @@ func LoadCommands(cmd *cobra.Command) {
 				Type:         "bool",
 				Description:  "Add floating numbers",
 				MapsTo:       "float",
+			},
+			{
+				Name:         "test",
+				Alias:        "t",
+				DefaultValue: "false",
+				Type:         "bool",
+				Description:  "test",
+				MapsTo:       "help",
 			},
 		},
 	})
