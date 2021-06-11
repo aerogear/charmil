@@ -1,5 +1,5 @@
 run:
-	go run ./cmd/host
+	go run ./examples/host
 
 build:
-	go build ./cmd/host
+	go build ./examples/host
