@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/aerogear/charmil/plugins/calculator"
-	"github.com/aerogear/charmil/plugins/hi"
+	"github.com/aerogear/charmil/examples/plugins/calculator"
+	"github.com/aerogear/charmil/examples/plugins/date"
+	"github.com/aerogear/charmil/pkg/factory"
 	"github.com/spf13/cobra"
 )
 
@@ -15,8 +16,12 @@ func main() {
 		SilenceUsage: true,
 	}
 
-	cmd.AddCommand(calculator.AddCommand)
-	cmd.AddCommand(hi.HiCommand)
+	// init default factory for the host
+	// pass to all the commands
+	defaultFactory := factory.Default()
+
+	cmd.AddCommand(calculator.RootCommand(defaultFactory))
+	cmd.AddCommand(date.DateCommand(defaultFactory))
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)
