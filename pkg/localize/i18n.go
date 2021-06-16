@@ -11,6 +11,11 @@ import (
 )
 
 type GoI18n struct {
+	language  *language.Tag
+	bundle    *i18n.Bundle
+	Localizer *i18n.Localizer
+	format    string
+	path      string
 }
 
 type Config struct {
@@ -19,12 +24,20 @@ type Config struct {
 	format   string
 }
 
-func (I *GoI18n) Localize(confg Config, messageId string, templateData map[string]interface{}) (string, error) {
-	bundle := i18n.NewBundle(confg.language)
+func (I *GoI18n) LocalizeByID(messageId string, templateData map[string]interface{}) (string, error) {
+
+	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, TemplateData: templateData}
+	res := I.Localizer.MustLocalize(localizeConfig)
+
+	return res, nil
+}
+
+func (I *GoI18n) InitLocalizer(cfg Config) (*GoI18n, error) {
+	bundle := i18n.NewBundle(cfg.language)
 
 	var unmarshalFunc i18n.UnmarshalFunc
 
-	switch confg.format {
+	switch cfg.format {
 	case "toml":
 		unmarshalFunc = toml.Unmarshal
 	case "json":
@@ -32,16 +45,21 @@ func (I *GoI18n) Localize(confg Config, messageId string, templateData map[strin
 	case "yaml":
 		unmarshalFunc = yaml.Unmarshal
 	default:
-		return "", errors.New("unsupported format " + confg.format)
+		return nil, errors.New("unsupported format " + cfg.format)
 	}
 
-	bundle.RegisterUnmarshalFunc(confg.format, unmarshalFunc)
-	bundle.LoadMessageFile(confg.path)
+	bundle.RegisterUnmarshalFunc(cfg.format, unmarshalFunc)
+	bundle.LoadMessageFile(cfg.path)
 
 	localizer := i18n.NewLocalizer(bundle)
 
-	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, TemplateData: templateData}
-	res := localizer.MustLocalize(localizeConfig)
+	res := &GoI18n{
+		language:  &cfg.language,
+		bundle:    bundle,
+		format:    cfg.format,
+		path:      cfg.path,
+		Localizer: localizer,
+	}
 
 	return res, nil
 }

@@ -4,17 +4,20 @@ import (
 	"time"
 
 	"github.com/aerogear/charmil/pkg/factory"
+	"github.com/aerogear/charmil/pkg/localize"
 	"github.com/aerogear/charmil/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
-	Logger func() (logging.Logger, error)
+	Logger   func() (logging.Logger, error)
+	Localize localize.Localizer
 }
 
 func DateCommand(f *factory.Factory) *cobra.Command {
 	opts := &Options{
-		Logger: f.Logger,
+		Logger:   f.Logger,
+		Localize: f.Localize,
 	}
 	cmd := &cobra.Command{
 		Use:          "date",
