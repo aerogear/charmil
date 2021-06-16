@@ -1,5 +1,5 @@
 package localize
 
 type Localizer interface {
-	Localize()
+	LocalizeByID(confg Config, messageId string, templateData map[string]interface{})
 }
