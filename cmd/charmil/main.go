@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -8,9 +9,12 @@ import (
 
 func main() {
 	cmd := &cobra.Command{
-		Use:          "hostname",
-		Short:        "Host CLI made using Charmil SDK",
+		Use:          "charmil",
+		Short:        "Commands for managing plugins",
 		SilenceUsage: true,
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Welcome to Charmil")
+		},
 	}
 
 	if err := cmd.Execute(); err != nil {
