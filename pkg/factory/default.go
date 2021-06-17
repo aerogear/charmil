@@ -7,7 +7,7 @@ import (
 	"github.com/aerogear/charmil/pkg/logging"
 )
 
-// create new command factory
+// create new instance of factory for plugins
 func Default(localizer localize.Localizer) *Factory {
 	var logger logging.Logger
 

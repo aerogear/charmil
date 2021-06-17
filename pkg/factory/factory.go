@@ -7,6 +7,8 @@ import (
 
 // Access to all the commands
 type Factory struct {
-	Logger    func() (logging.Logger, error)
+	// Logger provides functions for unified logging
+	Logger func() (logging.Logger, error)
+	// Localizer localizes the text in commands
 	Localizer localize.Localizer
 }

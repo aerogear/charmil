@@ -1,7 +1,6 @@
 package calculator
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/aerogear/charmil/pkg/factory"
@@ -21,7 +20,7 @@ func RootCommand() *cobra.Command {
 	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/calculator/locals/en/en.yaml", Format: "yaml"})
 
 	if err != nil {
-		fmt.Println("Error", err)
+		panic(err)
 	}
 
 	newFactory := factory.Default(loc)

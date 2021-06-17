@@ -1,7 +1,6 @@
 package date
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aerogear/charmil/pkg/factory"
@@ -18,10 +17,9 @@ type Options struct {
 
 func DateCommand() *cobra.Command {
 
-	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "yaml"})
-
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "e"})
 	if err != nil {
-		fmt.Println("Error", err)
+		panic(err)
 	}
 
 	newFactory := factory.Default(loc)
