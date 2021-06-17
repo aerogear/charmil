@@ -1,6 +1,7 @@
 package date
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aerogear/charmil/pkg/factory"
@@ -15,17 +16,20 @@ type Options struct {
 }
 
 func DateCommand(f *factory.Factory) *cobra.Command {
+
 	opts := &Options{
 		Logger:   f.Logger,
-		Localize: f.Localize,
+		Localize: f.Localizer,
 	}
+
 	cmd := &cobra.Command{
-		Use:          "date",
+		Use:          opts.Localize.LocalizeByID("date.use"),
 		Short:        "tell date",
 		Example:      "$ host date",
 		SilenceUsage: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			logger, _ := opts.Logger()
+			fmt.Println(opts.Localize.LocalizeByID("yo"))
 			logger.Output("Date Time is", time.Now())
 		},
 	}

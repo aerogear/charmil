@@ -7,6 +7,6 @@ import (
 
 // Access to all the commands
 type Factory struct {
-	Logger   func() (logging.Logger, error)
-	Localize localize.Localizer
+	Logger    func() (logging.Logger, error)
+	Localizer localize.Localizer
 }
