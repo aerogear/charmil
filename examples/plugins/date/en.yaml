@@ -1,6 +1,0 @@
-yo:
-  description: "First YAML desctiption"
-  one: "It is awesome!"
-date.use:
-  description: "Use of date"
-  one: "date"

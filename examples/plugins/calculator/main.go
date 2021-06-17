@@ -1,25 +1,38 @@
 package calculator
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/aerogear/charmil/pkg/factory"
+	"github.com/aerogear/charmil/pkg/localize"
 	"github.com/aerogear/charmil/pkg/logging"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/language"
 )
 
 type Options struct {
-	Logger func() (logging.Logger, error)
+	Logger   func() (logging.Logger, error)
+	Localize localize.Localizer
 }
 
-func RootCommand(f *factory.Factory) *cobra.Command {
+func RootCommand() *cobra.Command {
+
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/calculator/locals/en/en.yaml", Format: "yaml"})
+
+	if err != nil {
+		fmt.Println("Error", err)
+	}
+
+	newFactory := factory.Default(loc)
 	opts := &Options{
-		Logger: f.Logger,
+		Logger:   newFactory.Logger,
+		Localize: newFactory.Localizer,
 	}
 	cmd := &cobra.Command{
-		Use:          "calc",
-		Short:        "Calculator",
-		Example:      "$ host calc add 2 3",
+		Use:          opts.Localize.LocalizeByID("calc.cmd.use"),
+		Short:        opts.Localize.LocalizeByID("calc.cmd.short"),
+		Example:      opts.Localize.LocalizeByID("calc.cmd.example"),
 		SilenceUsage: true,
 	}
 
@@ -29,9 +42,9 @@ func RootCommand(f *factory.Factory) *cobra.Command {
 
 func AddCmd(opts *Options) *cobra.Command {
 	addCmd := &cobra.Command{
-		Use:   "add",
-		Short: "Add numbers",
-		Long:  `Adding the numbers`,
+		Use:   opts.Localize.LocalizeByID("add.cmd.use"),
+		Short: opts.Localize.LocalizeByID("add.cmd.short"),
+		Long:  opts.Localize.LocalizeByID("add.cmd.long"),
 		Run: func(cmd *cobra.Command, args []string) {
 			fstatus, _ := cmd.Flags().GetBool("float")
 			if fstatus {
