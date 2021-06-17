@@ -3,7 +3,6 @@ package localize
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -36,9 +35,6 @@ func (I *GoI18n) LocalizeByID(messageId string) string {
 }
 
 func InitLocalizer(cfg Config) (*GoI18n, error) {
-
-	fmt.Println("hehe", cfg)
-
 	bundle := i18n.NewBundle(cfg.Language)
 
 	var unmarshalFunc i18n.UnmarshalFunc

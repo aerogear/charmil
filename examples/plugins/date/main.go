@@ -8,6 +8,7 @@ import (
 	"github.com/aerogear/charmil/pkg/localize"
 	"github.com/aerogear/charmil/pkg/logging"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/language"
 )
 
 type Options struct {
@@ -15,21 +16,28 @@ type Options struct {
 	Localize localize.Localizer
 }
 
-func DateCommand(f *factory.Factory) *cobra.Command {
+func DateCommand() *cobra.Command {
+
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "yaml"})
+
+	if err != nil {
+		fmt.Println("Error", err)
+	}
+
+	newFactory := factory.Default(loc)
 
 	opts := &Options{
-		Logger:   f.Logger,
-		Localize: f.Localizer,
+		Logger:   newFactory.Logger,
+		Localize: newFactory.Localizer,
 	}
 
 	cmd := &cobra.Command{
-		Use:          opts.Localize.LocalizeByID("date.use"),
-		Short:        "tell date",
-		Example:      "$ host date",
+		Use:          opts.Localize.LocalizeByID("date.cmd.use"),
+		Short:        opts.Localize.LocalizeByID("date.cmd.short"),
+		Example:      opts.Localize.LocalizeByID("date.cmd.example"),
 		SilenceUsage: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			logger, _ := opts.Logger()
-			fmt.Println(opts.Localize.LocalizeByID("yo"))
 			logger.Output("Date Time is", time.Now())
 		},
 	}

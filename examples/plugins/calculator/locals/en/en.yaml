@@ -1,0 +1,19 @@
+add.cmd.use:
+  description: "Use of add command"
+  one: "add"
+add.cmd.short:
+  description: "Short decription of add"
+  one: "adding numbers"
+add.cmd.long:
+  description: "Long description of add"
+  one: "Adding the numbers"
+
+calc.cmd.use:
+  description: "Use of calc command"
+  one: "calc"
+calc.cmd.short:
+  description: "Short decription of calc"
+  one: "calculating numbers"
+calc.cmd.example:
+  description: "Examples of calc"
+  one: "$ calc add 1.1 2.1 -f"
