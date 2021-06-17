@@ -3,6 +3,7 @@ package localize
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -19,25 +20,30 @@ type GoI18n struct {
 }
 
 type Config struct {
-	language language.Tag
-	path     string
-	format   string
+	Language language.Tag
+	Path     string
+	Format   string
 }
 
-func (I *GoI18n) LocalizeByID(messageId string, templateData map[string]interface{}) (string, error) {
+func (I *GoI18n) LocalizeByID(messageId string) string {
 
-	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, TemplateData: templateData}
+	// localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, TemplateData: templateData}
+
+	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, PluralCount: 1}
 	res := I.Localizer.MustLocalize(localizeConfig)
 
-	return res, nil
+	return res
 }
 
-func (I *GoI18n) InitLocalizer(cfg Config) (*GoI18n, error) {
-	bundle := i18n.NewBundle(cfg.language)
+func InitLocalizer(cfg Config) (*GoI18n, error) {
+
+	fmt.Println("hehe", cfg)
+
+	bundle := i18n.NewBundle(cfg.Language)
 
 	var unmarshalFunc i18n.UnmarshalFunc
 
-	switch cfg.format {
+	switch cfg.Format {
 	case "toml":
 		unmarshalFunc = toml.Unmarshal
 	case "json":
@@ -45,21 +51,19 @@ func (I *GoI18n) InitLocalizer(cfg Config) (*GoI18n, error) {
 	case "yaml":
 		unmarshalFunc = yaml.Unmarshal
 	default:
-		return nil, errors.New("unsupported format " + cfg.format)
+		return nil, errors.New("unsupported format " + cfg.Format)
 	}
 
-	bundle.RegisterUnmarshalFunc(cfg.format, unmarshalFunc)
-	bundle.LoadMessageFile(cfg.path)
+	bundle.RegisterUnmarshalFunc(cfg.Format, unmarshalFunc)
+	bundle.LoadMessageFile(cfg.Path)
 
-	localizer := i18n.NewLocalizer(bundle)
-
-	res := &GoI18n{
-		language:  &cfg.language,
+	loc := &GoI18n{
+		language:  &cfg.Language,
 		bundle:    bundle,
-		format:    cfg.format,
-		path:      cfg.path,
-		Localizer: localizer,
+		format:    cfg.Format,
+		path:      cfg.Path,
+		Localizer: i18n.NewLocalizer(bundle),
 	}
 
-	return res, nil
+	return loc, nil
 }

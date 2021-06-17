@@ -1,9 +1,12 @@
 package factory
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/aerogear/charmil/pkg/localize"
 	"github.com/aerogear/charmil/pkg/logging"
+	"golang.org/x/text/language"
 )
 
 // create new command factory
@@ -26,7 +29,14 @@ func Default() *Factory {
 		return logger, nil
 	}
 
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/en.yaml", Format: "yaml"})
+
+	if err != nil {
+		fmt.Println("Error", err)
+	}
+
 	return &Factory{
-		Logger: loggerFunc,
+		Logger:    loggerFunc,
+		Localizer: loc,
 	}
 }
