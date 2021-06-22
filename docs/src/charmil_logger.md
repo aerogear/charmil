@@ -2,7 +2,7 @@
 Charmil logger provides a unified way to log messages across the entire Cobra CLI. 
 
 ## Functions provided by logger
-Logger provides multiple functions, which can be used at many use-cases like Info, Error etc. For now logger supports the following functions:
+The logger provides multiple functions, which have a variety of use cases such as Info, Error etc. For now logger supports the following functions:
 ```go
 Info(args ...interface{})
 Error(args ...interface{})
@@ -13,7 +13,7 @@ Errorln(args ...interface{})
 ```
 
 ## How to use
-When the factory is initialised, the logger is provided by default. To know about factory visit [here](charmil_factory.md)
+When the factory is initialized, the logger is provided by default. To know about factory visit [here](charmil_factory.md)
 
 ```go
 newFactory.Logger.Info("provide a message")
