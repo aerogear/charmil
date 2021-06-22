@@ -6,7 +6,7 @@ import github.com/aerogear/charmil/pkg/factory
 
 ## How to use
 
-1. Create a clean cobra command for your plugin
+1. Create a cobra command for your plugin
 ```go
 func MyCommand() (*cobra.Command, error) {
 	cmd := &cobra.Command{
@@ -21,7 +21,7 @@ func MyCommand() (*cobra.Command, error) {
 }
 ```
 
-2. Create a default factory instance in your command, which requires the localizer to be passed
+1. Create a factory instance in your command, which requires the localizer to be passed
 ```go
 // Init Localizer
 loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "active.en.yaml"})
