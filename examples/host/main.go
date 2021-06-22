@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
-	"github.com/aerogear/charmil/examples/plugins/calculator"
 	"github.com/aerogear/charmil/examples/plugins/date"
 	"github.com/spf13/cobra"
 )
@@ -15,8 +15,11 @@ func main() {
 		SilenceUsage: true,
 	}
 
-	cmd.AddCommand(calculator.RootCommand())
-	cmd.AddCommand(date.DateCommand())
+	dateCmd, err := date.DateCommand()
+	if err != nil {
+		fmt.Println(err)
+	}
+	cmd.AddCommand(dateCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)
