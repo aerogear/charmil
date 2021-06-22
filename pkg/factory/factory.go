@@ -5,10 +5,11 @@ import (
 	"github.com/aerogear/charmil/pkg/logging"
 )
 
-// Access to all the commands
+// Factory is an abstract type which provides
+// the access of charmil packages to the commands
 type Factory struct {
 	// Logger provides functions for unified logging
-	Logger func() (logging.Logger, error)
+	Logger logging.Logger
 	// Localizer localizes the text in commands
 	Localizer localize.Localizer
 }

@@ -10,7 +10,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// GoI18n stores the details to create bundle
+// go-i18n implementation
+
+// GoI18n is a type which
+// stores the details to create bundle
 type GoI18n struct {
 	language  *language.Tag
 	bundle    *i18n.Bundle
@@ -19,21 +22,33 @@ type GoI18n struct {
 	path      string
 }
 
+// Config is a type which helps to get the
+// information to initialize the localizer
 type Config struct {
 	Language language.Tag
 	Path     string
 	Format   string
 }
 
-// Localize by passing id present in local file
-func (I *GoI18n) LocalizeByID(messageId string) string {
-	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, PluralCount: 1}
+// LocalizeByID helps in localizing by passing id present in local file
+// pass dynamic value using template entries
+func (I *GoI18n) LocalizeByID(messageId string, template ...*TemplateEntry) string {
+
+	// Putting back templateEntry into desired format
+	// required by go-i18n
+	templateData := map[string]interface{}{}
+	for _, t := range template {
+		templateData[t.Key] = t.Value
+	}
+
+	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, PluralCount: 1, TemplateData: templateData}
 	res := I.Localizer.MustLocalize(localizeConfig)
 	return res
 }
 
-// initialize the localizer and create new instance for plugin
-// pass Config including lang, path & format of locals
+// InitLocalizer initialize the localizer
+// and create new instance for plugin
+// Pass Config including lang, path & format of locals
 func InitLocalizer(cfg Config) (*GoI18n, error) {
 
 	// create bundle of choose language

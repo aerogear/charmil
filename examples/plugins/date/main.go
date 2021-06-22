@@ -10,35 +10,44 @@ import (
 	"golang.org/x/text/language"
 )
 
+// Options is a type to access factory functions
+// User can limit the options to use comming from factory
 type Options struct {
-	Logger   func() (logging.Logger, error)
+	Logger   logging.Logger
 	Localize localize.Localizer
 }
 
-func DateCommand() *cobra.Command {
+// Date Command
+func DateCommand() (*cobra.Command, error) {
 
-	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "e"})
+	// Initialize localizer providing the language, locals and format of locals file
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "yaml"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
+	// Create new/default instance of factory
 	newFactory := factory.Default(loc)
-
 	opts := &Options{
 		Logger:   newFactory.Logger,
 		Localize: newFactory.Localizer,
 	}
 
+	// creating new command
+	// using localizer to access default text by ID provided in locals
 	cmd := &cobra.Command{
 		Use:          opts.Localize.LocalizeByID("date.cmd.use"),
 		Short:        opts.Localize.LocalizeByID("date.cmd.short"),
 		Example:      opts.Localize.LocalizeByID("date.cmd.example"),
 		SilenceUsage: true,
-		Run: func(cmd *cobra.Command, args []string) {
-			logger, _ := opts.Logger()
-			logger.Output("Date Time is", time.Now())
+		RunE: func(cmd *cobra.Command, args []string) error {
+
+			// Using logger for output
+			opts.Logger.Infof("Date Time is %s", time.Now())
+
+			return nil
 		},
 	}
 
-	return cmd
+	return cmd, nil
 }
