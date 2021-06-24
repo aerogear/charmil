@@ -21,7 +21,7 @@ type Options struct {
 func DateCommand() (*cobra.Command, error) {
 
 	// Initialize localizer providing the language, locals and format of locals file
-	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locales/en/en.yaml", Format: "yaml"})
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "yaml"})
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,9 @@ func DateCommand() (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:          opts.Localize.LocalizeByID("date.cmd.use"),
 		Short:        opts.Localize.LocalizeByID("date.cmd.short"),
+		Long:         opts.Localize.LocalizeByID("date.cmd.long"),
 		Example:      opts.Localize.LocalizeByID("date.cmd.example"),
+		Args:         cobra.ExactArgs(0),
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
