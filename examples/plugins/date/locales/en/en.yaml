@@ -7,3 +7,6 @@ date.cmd.short:
 date.cmd.example:
   description: "Examples of date command"
   one: "$ host date"
+date.cmd.long:
+  description: "Long description of date command"
+  one: "This is very Long"
