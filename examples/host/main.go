@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/aerogear/charmil/examples/plugins/date"
+	"github.com/aerogear/charmil/examples/plugins/echo"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +20,13 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	echoCmd, err := echo.EchoCommand()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	cmd.AddCommand(dateCmd)
+	cmd.AddCommand(echoCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)

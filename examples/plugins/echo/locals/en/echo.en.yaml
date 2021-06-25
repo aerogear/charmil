@@ -1,0 +1,23 @@
+echo.cmd.use:
+  description: "The one-line usage message"
+  one: "echo [string(s) to echo]"
+
+echo.cmd.short:
+  description: "The short description shown in the 'help' output"
+  one: "Prints given strings to stdout"
+
+echo.cmd.example:
+  description: "Examples of how to use the command"
+  one: "$ host echo Hey Gophers"
+
+echo.cmd.flag.repeat.description:
+  description: "Repeat flag description"
+  one: "number of times to echo to stdout"
+
+echo.cmd.flag.uppercase.description:
+  description: "Uppercase flag description"
+  one: "convert to uppercase"
+
+echo.cmd.flag.lowercase.description:
+  description: "Lowercase flag description"
+  one: "convert to lowercase"
