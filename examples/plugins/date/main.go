@@ -21,7 +21,7 @@ type Options struct {
 func DateCommand() (*cobra.Command, error) {
 
 	// Initialize localizer providing the language, locals and format of locals file
-	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locals/en/en.yaml", Format: "yaml"})
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locales/en/en.yaml", Format: "yaml"})
 	if err != nil {
 		return nil, err
 	}
