@@ -18,11 +18,11 @@ type Limit struct {
 func (l *LengthRule) Validate(cmd *cobra.Command) []error {
 
 	var errors []error
-	err := validateCobraCommand(cmd, l)
+	err := validateLength(cmd, l)
 	errors = append(errors, err...)
 
 	for _, child := range cmd.Commands() {
-		err := validateCobraCommand(child, l)
+		err := validateLength(child, l)
 		errors = append(errors, err...)
 
 	}
@@ -30,7 +30,7 @@ func (l *LengthRule) Validate(cmd *cobra.Command) []error {
 	return errors
 }
 
-func validateCobraCommand(cmd *cobra.Command, l *LengthRule) []error {
+func validateLength(cmd *cobra.Command, l *LengthRule) []error {
 	var errors []error
 
 	for fieldName, limits := range l.Limits {
