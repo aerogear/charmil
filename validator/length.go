@@ -2,15 +2,13 @@ package validator
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/spf13/cobra"
 )
 
 type LengthRule struct {
-	Use     Limit
-	Short   Limit
-	Long    Limit
-	Example Limit
+	Limits map[string]Limit
 }
 
 type Limit struct {
@@ -35,32 +33,14 @@ func (l *LengthRule) Validate(cmd *cobra.Command) []error {
 func validateCobraCommand(cmd *cobra.Command, l *LengthRule) []error {
 	var errors []error
 
-	cmdPath := cmd.CommandPath()
+	for fieldName, limits := range l.Limits {
+		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName).String()
 
-	use := cmd.Use
-	useErr := validateField(l.Use, use, cmdPath)
-	if useErr != nil {
-		errors = append(errors, useErr)
+		err := validateField(limits, reflectValue, cmd.CommandPath())
+		if err != nil {
+			errors = append(errors, err)
+		}
 	}
-
-	short := cmd.Short
-	shortErr := validateField(l.Short, short, cmdPath)
-	if shortErr != nil {
-		errors = append(errors, shortErr)
-	}
-
-	long := cmd.Long
-	longErr := validateField(l.Long, long, cmdPath)
-	if longErr != nil {
-		errors = append(errors, longErr)
-	}
-
-	example := cmd.Example
-	exampleErr := validateField(l.Example, example, cmdPath)
-	if exampleErr != nil {
-		errors = append(errors, exampleErr)
-	}
-
 	return errors
 }
 
