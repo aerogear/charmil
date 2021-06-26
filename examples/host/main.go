@@ -6,6 +6,7 @@ import (
 
 	"github.com/aerogear/charmil/examples/plugins/date"
 	"github.com/aerogear/charmil/examples/plugins/echo"
+	"github.com/aerogear/charmil/pkg/preview"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,10 @@ func main() {
 		Use:          "Host",
 		Short:        "Host CLI for embedding commands",
 		SilenceUsage: true,
+		Run:          preview.UpdateFlagValue,
 	}
+
+	preview.InitFlag(cmd)
 
 	dateCmd, err := date.DateCommand()
 	if err != nil {
@@ -24,6 +28,8 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	preview.AddCommands(echoCmd)
 
 	cmd.AddCommand(dateCmd)
 	cmd.AddCommand(echoCmd)
