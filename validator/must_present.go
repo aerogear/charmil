@@ -11,32 +11,36 @@ type MustPresent struct {
 	Fields []string
 }
 
-func (p *MustPresent) Validate(cmd *cobra.Command) []Error {
+func (p *MustPresent) Validate(cmd *cobra.Command, verbose bool) []Error {
 
 	var errors []Error
-	err := validateMustPresent(cmd, p)
+	err := validateMustPresent(cmd, p, verbose)
 	errors = append(errors, err...)
 
 	for _, child := range cmd.Commands() {
-		err := validateMustPresent(child, p)
+		err := validateMustPresent(child, p, verbose)
 		errors = append(errors, err...)
 	}
 
 	return errors
 }
 
-func validateMustPresent(cmd *cobra.Command, p *MustPresent) []Error {
+func validateMustPresent(cmd *cobra.Command, p *MustPresent, verbose bool) []Error {
 	var errors []Error
 
 	for _, field := range p.Fields {
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(field)
-		errors = append(errors, validateByType(&reflectValue, field, cmd.CommandPath())...)
+		errors = append(errors, validateByType(&reflectValue, field, cmd.CommandPath(), verbose)...)
 	}
 	return errors
 }
 
-func validateByType(reflectValue *reflect.Value, field string, path string) []Error {
+func validateByType(reflectValue *reflect.Value, field string, path string, verbose bool) []Error {
 	var errors []Error
+
+	if verbose {
+		fmt.Printf("%s Command %s -> %s: %v\n", MustPresentRule, path, reflectValue.String(), field)
+	}
 
 	if reflectValue.String() == "" ||
 		(reflectValue.Kind().String() == "func" && reflectValue.IsNil()) ||
