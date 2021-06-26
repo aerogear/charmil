@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type LengthRule struct {
+type Length struct {
 	Limits map[string]Limit
 }
 
@@ -15,13 +15,17 @@ type Limit struct {
 	Min, Max int
 }
 
-func (l *LengthRule) Validate(cmd *cobra.Command) []error {
+func (l *Length) Validate(cmd *cobra.Command) []Error {
 
-	var errors []error
+	var errors []Error
 	err := validateLength(cmd, l)
 	errors = append(errors, err...)
 
 	for _, child := range cmd.Commands() {
+		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
+			continue
+		}
+
 		err := validateLength(child, l)
 		errors = append(errors, err...)
 
@@ -30,48 +34,48 @@ func (l *LengthRule) Validate(cmd *cobra.Command) []error {
 	return errors
 }
 
-func validateLength(cmd *cobra.Command, l *LengthRule) []error {
-	var errors []error
+func validateLength(cmd *cobra.Command, l *Length) []Error {
+	var errors []Error
 
 	for fieldName, limits := range l.Limits {
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName).String()
 
 		err := validateField(limits, reflectValue, cmd.CommandPath())
-		if err != nil {
+		if err.Err != nil {
 			errors = append(errors, err)
 		}
 	}
 	return errors
 }
 
-func validateField(limit Limit, value string, path string) error {
+func validateField(limit Limit, value string, path string) Error {
 	length := len(value)
 
 	_, err := isLimitSet(limit)
-	if err != nil {
+	if err.Err != nil {
 		return err
 	}
 
 	if length < limit.Min {
-		return fmt.Errorf("%s in %s: length should be atleast %d", value, path, limit.Min)
+		return Error{Name: fmt.Sprintf("length should be at least %d", limit.Min), Err: ErrMin, Rule: LengthRule}
 	}
 	if length > limit.Max {
-		return fmt.Errorf("%s in %s: length should be less than %d", value, path, limit.Max)
+		return Error{Name: fmt.Sprintf("length should be less than %d", limit.Max), Err: ErrMax, Rule: LengthRule}
 	}
 
-	return nil
+	return Error{}
 }
 
-func isLimitSet(limit Limit) (bool, error) {
+func isLimitSet(limit Limit) (bool, Error) {
 	if limit.Max < 0 || limit.Min < 0 {
-		return true, fmt.Errorf("max and min must be greater than 0")
+		return true, Error{Name: "max and min must be greater than 0", Err: ErrNeg, Rule: LengthRule}
 	}
 	if limit.Max == 0 && limit.Min == 0 {
-		return false, fmt.Errorf("limit not set")
+		return false, Error{Name: "limit not set", Err: ErrZeroValue, Rule: LengthRule}
 	}
 	if limit.Max < limit.Min {
-		return true, fmt.Errorf("max limit must be greater than min limit")
+		return true, Error{Name: "max limit must be greater than min limit", Err: ErrMin, Rule: LengthRule}
 	}
 
-	return true, nil
+	return true, Error{}
 }

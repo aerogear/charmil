@@ -5,5 +5,5 @@ import (
 )
 
 type Rule interface {
-	Validate(cmd *cobra.Command) []error
+	Validate(cmd *cobra.Command) []Error
 }
