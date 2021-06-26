@@ -12,27 +12,35 @@ type MustPresent struct {
 }
 
 func (p *MustPresent) Validate(cmd *cobra.Command, verbose bool) []Error {
-
 	var errors []Error
 	info := stats{num: 0, num_failed: 0, errors: errors}
+
+	return p.ValidateHelper(cmd, verbose, info)
+}
+
+func (p *MustPresent) ValidateHelper(cmd *cobra.Command, verbose bool, info stats) []Error {
 
 	err := validateMustPresent(cmd, p, verbose)
 	info.num++
 	info.num_failed += len(err)
-	errors = append(errors, err...)
+	info.errors = append(info.errors, err...)
 
 	for _, child := range cmd.Commands() {
-		err := validateMustPresent(child, p, verbose)
-		info.num++
-		info.num_failed += len(err)
-		errors = append(errors, err...)
+
+		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
+			continue
+		}
+
+		if err := p.ValidateHelper(child, verbose, info); err != nil {
+			return err
+		}
 	}
 
 	if verbose {
 		fmt.Printf("commands checked: %d\nchecks failed: %d\n", info.num, info.num_failed)
 	}
 
-	return errors
+	return info.errors
 }
 
 func validateMustPresent(cmd *cobra.Command, p *MustPresent, verbose bool) []Error {
