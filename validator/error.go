@@ -13,11 +13,6 @@ var (
 	ErrAbsent      = errors.New("field must be present")
 )
 
-var (
-	LengthRule      = "LENGTH_RULE"
-	MustPresentRule = "MUST_PRESENT_RULE"
-)
-
 type Error struct {
 	Name string
 	Err  error
