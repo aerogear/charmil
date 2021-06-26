@@ -16,32 +16,35 @@ type Limit struct {
 }
 
 func (l *Length) Validate(cmd *cobra.Command, verbose bool) []Error {
-
 	var errors []Error
 	info := stats{num: 0, num_failed: 0, errors: errors}
+
+	return l.ValidateHelper(cmd, verbose, info)
+}
+
+func (l *Length) ValidateHelper(cmd *cobra.Command, verbose bool, info stats) []Error {
 
 	err := validateLength(cmd, l, verbose)
 	info.num++
 	info.num_failed += len(err)
-	errors = append(errors, err...)
+	info.errors = append(info.errors, err...)
 
 	for _, child := range cmd.Commands() {
+
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
 
-		err := validateLength(child, l, verbose)
-		info.num++
-		info.num_failed += len(err)
-		errors = append(errors, err...)
-
+		if err := l.ValidateHelper(child, verbose, info); err != nil {
+			return err
+		}
 	}
 
 	if verbose {
 		fmt.Printf("commands checked: %d\nchecks failed: %d\n", info.num, info.num_failed)
 	}
 
-	return errors
+	return info.errors
 }
 
 func validateLength(cmd *cobra.Command, l *Length, verbose bool) []Error {
