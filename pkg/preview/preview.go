@@ -61,7 +61,7 @@ func AddCommands(cmdList ...*cobra.Command) {
 func updateCmdFields(cmd *cobra.Command) {
 	cmd.Annotations = map[string]string{"channel": "preview"}
 	cmd.Short = color.HiCyanString("[Preview] ") + cmd.Short
-	cmd.Hidden = true
+	cmd.Hidden = !dp.isEnabled
 }
 
 func updateCmdVisibility() {
