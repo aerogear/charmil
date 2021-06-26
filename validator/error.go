@@ -2,6 +2,7 @@ package validator
 
 import "errors"
 
+// Define errors
 var (
 	ErrMin           = errors.New("less than min")
 	ErrMax           = errors.New("less than max")
@@ -14,6 +15,7 @@ var (
 	ErrFieldNotExist = errors.New("field doesn't exists")
 )
 
+// Error is a default validation error
 type Error struct {
 	Name string
 	Err  error
