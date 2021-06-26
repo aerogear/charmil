@@ -36,12 +36,12 @@ func DateCommand() (*cobra.Command, error) {
 	// creating new command
 	// using localizer to access default text by ID provided in locals
 	cmd := &cobra.Command{
-		Use:          opts.Localize.LocalizeByID("date.cmd.use"),
-		Short:        opts.Localize.LocalizeByID("date.cmd.short"),
-		Long:         opts.Localize.LocalizeByID("date.cmd.long"),
-		Example:      opts.Localize.LocalizeByID("date.cmd.example"),
-		Args:         cobra.ExactArgs(0),
-		SilenceUsage: true,
+		Use:     opts.Localize.LocalizeByID("date.cmd.use"),
+		Short:   opts.Localize.LocalizeByID("date.cmd.short"),
+		Long:    opts.Localize.LocalizeByID("date.cmd.long"),
+		Example: opts.Localize.LocalizeByID("date.cmd.example"),
+		Args:    cobra.ExactArgs(0),
+		// SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			// Using logger for output

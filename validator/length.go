@@ -18,7 +18,11 @@ type Limit struct {
 func (l *Length) Validate(cmd *cobra.Command, verbose bool) []Error {
 
 	var errors []Error
+	info := stats{num: 0, num_failed: 0, errors: errors}
+
 	err := validateLength(cmd, l, verbose)
+	info.num++
+	info.num_failed += len(err)
 	errors = append(errors, err...)
 
 	for _, child := range cmd.Commands() {
@@ -27,8 +31,14 @@ func (l *Length) Validate(cmd *cobra.Command, verbose bool) []Error {
 		}
 
 		err := validateLength(child, l, verbose)
+		info.num++
+		info.num_failed += len(err)
 		errors = append(errors, err...)
 
+	}
+
+	if verbose {
+		fmt.Printf("commands checked: %d\nchecks failed: %d\n", info.num, info.num_failed)
 	}
 
 	return errors
