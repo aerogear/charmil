@@ -51,9 +51,14 @@ func validateLength(cmd *cobra.Command, l *Length, verbose bool) []Error {
 	var errors []Error
 
 	for fieldName, limits := range l.Limits {
-		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName).String()
+		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName)
 
-		err := validateField(limits, reflectValue, cmd.CommandPath(), verbose)
+		if reflectValue.String() == "<invalid Value>" {
+			errors = append(errors, Error{Name: fmt.Sprintf("%s Field doesn't exist in cobra.Command", fieldName), Err: ErrFieldNotExist, Rule: LengthRule})
+			continue
+		}
+
+		err := validateField(limits, reflectValue.String(), cmd.CommandPath(), verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}

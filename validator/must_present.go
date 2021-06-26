@@ -48,6 +48,12 @@ func validateMustPresent(cmd *cobra.Command, p *MustPresent, verbose bool) []Err
 
 	for _, field := range p.Fields {
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(field)
+
+		if reflectValue.String() == "<invalid Value>" {
+			errors = append(errors, Error{Name: fmt.Sprintf("%s Field doesn't exist in cobra.Command", field), Err: ErrFieldNotExist, Rule: LengthRule})
+			continue
+		}
+
 		errors = append(errors, validateByType(&reflectValue, field, cmd.CommandPath(), verbose)...)
 	}
 	return errors
