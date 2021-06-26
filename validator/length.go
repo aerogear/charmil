@@ -15,10 +15,10 @@ type Limit struct {
 	Min, Max int
 }
 
-func (l *Length) Validate(cmd *cobra.Command) []Error {
+func (l *Length) Validate(cmd *cobra.Command, verbose bool) []Error {
 
 	var errors []Error
-	err := validateLength(cmd, l)
+	err := validateLength(cmd, l, verbose)
 	errors = append(errors, err...)
 
 	for _, child := range cmd.Commands() {
@@ -26,7 +26,7 @@ func (l *Length) Validate(cmd *cobra.Command) []Error {
 			continue
 		}
 
-		err := validateLength(child, l)
+		err := validateLength(child, l, verbose)
 		errors = append(errors, err...)
 
 	}
@@ -34,13 +34,13 @@ func (l *Length) Validate(cmd *cobra.Command) []Error {
 	return errors
 }
 
-func validateLength(cmd *cobra.Command, l *Length) []Error {
+func validateLength(cmd *cobra.Command, l *Length, verbose bool) []Error {
 	var errors []Error
 
 	for fieldName, limits := range l.Limits {
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName).String()
 
-		err := validateField(limits, reflectValue, cmd.CommandPath())
+		err := validateField(limits, reflectValue, cmd.CommandPath(), verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}
@@ -48,12 +48,16 @@ func validateLength(cmd *cobra.Command, l *Length) []Error {
 	return errors
 }
 
-func validateField(limit Limit, value string, path string) Error {
+func validateField(limit Limit, value string, path string, verbose bool) Error {
 	length := len(value)
 
 	_, err := isLimitSet(limit)
 	if err.Err != nil {
 		return err
+	}
+
+	if verbose {
+		fmt.Printf("%s Command %s -> %s: %v\n", LengthRule, path, value, limit)
 	}
 
 	if length < limit.Min {
