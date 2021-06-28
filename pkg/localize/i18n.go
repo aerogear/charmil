@@ -69,7 +69,10 @@ func InitLocalizer(cfg Config) (*GoI18n, error) {
 
 	// load translations during initialization
 	bundle.RegisterUnmarshalFunc(cfg.Format, unmarshalFunc)
-	bundle.LoadMessageFile(cfg.Path)
+	_, err := bundle.LoadMessageFile(cfg.Path)
+	if err != nil {
+		return nil, err
+	}
 
 	loc := &GoI18n{
 		language:  &cfg.Language,
