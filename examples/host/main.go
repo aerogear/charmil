@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/aerogear/charmil/examples/plugins/date"
@@ -17,8 +16,9 @@ func main() {
 
 	dateCmd, err := date.DateCommand()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
+
 	cmd.AddCommand(dateCmd)
 
 	if err := cmd.Execute(); err != nil {
