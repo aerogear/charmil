@@ -9,14 +9,7 @@ import (
 // Rule is the interface which is implemented
 // by every rule defined in validator package
 type Rule interface {
-	// ValidateLength checks the length of cobra command
-	// with the limits provided by the user and returns errors
-	// verbose option is present which prints debug info
-	ValidateLength(cmd *cobra.Command, verbose bool) []ValidationError
-	// ValidateMustExist ensures that the fields
-	// provided by the user are present in cobra command
-	// verbose option is present which prints debug info
-	ValidateMustExist(cmd *cobra.Command, verbose bool) []ValidationError
+	ExecuteRules(cmd *cobra.Command) []ValidationError
 }
 
 // ValidationError is a default validation error
