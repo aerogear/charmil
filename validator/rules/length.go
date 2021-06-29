@@ -25,6 +25,7 @@ var LengthRule = "LENGTH_RULE"
 // with key as attribute for which length is controlled
 // and value limit as Limit struct
 type Length struct {
+	Enable bool
 	Limits map[string]Limit
 }
 
@@ -33,23 +34,7 @@ type Limit struct {
 	Min, Max int
 }
 
-// Validate implements the Rule interface
-func (l *Length) ValidateLength(cmd *cobra.Command, verbose bool) []validator.ValidationError {
-	var errors []validator.ValidationError
-	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
-
-	return validator.Traverse(
-		cmd,
-		verbose,
-		info,
-		l,
-		func(cmd *cobra.Command, verbose bool) []validator.ValidationError {
-			return l.validateHelper(cmd, verbose)
-		},
-	)
-}
-
-func (l *Length) validateHelper(cmd *cobra.Command, verbose bool) []validator.ValidationError {
+func validateLength(cmd *cobra.Command, l Length, verbose bool) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	for fieldName, limits := range l.Limits {
@@ -63,7 +48,7 @@ func (l *Length) validateHelper(cmd *cobra.Command, verbose bool) []validator.Va
 		}
 
 		// validate fieldName
-		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), verbose)
+		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}
@@ -73,7 +58,7 @@ func (l *Length) validateHelper(cmd *cobra.Command, verbose bool) []validator.Va
 
 // validateField compares the defined limit
 // with the length of the attribute/value
-func validateField(cmd *cobra.Command, limit Limit, value string, path string, verbose bool) validator.ValidationError {
+func validateField(cmd *cobra.Command, limit Limit, value string, path string, fieldName string, verbose bool) validator.ValidationError {
 	length := len(value)
 
 	// check if valid limit is set
@@ -88,10 +73,10 @@ func validateField(cmd *cobra.Command, limit Limit, value string, path string, v
 	}
 
 	if length < limit.Min {
-		return validator.ValidationError{Name: fmt.Sprintf("length should be at least %d", limit.Min), Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
+		return validator.ValidationError{Name: fmt.Sprintf("%s length should be at least %d in %s cmd", fieldName, limit.Min, path), Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
 	}
 	if length > limit.Max {
-		return validator.ValidationError{Name: fmt.Sprintf("length should be less than %d", limit.Max), Err: ErrLengthMax, Rule: LengthRule, Cmd: cmd}
+		return validator.ValidationError{Name: fmt.Sprintf("%s length should be less than %d in %s cmd", fieldName, limit.Max, path), Err: ErrLengthMax, Rule: LengthRule, Cmd: cmd}
 	}
 
 	return validator.ValidationError{}

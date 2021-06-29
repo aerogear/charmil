@@ -20,26 +20,11 @@ var MustExistRule = "MUST_EXIST_RULE"
 // MustExist is a struct that provides
 // Fields defined for MustExist validation
 type MustExist struct {
+	Enable bool
 	Fields []string
 }
 
-// Validate implements the Rule interface
-func (p *MustExist) ValidateMustExist(cmd *cobra.Command, verbose bool) []validator.ValidationError {
-	var errors []validator.ValidationError
-	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
-
-	return validator.Traverse(
-		cmd,
-		verbose,
-		info,
-		p,
-		func(cmd *cobra.Command, verbose bool) []validator.ValidationError {
-			return p.validateHelper(cmd, verbose)
-		},
-	)
-}
-
-func (p *MustExist) validateHelper(cmd *cobra.Command, verbose bool) []validator.ValidationError {
+func validateMustExist(cmd *cobra.Command, p MustExist, verbose bool) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	for _, field := range p.Fields {
@@ -75,7 +60,7 @@ func validateByType(cmd *cobra.Command, reflectValue *reflect.Value, field strin
 		(reflectValue.Kind().String() == "int" && reflectValue.Int() == 0) ||
 		(reflectValue.Kind().String() == "slice" && reflectValue.Len() == 0) ||
 		(reflectValue.Kind().String() == "map" && reflectValue.Len() == 0) {
-		errors = append(errors, validator.ValidationError{Name: fmt.Sprintf("%s must be present in %s", field, path), Err: ErrMustExistAbsent, Rule: MustExistRule, Cmd: cmd})
+		errors = append(errors, validator.ValidationError{Name: fmt.Sprintf("%s must be present in %s cmd", field, path), Err: ErrMustExistAbsent, Rule: MustExistRule, Cmd: cmd})
 	}
 
 	return errors
