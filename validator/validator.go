@@ -6,12 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Rule is the interface which is implemented
-// by every rule defined in validator package
-type Rule interface {
-	ExecuteRules(cmd *cobra.Command) []ValidationError
-}
-
 // ValidationError is a default validation error
 type ValidationError struct {
 	Name string
@@ -33,7 +27,7 @@ type StatusLog struct {
 
 // Traverse is used to traverse and validate
 // the command and it's descendant commands
-func Traverse(cmd *cobra.Command, verbose bool, info StatusLog, x interface{}, validate func(cmd *cobra.Command, verbose bool) []ValidationError) []ValidationError {
+func Traverse(cmd *cobra.Command, verbose bool, info StatusLog, validate func(cmd *cobra.Command, verbose bool) []ValidationError) []ValidationError {
 	// validate the root command
 	err := validate(cmd, verbose)
 	// record stats
@@ -50,7 +44,7 @@ func Traverse(cmd *cobra.Command, verbose bool, info StatusLog, x interface{}, v
 		}
 
 		// recursive call for ValidateHelper
-		if err := Traverse(child, verbose, info, x, validate); err != nil {
+		if err := Traverse(child, verbose, info, validate); err != nil {
 			return err
 		}
 	}
