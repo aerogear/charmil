@@ -74,7 +74,7 @@ func validateField(cmd *cobra.Command, limit Limit, value string, path string, f
 	if length < limit.Min {
 		return validator.ValidationError{Name: fmt.Sprintf("%s length should be at least %d", fieldName, limit.Min), Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
 	}
-	if length > limit.Max {
+	if limit.Max != 0 && length > limit.Max {
 		return validator.ValidationError{Name: fmt.Sprintf("%s length should be less than %d", fieldName, limit.Max), Err: ErrLengthMax, Rule: LengthRule, Cmd: cmd}
 	}
 
@@ -90,7 +90,7 @@ func isLimitSet(cmd *cobra.Command, limit Limit) (bool, validator.ValidationErro
 	if limit.Max == 0 && limit.Min == 0 {
 		return false, validator.ValidationError{Name: "limit not set", Err: ErrLengthZeroValue, Rule: LengthRule, Cmd: cmd}
 	}
-	if limit.Max < limit.Min {
+	if limit.Max != 0 && limit.Max < limit.Min {
 		return true, validator.ValidationError{Name: "max limit must be greater than min limit", Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
 	}
 
