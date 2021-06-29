@@ -2,6 +2,7 @@ package rules
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/aerogear/charmil/validator"
@@ -30,16 +31,35 @@ func (config *RuleConfig) ExecuteRules(cmd *cobra.Command) []validator.Validatio
 
 func (config *RuleConfig) executeHelper(cmd *cobra.Command, info validator.StatusLog) []validator.ValidationError {
 
-	return validator.Traverse(
-		cmd,
-		config.Verbose,
-		info,
-		func(cmd *cobra.Command, verbose bool) []validator.ValidationError {
-			info.Errors = append(info.Errors, validateLength(cmd, config.Length, config.Verbose)...)
-			info.Errors = append(info.Errors, validateMustExist(cmd, config.MustExist, config.Verbose)...)
-			return info.Errors
-		},
-	)
+	lenErrs := validateLength(cmd, config.Length, config.Verbose)
+	info.TotalErrors += len(lenErrs)
+
+	mustExistErrs := validateMustExist(cmd, config.MustExist, config.Verbose)
+	info.TotalErrors += len(mustExistErrs)
+
+	info.Errors = append(info.Errors, lenErrs...)
+	info.Errors = append(info.Errors, mustExistErrs...)
+	info.TotalTested++
+
+	for _, child := range cmd.Commands() {
+
+		// base case
+		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
+			continue
+		}
+
+		// recursive call
+		if err := config.executeHelper(child, info); err != nil {
+			return err
+		}
+	}
+
+	// prints additional info in debug mode
+	if config.Verbose {
+		fmt.Printf("commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
+	}
+
+	return info.Errors
 }
 
 // initDefaultRules initialize default rules

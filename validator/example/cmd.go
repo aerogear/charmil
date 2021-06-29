@@ -30,8 +30,16 @@ func NewCommand() *cobra.Command {
 		Run:     func(cmd *cobra.Command, args []string) {},
 	}
 
+	cmd3 := &cobra.Command{
+		Use:     "subcmd3",
+		Short:   "",
+		Example: "examples mine",
+		Run:     func(cmd *cobra.Command, args []string) {},
+	}
+
 	cmd1.AddCommand(cmd2)
 	cmd.AddCommand(cmd1)
+	cmd.AddCommand(cmd3)
 
 	return cmd
 }
