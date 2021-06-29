@@ -16,7 +16,7 @@ var vali rules.RuleConfig
 ```
 or overriding default config
 ```go
-var vali rules.RuleConfig = rules.RuleConfig{
+vali := rules.RuleConfig{
 	Verbose: true,
 	MustExist: rules.MustExist{
 		Fields: []string{"Args"},
