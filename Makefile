@@ -3,3 +3,6 @@ run:
 
 build:
 	go build ./examples/host
+
+test:
+	go test ./validator/example

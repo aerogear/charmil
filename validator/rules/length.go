@@ -25,7 +25,6 @@ var LengthRule = "LENGTH_RULE"
 // with key as attribute for which length is controlled
 // and value limit as Limit struct
 type Length struct {
-	Enable bool
 	Limits map[string]Limit
 }
 
@@ -73,10 +72,10 @@ func validateField(cmd *cobra.Command, limit Limit, value string, path string, f
 	}
 
 	if length < limit.Min {
-		return validator.ValidationError{Name: fmt.Sprintf("%s length should be at least %d in %s cmd", fieldName, limit.Min, path), Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
+		return validator.ValidationError{Name: fmt.Sprintf("%s length should be at least %d", fieldName, limit.Min), Err: ErrLengthMin, Rule: LengthRule, Cmd: cmd}
 	}
 	if length > limit.Max {
-		return validator.ValidationError{Name: fmt.Sprintf("%s length should be less than %d in %s cmd", fieldName, limit.Max, path), Err: ErrLengthMax, Rule: LengthRule, Cmd: cmd}
+		return validator.ValidationError{Name: fmt.Sprintf("%s length should be less than %d", fieldName, limit.Max), Err: ErrLengthMax, Rule: LengthRule, Cmd: cmd}
 	}
 
 	return validator.ValidationError{}

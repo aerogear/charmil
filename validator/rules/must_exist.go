@@ -20,7 +20,6 @@ var MustExistRule = "MUST_EXIST_RULE"
 // MustExist is a struct that provides
 // Fields defined for MustExist validation
 type MustExist struct {
-	Enable bool
 	Fields []string
 }
 
@@ -60,7 +59,7 @@ func validateByType(cmd *cobra.Command, reflectValue *reflect.Value, field strin
 		(reflectValue.Kind().String() == "int" && reflectValue.Int() == 0) ||
 		(reflectValue.Kind().String() == "slice" && reflectValue.Len() == 0) ||
 		(reflectValue.Kind().String() == "map" && reflectValue.Len() == 0) {
-		errors = append(errors, validator.ValidationError{Name: fmt.Sprintf("%s must be present in %s cmd", field, path), Err: ErrMustExistAbsent, Rule: MustExistRule, Cmd: cmd})
+		errors = append(errors, validator.ValidationError{Name: fmt.Sprintf("%s must be present", field), Err: ErrMustExistAbsent, Rule: MustExistRule, Cmd: cmd})
 	}
 
 	return errors
