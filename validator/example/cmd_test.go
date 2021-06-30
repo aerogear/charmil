@@ -13,14 +13,14 @@ func Test_ExecuteCommand(t *testing.T) {
 	// default config can also be overrided
 	var vali rules.RuleConfig
 	validationErr := vali.ExecuteRules(cmd)
-	for _, errs := range validationErr {
-		if errs.Err != nil {
-			t.Errorf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
-		}
+	if len(validationErr) != 0 {
+		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
 	}
 
-	if len(validationErr) == 0 {
-		t.Log("success, Test Passed!")
+	for _, errs := range validationErr {
+		if errs.Err != nil {
+			t.Fatalf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
+		}
 	}
 
 }
