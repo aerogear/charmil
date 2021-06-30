@@ -99,8 +99,8 @@ func (config *RuleConfig) initDefaultRules() {
 			Limits: map[string]Limit{
 				"Use":     {Min: 2},
 				"Short":   {Min: 15},
-				"Long":    {Min: 100},
-				"Example": {Min: 100},
+				"Long":    {Min: 50},
+				"Example": {Min: 50},
 			},
 		},
 		MustExist: MustExist{
