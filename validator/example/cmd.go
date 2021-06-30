@@ -4,6 +4,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type command struct {
+	name    *cobra.Command
+	use     string
+	short   string
+	example string
+}
+
 func NewCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -16,30 +23,21 @@ func NewCommand() *cobra.Command {
 		},
 	}
 
-	cmd1 := &cobra.Command{
-		Use:     "subcmd01",
-		Short:   "",
-		Example: "examples",
-		Run:     func(cmd *cobra.Command, args []string) {},
+	var commands []command = []command{
+		{use: "subcmd01", short: "short01", example: "example01"},
+		{use: "subcmd12", short: "short12", example: "example12"},
+		{use: "subcmd03", short: "short03", example: "example03"},
 	}
 
-	cmd2 := &cobra.Command{
-		Use:     "subcmd12",
-		Short:   "",
-		Example: "examples",
-		Run:     func(cmd *cobra.Command, args []string) {},
+	for _, cm := range commands {
+		cm.name = &cobra.Command{
+			Use:     cm.use,
+			Short:   cm.short,
+			Example: cm.example,
+			Run:     func(cmd *cobra.Command, args []string) {},
+		}
+		cmd.AddCommand(cm.name)
 	}
-
-	cmd3 := &cobra.Command{
-		Use:     "subcmd03",
-		Short:   "",
-		Example: "examples mine",
-		Run:     func(cmd *cobra.Command, args []string) {},
-	}
-
-	cmd1.AddCommand(cmd2)
-	cmd.AddCommand(cmd1)
-	cmd.AddCommand(cmd3)
 
 	return cmd
 }

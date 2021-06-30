@@ -34,10 +34,10 @@ type Limit struct {
 	Min, Max int
 }
 
-func validateLength(cmd *cobra.Command, l Length, verbose bool) []validator.ValidationError {
+func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for fieldName, limits := range l.Limits {
+	for fieldName, limits := range config.Length.Limits {
 		// reflects the fieldName in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName)
 
@@ -48,7 +48,7 @@ func validateLength(cmd *cobra.Command, l Length, verbose bool) []validator.Vali
 		}
 
 		// validate fieldName
-		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, verbose)
+		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, config.Verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}
