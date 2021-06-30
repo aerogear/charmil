@@ -5,6 +5,10 @@
 *.so
 *.dylib
 
+# IDE of text editor config directories
+/.idea/
+/.vscode/
+
 # Test binary, built with `go test -c`
 *.test
 
