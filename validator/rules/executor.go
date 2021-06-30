@@ -2,7 +2,9 @@ package rules
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/aerogear/charmil/validator"
 	"github.com/spf13/cobra"
@@ -28,47 +30,45 @@ func (config *RuleConfig) ExecuteRules(cmd *cobra.Command) []validator.Validatio
 	// validate the root command
 	config.validate(cmd, &info)
 
-	return config.executeHelper(cmd, info)
+	return config.executeHelper(cmd, &info)
+}
+
+func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
+	info.Errors = config.executeRecursive(cmd, info)
+
+	// prints additional info for the checks
+	fmt.Fprintf(os.Stderr, "commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
+
+	return info.Errors
+}
+
+// executeRecursive recursively traverse over all the subcommands
+// and validate using executeRulesChildren function
+func (config *RuleConfig) executeRecursive(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
+
+	for _, child := range cmd.Commands() {
+		// base case
+		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
+			continue
+		}
+		// recursive call
+		info.Errors = config.executeRecursive(child, info)
+	}
+	info.Errors = config.executeRulesChildren(cmd, info)
+
+	return info.Errors
 }
 
 // executeRulesChildren execute rules on children of cmd
-func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info validator.StatusLog) []validator.ValidationError {
-
+func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
 	children := cmd.Commands()
 	for _, child := range children {
 
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-
-		config.validate(child, &info)
+		config.validate(child, info)
 	}
-	return info.Errors
-}
-
-// executeHelper recursively traverse over all the subcommands
-// and validate using executeRulesChildren function
-func (config *RuleConfig) executeHelper(cmd *cobra.Command, info validator.StatusLog) []validator.ValidationError {
-
-	for _, child := range cmd.Commands() {
-
-		// base case
-		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
-			continue
-		}
-
-		// recursive call
-		info.Errors = config.executeHelper(child, info)
-
-	}
-
-	// prints additional info in debug mode
-	if config.Verbose {
-		log.Printf("commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
-	}
-
-	info.Errors = config.executeRulesChildren(cmd, info)
-
 	return info.Errors
 }
 
@@ -76,11 +76,11 @@ func (config *RuleConfig) executeHelper(cmd *cobra.Command, info validator.Statu
 func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog) {
 
 	// Length rule
-	lenErrs := validateLength(cmd, config.Length, config.Verbose)
+	lenErrs := validateLength(cmd, config)
 	info.TotalErrors += len(lenErrs)
 
 	// MustExist rule
-	mustExistErrs := validateMustExist(cmd, config.MustExist, config.Verbose)
+	mustExistErrs := validateMustExist(cmd, config)
 	info.TotalErrors += len(mustExistErrs)
 
 	info.Errors = append(info.Errors, lenErrs...)

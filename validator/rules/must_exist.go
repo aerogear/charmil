@@ -24,10 +24,10 @@ type MustExist struct {
 	Fields []string
 }
 
-func validateMustExist(cmd *cobra.Command, p MustExist, verbose bool) []validator.ValidationError {
+func validateMustExist(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for _, field := range p.Fields {
+	for _, field := range config.MustExist.Fields {
 		// reflects the field in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(field)
 
@@ -38,7 +38,7 @@ func validateMustExist(cmd *cobra.Command, p MustExist, verbose bool) []validato
 		}
 
 		// validate field and append errors
-		errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), verbose)...)
+		errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), config.Verbose)...)
 	}
 	return errors
 }
