@@ -3,6 +3,7 @@ package rules
 import (
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 
 	"github.com/aerogear/charmil/validator"
@@ -49,7 +50,7 @@ func validateByType(cmd *cobra.Command, reflectValue *reflect.Value, field strin
 
 	// prints additional info in debug mode
 	if verbose {
-		fmt.Printf("%s Command %s -> %s: %v\n", MustExistRule, path, reflectValue.String(), field)
+		log.Printf("%s Command %s -> %s: %v\n", MustExistRule, path, reflectValue.String(), field)
 	}
 
 	// handle types
