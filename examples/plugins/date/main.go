@@ -3,9 +3,9 @@ package date
 import (
 	"time"
 
-	"github.com/aerogear/charmil/pkg/factory"
-	"github.com/aerogear/charmil/pkg/localize"
-	"github.com/aerogear/charmil/pkg/logging"
+	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/core/logging"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
 )
