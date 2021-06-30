@@ -7,7 +7,7 @@ import (
 func NewCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
-		Use:     "new",
+		Use:     "cmd0",
 		Short:   "This is the short",
 		Long:    "This is long",
 		Example: "My Example",
@@ -17,21 +17,21 @@ func NewCommand() *cobra.Command {
 	}
 
 	cmd1 := &cobra.Command{
-		Use:     "subcmd",
+		Use:     "subcmd01",
 		Short:   "",
 		Example: "examples",
 		Run:     func(cmd *cobra.Command, args []string) {},
 	}
 
 	cmd2 := &cobra.Command{
-		Use:     "subcmd2",
+		Use:     "subcmd12",
 		Short:   "",
 		Example: "examples",
 		Run:     func(cmd *cobra.Command, args []string) {},
 	}
 
 	cmd3 := &cobra.Command{
-		Use:     "subcmd3",
+		Use:     "subcmd03",
 		Short:   "",
 		Example: "examples mine",
 		Run:     func(cmd *cobra.Command, args []string) {},

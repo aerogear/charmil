@@ -11,7 +11,9 @@ func Test_ExecuteCommand(t *testing.T) {
 
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
-	var vali rules.RuleConfig
+	var vali rules.RuleConfig = rules.RuleConfig{
+		// Verbose: true,
+	}
 	validationErr := vali.ExecuteRules(cmd)
 	for _, errs := range validationErr {
 		if errs.Err != nil {

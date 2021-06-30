@@ -2,7 +2,6 @@ package rules
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/aerogear/charmil/validator"
@@ -26,20 +25,30 @@ func (config *RuleConfig) ExecuteRules(cmd *cobra.Command) []validator.Validatio
 	// initialize default rules
 	config.initDefaultRules()
 
+	// validate the root command
+	config.validate(cmd, &info)
+
 	return config.executeHelper(cmd, info)
 }
 
+// executeRulesChildren execute rules on children of cmd
+func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info validator.StatusLog) []validator.ValidationError {
+
+	children := cmd.Commands()
+	for _, child := range children {
+
+		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
+			continue
+		}
+
+		config.validate(child, &info)
+	}
+	return info.Errors
+}
+
+// executeHelper recursively traverse over all the subcommands
+// and validate using executeRulesChildren function
 func (config *RuleConfig) executeHelper(cmd *cobra.Command, info validator.StatusLog) []validator.ValidationError {
-
-	lenErrs := validateLength(cmd, config.Length, config.Verbose)
-	info.TotalErrors += len(lenErrs)
-
-	mustExistErrs := validateMustExist(cmd, config.MustExist, config.Verbose)
-	info.TotalErrors += len(mustExistErrs)
-
-	info.Errors = append(info.Errors, lenErrs...)
-	info.Errors = append(info.Errors, mustExistErrs...)
-	info.TotalTested++
 
 	for _, child := range cmd.Commands() {
 
@@ -49,17 +58,34 @@ func (config *RuleConfig) executeHelper(cmd *cobra.Command, info validator.Statu
 		}
 
 		// recursive call
-		if err := config.executeHelper(child, info); err != nil {
-			return err
-		}
+		info.Errors = config.executeHelper(child, info)
+
 	}
 
 	// prints additional info in debug mode
 	if config.Verbose {
-		fmt.Printf("commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
+		log.Printf("commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
 	}
 
+	info.Errors = config.executeRulesChildren(cmd, info)
+
 	return info.Errors
+}
+
+// validate returns validation errors by executing the rules
+func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog) {
+
+	// Length rule
+	lenErrs := validateLength(cmd, config.Length, config.Verbose)
+	info.TotalErrors += len(lenErrs)
+
+	// MustExist rule
+	mustExistErrs := validateMustExist(cmd, config.MustExist, config.Verbose)
+	info.TotalErrors += len(mustExistErrs)
+
+	info.Errors = append(info.Errors, lenErrs...)
+	info.Errors = append(info.Errors, mustExistErrs...)
+	info.TotalTested++
 }
 
 // initDefaultRules initialize default rules
