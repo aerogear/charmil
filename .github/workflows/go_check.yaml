@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - '**.go'
+      - "**.go"
   pull_request:
     branches: [main]
     paths:
-      - '**.go'
+      - "**.go"
 
 jobs:
   build:
@@ -28,3 +28,5 @@ jobs:
           # args: --issues-exit-code=0
       - name: Build
         run: make build
+      - name: Test Validator Example
+        run: make test/validator
