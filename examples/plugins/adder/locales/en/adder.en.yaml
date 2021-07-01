@@ -9,3 +9,7 @@ adder.cmd.short:
 adder.cmd.example:
   description: "Examples of how to use the command"
   one: "$ host adder 1 2 3 4"
+
+adder.cmd.resultMessage:
+  description: "The message to be print while displaying result"
+  one: "The result is:"

@@ -41,7 +41,7 @@ func AdderCommand() (*cobra.Command, error) {
 				result += n
 			}
 
-			f.Logger.Infof("The result is: %d\n", result)
+			f.Logger.Infoln(f.Localizer.LocalizeByID("adder.cmd.resultMessage"), result)
 		},
 	}
 
