@@ -10,6 +10,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type Rules interface {
+	Validate() []validator.ValidationError
+}
+
 // RuleConfig is the struct that stores
 // configuration of rules
 type RuleConfig struct {
@@ -75,17 +79,18 @@ func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info *validat
 // validate returns validation errors by executing the rules
 func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog) {
 
-	// Length rule
-	lenErrs := validateLength(cmd, config)
-	info.TotalErrors += len(lenErrs)
+	rules := []Rules{
+		&LengthHelper{cmd: cmd, config: config},
+		&MustExistHelper{cmd: cmd, config: config},
+	}
 
-	// MustExist rule
-	mustExistErrs := validateMustExist(cmd, config)
-	info.TotalErrors += len(mustExistErrs)
+	for _, rule := range rules {
+		validationErrors := rule.Validate()
+		info.TotalErrors += len(validationErrors)
+		info.Errors = append(info.Errors, validationErrors...)
+		info.TotalTested++
+	}
 
-	info.Errors = append(info.Errors, lenErrs...)
-	info.Errors = append(info.Errors, mustExistErrs...)
-	info.TotalTested++
 }
 
 // initDefaultRules initialize default rules

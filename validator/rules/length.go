@@ -34,6 +34,15 @@ type Limit struct {
 	Min, Max int
 }
 
+type LengthHelper struct {
+	cmd    *cobra.Command
+	config *RuleConfig
+}
+
+func (l *LengthHelper) Validate() []validator.ValidationError {
+	return validateLength(l.cmd, l.config)
+}
+
 func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 
