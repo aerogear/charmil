@@ -1,6 +1,8 @@
-package example
+package main
 
 import (
+	"log"
+
 	"github.com/spf13/cobra"
 )
 
@@ -57,4 +59,11 @@ func NewCommand() *cobra.Command {
 	}
 
 	return cmd
+}
+
+func main() {
+	cmd := NewCommand()
+	if err := cmd.Execute(); err != nil {
+		log.Fatal(err)
+	}
 }
