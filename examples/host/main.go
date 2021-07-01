@@ -5,6 +5,7 @@ import (
 
 	"github.com/aerogear/charmil/core/commands"
 	echo "github.com/aerogear/charmil/examples/plugin"
+	"github.com/aerogear/charmil/examples/plugins/adder"
 	"github.com/spf13/cobra"
 )
 
@@ -27,6 +28,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	adderCmd, err := adder.AdderCommand()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	root.AddCommand(adderCmd)
 
 	// Execute root command
 	if err := root.Execute(); err != nil {

@@ -1,0 +1,11 @@
+adder.cmd.use:
+  description: "The one-line usage message"
+  one: "adder [numbers to add]"
+
+adder.cmd.short:
+  description: "The short description shown in the 'help' output"
+  one: "Adds given numbers and prints the result"
+
+adder.cmd.example:
+  description: "Examples of how to use the command"
+  one: "$ host adder 1 2 3 4"
