@@ -1,16 +1,23 @@
 package adder
 
 import (
-	"os"
 	"strconv"
 
+	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
 )
 
-func AdderCommand() (*cobra.Command, error) {
+func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
+	h := config.New()
+
+	h.SetValue("key5", "val5")
+	h.SetValue("key6", "val6")
+	h.SetValue("key7", "val7")
+	h.SetValue("key8", "val8")
+
 	locConfig := localize.Config{
 		Language: language.English,
 		Path:     "examples/plugins/adder/locales/en/adder.en.yaml",
@@ -19,7 +26,7 @@ func AdderCommand() (*cobra.Command, error) {
 
 	loc, err := localize.InitLocalizer(locConfig)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	f := factory.Default(loc)
@@ -29,21 +36,22 @@ func AdderCommand() (*cobra.Command, error) {
 		Short:   f.Localizer.LocalizeByID("adder.cmd.short"),
 		Example: f.Localizer.LocalizeByID("adder.cmd.example"),
 		Args:    cobra.MinimumNArgs(2),
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			result := 0
 
 			for _, arg := range args {
 				n, err := strconv.Atoi(arg)
 				if err != nil {
-					f.Logger.Errorln(err)
-					os.Exit(1)
+					return err
 				}
 				result += n
 			}
 
 			f.Logger.Infoln(f.Localizer.LocalizeByID("adder.cmd.resultMessage"), result)
+
+			return nil
 		},
 	}
 
-	return adderCmd, nil
+	return adderCmd, h.GetAllSettings(), nil
 }
