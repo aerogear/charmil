@@ -10,27 +10,35 @@ import (
 	"golang.org/x/text/language"
 )
 
+// AdderCommand returns the root command of plugin.
+// This will be added to the host CLI as an extension.
 func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
+	// Stores a new instance of the charmil config handler
 	h := config.New()
 
+	// Sets dummy values into config map
 	h.SetValue("key5", "val5")
 	h.SetValue("key6", "val6")
 	h.SetValue("key7", "val7")
 	h.SetValue("key8", "val8")
 
+	// Stores the config for localizer
 	locConfig := localize.Config{
 		Language: language.English,
 		Path:     "examples/plugins/adder/locales/en/adder.en.yaml",
 		Format:   "yaml",
 	}
 
+	// Initializes the localizer by passing config
 	loc, err := localize.InitLocalizer(locConfig)
 	if err != nil {
 		return nil, nil, err
 	}
 
+	//Stores a new factory instance with default settings
 	f := factory.Default(loc)
 
+	// Stores the root command of plugin
 	adderCmd := &cobra.Command{
 		Use:     f.Localizer.LocalizeByID("adder.cmd.use"),
 		Short:   f.Localizer.LocalizeByID("adder.cmd.short"),
@@ -53,5 +61,6 @@ func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
 		},
 	}
 
+	// Returns the root command of plugin along with the plugin config map
 	return adderCmd, h.GetAllSettings(), nil
 }
