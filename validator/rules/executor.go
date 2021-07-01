@@ -1,15 +1,17 @@
 package rules
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/aerogear/charmil/validator"
+	"github.com/imdario/mergo"
 	"github.com/spf13/cobra"
 )
 
+// Rules is an interface that is implemented
+// by every rule defined in rules package
 type Rules interface {
 	Validate() []validator.ValidationError
 }
@@ -84,6 +86,7 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 		&MustExistHelper{cmd: cmd, config: config},
 	}
 
+	// traverse all rules and validate
 	for _, rule := range rules {
 		validationErrors := rule.Validate()
 		info.TotalErrors += len(validationErrors)
@@ -113,28 +116,22 @@ func (config *RuleConfig) initDefaultRules() {
 		},
 	}
 
-	// Check verbose input from user
-	var verbose bool
-	if config != nil && config.Verbose {
-		verbose = true
+	if err := mergo.Merge(&config.Length, defaultConfig.Length); err != nil {
+		log.Fatal(err)
 	}
+	config.Fields = append(config.Fields, defaultConfig.Fields...)
+	config.Fields = removeDuplicates(config.Fields)
+}
 
-	// Set Config to defaultConfig
-	*config = *defaultConfig
-	config.Verbose = verbose
-
-	// Merge the defaultConfig and Config given by user
-	if config.Length.Limits != nil && config.MustExist.Fields != nil {
-		out, err := json.Marshal(config)
-		if err != nil {
-			log.Fatal(err)
-		}
-		data := []byte(out)
-
-		errr := json.Unmarshal(data, &defaultConfig)
-		if errr != nil {
-			log.Fatal(errr)
+// remove duplicates from slice
+func removeDuplicates(input []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range input {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
 		}
 	}
-
+	return list
 }
