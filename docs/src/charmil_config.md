@@ -27,12 +27,12 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
       h := config.New()
       ```
 
-  4.  Create an instance of the `File` struct, passing all the required settings for the local config file as fields. Once this is done, pass that `File` instance as an argument into the `InitFile` method, in order to link the local config file to the pointer receiver ie. handler.
+  4.  Create an instance of the `CfgFile` struct, passing all the required settings for the local config file as fields. Once this is done, pass that `CfgFile` instance as an argument into the `InitFile` method, in order to link the local config file to the pointer receiver ie. handler.
 
       _Example:_
 
       ```go
-      f = config.File{
+      f = config.CfgFile{
       	Name: "config",
       	Type: "yaml",
       	Path: "./examples/host",

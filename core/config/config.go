@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// File defines the fields required to point to a local config file
-type File struct {
+// CfgFile defines the fields required to point to a local config file
+type CfgFile struct {
 	// Name of the config file (without extension)
 	Name string
 
@@ -39,7 +39,7 @@ func New() *Handler {
 
 // InitFile links the handler instance to a local config file
 // based on the specified file configuration
-func (h *Handler) InitFile(f File) {
+func (h *Handler) InitFile(f CfgFile) {
 	h.vp.SetConfigName(f.Name)
 	h.vp.SetConfigType(f.Type)
 	h.vp.AddConfigPath(f.Path)

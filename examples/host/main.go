@@ -15,7 +15,7 @@ var (
 	h *config.Handler
 
 	// Stores the local config file settings
-	f = config.File{
+	f = config.CfgFile{
 		Name: "config",
 		Type: "yaml",
 		Path: "./examples/host",
