@@ -1,5 +1,5 @@
 # Charmil
-
+![example workflow](https://github.com/aerogear/charmil/actions/workflows/go_check.yaml/badge.svg)
 <a href="https://discord.gg/nAQBYZncvm">
   <img alt="Discord Server" src="https://img.shields.io/discord/632220458137419776?logo=Discord&logoColor=%23fff">
 </a>
