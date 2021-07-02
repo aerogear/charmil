@@ -1,4 +1,5 @@
 # Charmil
+![Discord](https://img.shields.io/discord/632220458137419776?logo=Discord&logoColor=%23fff)
 
 
 <p align="center">
