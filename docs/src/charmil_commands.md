@@ -1,23 +1,22 @@
 ## Charmil Commands
 Charmil provides prebuilt commands for developers to use when testing their application. These commands are opt-in and are only added when the application is built with a specific tag.
 
-To add charmil commands to your root command you can call the `CharmilCommands()` function. If calling this function does not populate `err` then add the commands to your root command.  
+To add charmil commands to your root command you can call the `AttachCharmilCommands()` function with your root command. It also must be noted that just not being in a dev build shouldn't cause `err` to be populated.  
 
 ```go
 cmd := &cobra.Command{
 		Use:          "Host",
 		Short:        "Host CLI for embedding commands",
 		SilenceUsage: true,
-	}
-	charmilCommands, err := commands.CharmilCommands()
-	if err == nil {
-		cmd.AddCommand(charmilCommands)
-	}
-```
-The reason for this structure is because sometimes you do not want to add charmil commands to your root command, for example in a production build. So that is why `CharmilCommands()` populating err does not mean it is time to panic.
+}
 
-Charmil commands are opt-in meaning you must specifically ask for them in your build and if you don't trying to get 
-them will return an error. To not get an error you must build your application; in this example `ack` with the `dev` tag.
+err = commands.AttachCharmilCommands(cmd)
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+Charmil commands are opt-in meaning you must specifically ask for them in your build; meaning trying to call `AttachCharmilCommands()` does not do anything in these builds.
 ```bash
 go build -tags dev ack.go
 ```
