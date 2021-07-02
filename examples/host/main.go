@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
-
+	"github.com/aerogear/charmil/core/commands"
 	"github.com/aerogear/charmil/examples/plugins/date"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 func main() {
-	cmd := &cobra.Command{
+	root := &cobra.Command{
 		Use:          "Host",
 		Short:        "Host CLI for embedding commands",
 		SilenceUsage: true,
@@ -19,9 +19,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cmd.AddCommand(dateCmd)
+	root.AddCommand(dateCmd)
 
-	if err := cmd.Execute(); err != nil {
+	err = commands.AttachCharmilCommands(root)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := root.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }
