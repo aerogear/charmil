@@ -12,10 +12,10 @@ func Test_ExecuteCommand(t *testing.T) {
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
 	var vali rules.RuleConfig = rules.RuleConfig{
-		Verbose: true,
+		Verbose: false,
 		Rules: []rules.Rules{
-			&rules.Length{Verbose: false, Limits: map[string]rules.Limit{"Use": {Min: 1000}}},
-			&rules.MustExist{Verbose: false, Fields: map[string]bool{"Long": true}},
+			&rules.Length{Limits: map[string]rules.Limit{"Use": {Min: 2}}},
+			&rules.MustExist{Fields: map[string]bool{"Long": false}},
 		},
 	}
 

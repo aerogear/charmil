@@ -30,7 +30,7 @@ func (config *RuleConfig) ExecuteRules(cmd *cobra.Command) []validator.Validatio
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
 	// initialize default rules
-	config.initDefaultRules(cmd)
+	config.initDefaultRules()
 
 	// validate the root command
 	config.validate(cmd, &info)
@@ -50,7 +50,6 @@ func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.Stat
 // executeRecursive recursively traverse over all the subcommands
 // and validate using executeRulesChildren function
 func (config *RuleConfig) executeRecursive(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
-	// fmt.Println(cmd.CommandPath())
 	for _, child := range cmd.Commands() {
 		// base case
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
@@ -94,27 +93,26 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
-func (config *RuleConfig) initDefaultRules(cmd *cobra.Command) {
+func (config *RuleConfig) initDefaultRules() {
+	defaultVerbose := config.Verbose
+
 	defaultConfig := RuleConfig{
-		Verbose: false,
+		Verbose: defaultVerbose,
 		Rules: []Rules{
 			&Length{
-				Verbose: false,
+				Verbose: defaultVerbose,
 				Limits: map[string]Limit{
 					"Use":     {Min: 2},
 					"Short":   {Min: 15},
 					"Long":    {Min: 50},
 					"Example": {Min: 50},
 				}},
-			&MustExist{Verbose: false, Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true}},
+			&MustExist{Verbose: defaultVerbose, Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true}},
 		},
 	}
 
-	fmt.Println("User Input", config)
 	if err := mergo.Merge(&defaultConfig, config, mergo.WithSliceDeepCopy); err != nil {
 		log.Fatal(err)
 	}
 	*config = defaultConfig
-	fmt.Println("After Merging", config)
-
 }
