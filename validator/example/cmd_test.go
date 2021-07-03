@@ -11,7 +11,7 @@ func Test_ExecuteCommand(t *testing.T) {
 
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
-	var vali rules.RuleConfig
+	vali := rules.NewRuleConfig()
 	validationErr := vali.ExecuteRules(cmd)
 	if len(validationErr) != 0 {
 		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)

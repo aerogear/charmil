@@ -24,16 +24,7 @@ type MustExist struct {
 	Fields []string
 }
 
-type MustExistHelper struct {
-	cmd    *cobra.Command
-	config *RuleConfig
-}
-
-func (m *MustExistHelper) Validate() []validator.ValidationError {
-	return validateMustExist(m.cmd, m.config)
-}
-
-func validateMustExist(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
+func (m *MustExist)Validate(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	for _, field := range config.MustExist.Fields {
