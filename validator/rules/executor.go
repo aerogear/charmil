@@ -85,7 +85,7 @@ func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info *validat
 	return info.Errors
 }
 
-// validate returns validation errors by executing the rules
+// validate populates info with stats on the rules executed
 func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog) {
 
 	rules := []Rules{
@@ -97,8 +97,8 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 		validationErrors := rule.Validate()
 		info.TotalErrors += len(validationErrors)
 		info.Errors = append(info.Errors, validationErrors...)
-		info.TotalTested++
 	}
+	info.TotalTested++
 
 }
 
