@@ -22,31 +22,27 @@ var (
 
 var LengthRule = "LENGTH_RULE"
 
-// Length is a struct that provides a map
-// with key as attribute for which length is controlled
-// and value limit as Limit struct
-type Length struct {
-	Limits map[string]Limit
-}
-
 // Limit defines min, max length of string
 type Limit struct {
 	Min, Max int
 }
 
-type LengthHelper struct {
-	cmd    *cobra.Command
-	config *RuleConfig
+// Length is a struct that provides a map
+// with key as attribute for which length is controlled
+// and value limit as Limit struct
+type Length struct {
+	Verbose bool
+	Limits  map[string]Limit
 }
 
-func (l *LengthHelper) Validate() []validator.ValidationError {
-	return validateLength(l.cmd, l.config)
+func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
+	return l.validateLength(cmd)
 }
 
-func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
+func (l *Length) validateLength(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for fieldName, limits := range config.Length.Limits {
+	for fieldName, limits := range l.Limits {
 		// reflects the fieldName in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName)
 
@@ -57,7 +53,7 @@ func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.Validati
 		}
 
 		// validate fieldName
-		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, config.Verbose)
+		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, l.Verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}

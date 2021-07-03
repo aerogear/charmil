@@ -11,7 +11,12 @@ func Test_ExecuteCommand(t *testing.T) {
 
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
-	var vali rules.RuleConfig
+	var vali rules.RuleConfig = rules.RuleConfig{
+		Rules: []rules.Rules{
+			&rules.Length{Verbose: true, Limits: map[string]rules.Limit{"Use": {Min: 100}}},
+		},
+	}
+
 	validationErr := vali.ExecuteRules(cmd)
 	if len(validationErr) != 0 {
 		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
@@ -19,7 +24,7 @@ func Test_ExecuteCommand(t *testing.T) {
 
 	for _, errs := range validationErr {
 		if errs.Err != nil {
-			t.Fatalf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
+			t.Errorf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
 		}
 	}
 

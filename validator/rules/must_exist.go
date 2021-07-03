@@ -21,22 +21,18 @@ var MustExistRule = "MUST_EXIST_RULE"
 // MustExist is a struct that provides
 // Fields defined for MustExist validation
 type MustExist struct {
-	Fields []string
+	Verbose bool
+	Fields  []string
 }
 
-type MustExistHelper struct {
-	cmd    *cobra.Command
-	config *RuleConfig
+func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
+	return m.validateMustExist(cmd)
 }
 
-func (m *MustExistHelper) Validate() []validator.ValidationError {
-	return validateMustExist(m.cmd, m.config)
-}
-
-func validateMustExist(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
+func (m *MustExist) validateMustExist(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for _, field := range config.MustExist.Fields {
+	for _, field := range m.Fields {
 		// reflects the field in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(field)
 
@@ -47,7 +43,7 @@ func validateMustExist(cmd *cobra.Command, config *RuleConfig) []validator.Valid
 		}
 
 		// validate field and append errors
-		errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), config.Verbose)...)
+		errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), m.Verbose)...)
 	}
 	return errors
 }
