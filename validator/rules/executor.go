@@ -95,27 +95,26 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
 func (config *RuleConfig) initDefaultRules(cmd *cobra.Command) {
-	defaultVerbose := false
 	defaultConfig := RuleConfig{
-		Verbose: defaultVerbose,
+		Verbose: false,
 		Rules: []Rules{
 			&Length{
-				Verbose: defaultVerbose,
+				Verbose: false,
 				Limits: map[string]Limit{
 					"Use":     {Min: 2},
 					"Short":   {Min: 15},
 					"Long":    {Min: 50},
 					"Example": {Min: 50},
 				}},
-			&MustExist{Verbose: defaultVerbose, Fields: []string{"Use", "Short", "Long", "Example"}},
+			&MustExist{Verbose: false, Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true}},
 		},
 	}
 
-	fmt.Println("User Input", config.Rules[0])
+	fmt.Println("User Input", config)
 	if err := mergo.Merge(&defaultConfig, config, mergo.WithSliceDeepCopy); err != nil {
 		log.Fatal(err)
 	}
 	*config = defaultConfig
-	fmt.Println("After Merging", config.Rules[0])
+	fmt.Println("After Merging", config)
 
 }

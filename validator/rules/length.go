@@ -3,7 +3,7 @@ package rules
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"reflect"
 
 	"github.com/aerogear/charmil/validator"
@@ -74,7 +74,7 @@ func validateField(cmd *cobra.Command, limit Limit, value string, path string, f
 
 	// prints additional info in debug mode
 	if verbose {
-		log.Printf("%s Command %s -> %s: %v\n", LengthRule, path, value, limit)
+		fmt.Fprintf(os.Stderr, "%s Command %s -> %s: %v\n", LengthRule, path, value, limit)
 	}
 
 	if length < limit.Min {

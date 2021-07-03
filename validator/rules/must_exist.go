@@ -3,7 +3,7 @@ package rules
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"reflect"
 
 	"github.com/aerogear/charmil/validator"
@@ -22,7 +22,7 @@ var MustExistRule = "MUST_EXIST_RULE"
 // Fields defined for MustExist validation
 type MustExist struct {
 	Verbose bool
-	Fields  []string
+	Fields  map[string]bool
 }
 
 func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
@@ -32,7 +32,7 @@ func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
 func (m *MustExist) validateMustExist(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for _, field := range m.Fields {
+	for field, isTrue := range m.Fields {
 		// reflects the field in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(field)
 
@@ -43,7 +43,9 @@ func (m *MustExist) validateMustExist(cmd *cobra.Command) []validator.Validation
 		}
 
 		// validate field and append errors
-		errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), m.Verbose)...)
+		if isTrue {
+			errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), m.Verbose)...)
+		}
 	}
 	return errors
 }
@@ -55,7 +57,7 @@ func validateByType(cmd *cobra.Command, reflectValue *reflect.Value, field strin
 
 	// prints additional info in debug mode
 	if verbose {
-		log.Printf("%s Command %s -> %s: %v\n", MustExistRule, path, reflectValue.String(), field)
+		fmt.Fprintf(os.Stderr, "%s Command %s -> %s: %v\n", MustExistRule, path, reflectValue.String(), field)
 	}
 
 	// handle types
