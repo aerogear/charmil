@@ -2,9 +2,11 @@ package rules
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/aerogear/charmil/validator"
+	"github.com/imdario/mergo"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +19,8 @@ type Rules interface {
 // RuleConfig is the struct that stores
 // configuration of rules
 type RuleConfig struct {
-	Rules []Rules
+	Verbose bool
+	Rules   []Rules
 }
 
 // ExecuteRules executes all the rules
@@ -92,22 +95,27 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
 func (config *RuleConfig) initDefaultRules(cmd *cobra.Command) {
-
+	defaultVerbose := false
 	defaultConfig := RuleConfig{
+		Verbose: defaultVerbose,
 		Rules: []Rules{
 			&Length{
-				Verbose: false,
+				Verbose: defaultVerbose,
 				Limits: map[string]Limit{
 					"Use":     {Min: 2},
 					"Short":   {Min: 15},
 					"Long":    {Min: 50},
 					"Example": {Min: 50},
 				}},
-			&MustExist{Verbose: false, Fields: []string{"Use", "Short", "Long", "Example"}},
+			&MustExist{Verbose: defaultVerbose, Fields: []string{"Use", "Short", "Long", "Example"}},
 		},
 	}
 
-	// TODO: Override default configuration
-
+	fmt.Println("User Input", config.Rules[0])
+	if err := mergo.Merge(&defaultConfig, config, mergo.WithSliceDeepCopy); err != nil {
+		log.Fatal(err)
+	}
 	*config = defaultConfig
+	fmt.Println("After Merging", config.Rules[0])
+
 }
