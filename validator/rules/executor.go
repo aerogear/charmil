@@ -51,6 +51,11 @@ func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.Stat
 func (config *RuleConfig) executeRecursive(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
 
 	for _, child := range cmd.Commands() {
+
+		if child.Use == "charmil"{
+			continue
+		}
+
 		// base case
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
@@ -67,6 +72,10 @@ func (config *RuleConfig) executeRecursive(cmd *cobra.Command, info *validator.S
 func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
 	children := cmd.Commands()
 	for _, child := range children {
+
+		if child.Use == "charmil"{
+			continue
+		}
 
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
