@@ -1,26 +1,44 @@
 package adder
 
 import (
+	"fmt"
+	"log"
 	"strconv"
 
-	"github.com/aerogear/charmil/core/config"
+	c "github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
 )
 
+type config struct {
+	Key5 string
+	Key6 string
+	Key7 string
+	Key8 string
+}
+
+var cfg = &config{}
+
 // AdderCommand returns the root command of plugin.
 // This will be added to the host CLI as an extension.
-func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
+func AdderCommand(cfile c.CfgFile) (*cobra.Command, error) {
 	// Stores a new instance of the charmil config handler
-	h := config.New()
+	// Links the handler instance to a local config file
+	h := c.New(cfile, cfg)
 
-	// Sets dummy values into config map
-	h.SetValue("key5", "val5")
-	h.SetValue("key6", "val6")
-	h.SetValue("key7", "val7")
-	h.SetValue("key8", "val8")
+	// // Loads config values from the local config file
+	// err := h.LoadPluginCfg()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// Sets dummy values into config
+	cfg.Key5 = "val5"
+	cfg.Key6 = "val6"
+	cfg.Key7 = "val7"
+	cfg.Key8 = "val8"
 
 	// Stores the config for localizer
 	locConfig := localize.Config{
@@ -32,7 +50,7 @@ func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
 	// Initializes the localizer by passing config
 	loc, err := localize.InitLocalizer(locConfig)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	//Stores a new factory instance with default settings
@@ -60,7 +78,14 @@ func AdderCommand() (*cobra.Command, map[string]interface{}, error) {
 			return nil
 		},
 	}
+	fmt.Println("Adder Plugin Config:", *cfg)
+
+	// Writes the current config into the local config file
+	err = h.SavePluginCfg()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Returns the root command of plugin along with the plugin config map
-	return adderCmd, h.GetAllSettings(), nil
+	return adderCmd, nil
 }

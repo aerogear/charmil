@@ -1,23 +1,34 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/aerogear/charmil/core/commands"
-	"github.com/aerogear/charmil/core/config"
+	c "github.com/aerogear/charmil/core/config"
 	echo "github.com/aerogear/charmil/examples/plugin"
 	"github.com/aerogear/charmil/examples/plugins/adder"
 	"github.com/spf13/cobra"
 )
 
+// CONSTRAINT: All fields of config struct need to be exportable
+type config struct {
+	Key1 string
+	Key2 string
+	Key3 string
+	Key4 string
+}
+
 var (
 	// Stores an instance of the charmil config handler
-	h *config.Handler
+	h *c.Handler
+
+	cfg = &config{}
 
 	// Stores the local config file settings
-	f = config.CfgFile{
+	cfile = c.CfgFile{
 		Name: "config",
-		Type: "yaml",
+		Type: "json",
 		Path: "./examples/host",
 	}
 
@@ -30,10 +41,8 @@ var (
 
 func init() {
 	// Assigns a new instance of the charmil config handler
-	h = config.New()
-
 	// Links the handler instance to a local config file
-	h.InitFile(f)
+	h = c.New(cfile, cfg)
 
 	// Loads config values from the local config file
 	err := h.Load()
@@ -43,8 +52,10 @@ func init() {
 }
 
 func main() {
-	// Sets a dummy value into config
-	h.SetValue("key4", "val4")
+	// TODO: Initialize the factory struct here and pass it to the plugins
+
+	// Sets a value into config
+	cfg.Key4 = "val4"
 
 	// Add plugin CLI into host
 	echoCmd, err := echo.EchoCommand()
@@ -53,7 +64,7 @@ func main() {
 	}
 
 	// Stores the root command and the config map of the `adder` plugin
-	adderCmd, adderCfg, err := adder.AdderCommand()
+	adderCmd, err := adder.AdderCommand(cfile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,10 +79,12 @@ func main() {
 	}
 
 	// Maps the plugin name to its imported config map
-	h.SetPluginCfg("adder", adderCfg)
+	// h.SetPluginCfg("adder", adderCfg)
 
 	// Stores config of every imported plugin into the current config
-	h.MergePluginCfg()
+	// h.MergePluginCfg()
+
+	fmt.Println("Host Config: ", *cfg)
 
 	// Writes the current config into the local config file
 	err = h.Save()
@@ -79,7 +92,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Execute root command
+	// fmt.Println("Viper host settings are: ", h.GetAllSettings())
+
 	if err := root.Execute(); err != nil {
 		log.Fatal(err)
 	}
