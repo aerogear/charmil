@@ -20,6 +20,7 @@ ruleCfg := rules.ValidatorConfig{
 	ValidatorRules: rules.ValidatorRules{
 		Length: rules.Length{Limits: map[string]rules.Limit{"Use": {Min: 1}}},
 		MustExist: rules.MustExist{Fields: map[string]bool{"Args": true}},
+		UseMatches: rules.UseMatches{Regexp: `^[^-_+]+$`},
 	},
 }
 ```
