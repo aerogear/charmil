@@ -66,7 +66,7 @@ Developers can create CLI profiles to install multiple individual CLI's at the s
 
 ## Documentation
 
-Visit the [Charmil Documentation](docs/src)
+Visit the [Charmil Documentation](https://aerogear.github.io/charmil/docs/)
 
 ## License
 

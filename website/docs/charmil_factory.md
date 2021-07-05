@@ -1,6 +1,8 @@
 ---
 title: Charmil Factory
+slug: /charmil_factory
 ---
+
 The Charmil Factory offers you one-stop access to all of the Charmil packages all at once. So you just need to initialize factory in your cobra command and start using logging, i18n, etc. 
 ```go
 import github.com/aerogear/charmil/core/factory

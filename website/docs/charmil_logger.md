@@ -1,6 +1,8 @@
 ---
 title: Charmil Logger
+slug: /charmil_logger
 ---
+
 Charmil logger provides a unified way to log messages across the entire Cobra CLI. 
 
 ## Functions provided by logger
