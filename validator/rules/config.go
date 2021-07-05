@@ -2,6 +2,7 @@ package rules
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/aerogear/charmil/validator"
 	"github.com/imdario/mergo"
@@ -51,10 +52,14 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 
 	// unmarshal defaultConfigJson in configHelper
 	var configHelper ValidatorConfig
-	json.Unmarshal([]byte(defaultConfigJson), &configHelper)
+	if err := json.Unmarshal([]byte(defaultConfigJson), &configHelper); err != nil {
+		log.Fatal(err)
+	}
 
 	// Merge user provided config into configHelper
-	mergo.Merge(&configHelper, validatorConfig, mergo.WithSliceDeepCopy)
+	if err := mergo.Merge(&configHelper, validatorConfig, mergo.WithSliceDeepCopy); err != nil {
+		log.Fatal(err)
+	}
 	validatorConfig = &configHelper
 
 	// append rules to execute
