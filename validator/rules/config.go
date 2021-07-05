@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"encoding/json"
 	"log"
 
 	"github.com/aerogear/charmil/validator"
@@ -30,9 +29,9 @@ type ValidatorRules struct {
 
 // ExecuteRules executes all the rules
 // provided by validatorConfig
-func (validatorConfig *ValidatorConfig) ExecuteRules(cmd *cobra.Command) []validator.ValidationError {
+func ExecuteRules(cmd *cobra.Command, validatorConfig *ValidatorConfig) []validator.ValidationError {
 	var ruleConfig RuleConfig
-	return ruleConfig.ExecuteRulesInternal(cmd, validatorConfig)
+	return ExecuteRulesInternal(cmd, &ruleConfig, validatorConfig)
 }
 
 // ValidatorConfigToRuleConfig intializes the default config
@@ -40,33 +39,27 @@ func (validatorConfig *ValidatorConfig) ExecuteRules(cmd *cobra.Command) []valid
 func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *RuleConfig) {
 	defaultVerbose := validatorConfig.ValidatorOptions.Verbose
 
-	defaultConfigJson := `{
-		"ValidatorOptions": {
-			"Verbose": false
-		},
-		"ValidatorRules": {
-			"Length": {
-				"Limits": {
-					"Use":     {"Min": 2},
-					"Short":   {"Min": 15},
-					"Long":    {"Min": 50},
-					"Example": {"Min": 50}
-				}
-			},
-			"MustExist": {
-				"Fields": {"Use": true, "Short": true, "Long": true, "Example": true}
-			}
-		}
-	}`
-
 	// unmarshal defaultConfigJson in configHelper
-	var configHelper ValidatorConfig
-	if err := json.Unmarshal([]byte(defaultConfigJson), &configHelper); err != nil {
-		log.Fatal(err)
+	var configHelper ValidatorConfig = ValidatorConfig{
+		ValidatorOptions: ValidatorOptions{
+			Verbose: defaultVerbose,
+		},
+		ValidatorRules: ValidatorRules{
+			Length: Length{
+				Verbose: defaultVerbose,
+				Limits: map[string]Limit{
+					"Use":     {Min: 2},
+					"Short":   {Min: 15},
+					"Long":    {Min: 50},
+					"Example": {Min: 50},
+				},
+			},
+			MustExist: MustExist{
+				Verbose: defaultVerbose,
+				Fields:  map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true},
+			},
+		},
 	}
-
-	configHelper.Length.Verbose = defaultVerbose
-	configHelper.MustExist.Verbose = defaultVerbose
 
 	// Merge user provided config into configHelper
 	if err := mergo.Merge(&configHelper, validatorConfig, mergo.WithSliceDeepCopy); err != nil {

@@ -22,21 +22,21 @@ type RuleConfig struct {
 
 // ExecuteRulesInternal executes all the rules
 // provided by ruleConfig
-func (ruleConfig *RuleConfig) ExecuteRulesInternal(cmd *cobra.Command, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
+func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
 	// initialize default rules
-	ruleConfig.initDefaultRules(userValidatorConfig)
+	initDefaultRules(userValidatorConfig, ruleConfig)
 
 	// validate the root command
-	ruleConfig.validate(cmd, &info)
+	validate(cmd, &info, ruleConfig)
 
-	return ruleConfig.executeHelper(cmd, &info)
+	return executeHelper(cmd, &info, ruleConfig)
 }
 
-func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
-	info.Errors = config.executeRecursive(cmd, info)
+func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
+	info.Errors = executeRecursive(cmd, info, ruleConfig)
 
 	// prints additional info for the checks
 	fmt.Fprintf(os.Stderr, "commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
@@ -46,38 +46,38 @@ func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.Stat
 
 // executeRecursive recursively traverse over all the subcommands
 // and validate using executeRulesChildren function
-func (config *RuleConfig) executeRecursive(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
+func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
 	for _, child := range cmd.Commands() {
 		// base case
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
 		// recursive call
-		info.Errors = config.executeRecursive(child, info)
+		info.Errors = executeRecursive(child, info, ruleConfig)
 	}
-	info.Errors = config.executeRulesChildren(cmd, info)
+	info.Errors = executeRulesChildren(cmd, info, ruleConfig)
 
 	return info.Errors
 }
 
 // executeRulesChildren execute rules on children of cmd
-func (config *RuleConfig) executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
+func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
 	children := cmd.Commands()
 	for _, child := range children {
 
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		config.validate(child, info)
+		validate(child, info, ruleConfig)
 	}
 	return info.Errors
 }
 
 // validate returns validation errors by executing the rules
-func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog) {
+func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) {
 
 	// traverse all rules and validate
-	for _, rule := range config.Rules {
+	for _, rule := range ruleConfig.Rules {
 		validationErrors := rule.Validate(cmd)
 		info.TotalErrors += len(validationErrors)
 		info.Errors = append(info.Errors, validationErrors...)
@@ -88,6 +88,6 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
-func (config *RuleConfig) initDefaultRules(validatorConfig *ValidatorConfig) {
-	ValidatorConfigToRuleConfig(validatorConfig, config)
+func initDefaultRules(validatorConfig *ValidatorConfig, ruleConfig *RuleConfig) {
+	ValidatorConfigToRuleConfig(validatorConfig, ruleConfig)
 }

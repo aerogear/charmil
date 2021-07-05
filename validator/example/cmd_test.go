@@ -16,13 +16,13 @@ func Test_ExecuteCommand(t *testing.T) {
 		ValidatorRules: rules.ValidatorRules{
 			Length: rules.Length{
 				Limits: map[string]rules.Limit{
-					"Use": {Min: 100},
+					"Use": {Min: 1},
 				},
 			},
 		},
 	}
 
-	validationErr := ruleCfg.ExecuteRules(cmd)
+	validationErr := rules.ExecuteRules(cmd, &ruleCfg)
 	if len(validationErr) != 0 {
 		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
 	}
