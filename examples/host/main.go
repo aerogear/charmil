@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/aerogear/charmil/core/commands"
-	"github.com/aerogear/charmil/examples/plugins/date"
-	"github.com/spf13/cobra"
 	"log"
+
+	"github.com/aerogear/charmil/core/commands"
+	echo "github.com/aerogear/charmil/examples/plugin"
+	"github.com/spf13/cobra"
 )
 
 func main() {
@@ -14,18 +15,20 @@ func main() {
 		SilenceUsage: true,
 	}
 
-	dateCmd, err := date.DateCommand()
+	// Add plugin CLI into host
+	echoCmd, err := echo.EchoCommand()
 	if err != nil {
 		log.Fatal(err)
 	}
+	root.AddCommand(echoCmd)
 
-	root.AddCommand(dateCmd)
-
+	// Add Charmil commands into host
 	err = commands.AttachCharmilCommands(root)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Execute root command
 	if err := root.Execute(); err != nil {
 		log.Fatal(err)
 	}

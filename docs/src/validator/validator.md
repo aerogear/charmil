@@ -2,33 +2,36 @@
 Validator can be used for testing and controlling many aspects of cobra commands. It provides many rules out of the box for validating the commands.
 
 ## Rules provided by validator
-- [LengthRule](validator_length_rule.md)
-- [MustExistRule](validator_must_exist_rule.md)
-- UseMatches
+- LengthRule
+- MustExistRule
+- UseMatchesRule
 > We are working on the validator library to provide more rules
 
 ## How to use
 It is recommended to use the validator while writing unit tests for cobra commands.
 
-1. Create a validator of type `rules.RuleConfig`. You can provide your own RulesConfig or use the default one by leaving it empty
+1. Create a configuration of type `rules.ValidatorConfig`. You can provide your own ValidatorConfig or use the default one by leaving it empty
 ```go
-var vali rules.RuleConfig
+var ruleCfg rules.ValidatorConfig
 ```
 or overriding default config
 ```go
-vali := rules.RuleConfig{
-	Verbose: true,
-	MustExist: rules.MustExist{
-		Fields: []string{"Args"},
+ruleCfg := rules.ValidatorConfig{
+	ValidatorRules: rules.ValidatorRules{
+		Length: rules.Length{Limits: map[string]rules.Limit{"Use": {Min: 1}}},
+		MustExist: rules.MustExist{Fields: map[string]bool{"Args": true}},
 	},
 }
 ```
-2. Generate the validation errors by using `ExecuteRules` function over the config
+2. Generate the validation errors by using `ExecuteRules` function over the ruleCfg
 ```go
-validationErr := vali.ExecuteRules(cmd)
+validationErr := rules.ExecuteRules(cmd, &ruleCfg)
 ```
 `ExecuteRules` function will return a slice of `ValidationError` object, which can be efficiently used for testing purposes.
 ```go
+if len(validationErr) != 0 {
+	t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
+}
 for _, errs := range validationErr {
 	if errs.Err != nil {
 		t.Errorf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
