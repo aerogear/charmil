@@ -10,10 +10,10 @@ func AttachCharmilCommands(hostRoot *cobra.Command) error {
 		return nil
 	}
 
-         // Placeholder command. To be replaced later by actual commands
+	// Placeholder command. To be replaced later by actual commands
 	cmd := &cobra.Command{
-		Use:     "charmil",
-		Short:   "built in charmil commands",
+		Use:          "charmil",
+		Short:        "built in charmil commands",
 		SilenceUsage: false,
 	}
 
