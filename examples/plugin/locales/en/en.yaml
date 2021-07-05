@@ -1,0 +1,12 @@
+echo.cmd.use:
+  description: "echo command use"
+  one: "echo [string to echo]"
+echo.cmd.short:
+  description: "echo command short description"
+  one: "Echo anything to the screen"
+echo.cmd.long:
+  description: "echo command long description"
+  one: "Echo can utter any string to the screen"
+echo.cmd.example:
+  description: "echo command examples"
+  one: "$ host echo"
