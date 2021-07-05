@@ -1,7 +1,6 @@
 package adder
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -23,17 +22,7 @@ var cfg = &config{}
 
 // AdderCommand returns the root command of plugin.
 // This will be added to the host CLI as an extension.
-func AdderCommand(cfile c.CfgFile) (*cobra.Command, error) {
-	// Stores a new instance of the charmil config handler
-	// Links the handler instance to a local config file
-	h := c.New(cfile, cfg)
-
-	// // Loads config values from the local config file
-	// err := h.LoadPluginCfg()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
+func AdderCommand(cfgFilePath string) (*cobra.Command, error) {
 	// Sets dummy values into config
 	cfg.Key5 = "val5"
 	cfg.Key6 = "val6"
@@ -78,10 +67,9 @@ func AdderCommand(cfile c.CfgFile) (*cobra.Command, error) {
 			return nil
 		},
 	}
-	fmt.Println("Adder Plugin Config:", *cfg)
 
 	// Writes the current config into the local config file
-	err = h.SavePluginCfg()
+	err = c.MergePluginCfg("adder", cfgFilePath, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}

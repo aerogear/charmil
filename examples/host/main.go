@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/aerogear/charmil/core/commands"
@@ -19,19 +18,15 @@ type config struct {
 	Key4 string
 }
 
+const cfgFilePath = "./examples/host/config.json"
+
 var (
 	// Stores an instance of the charmil config handler
 	h *c.Handler
 
 	cfg = &config{}
 
-	// Stores the local config file settings
-	cfile = c.CfgFile{
-		Name: "config",
-		Type: "json",
-		Path: "./examples/host",
-	}
-
+	// Root command of the host CLI
 	root = &cobra.Command{
 		Use:          "Host",
 		Short:        "Host CLI for embedding commands",
@@ -42,7 +37,7 @@ var (
 func init() {
 	// Assigns a new instance of the charmil config handler
 	// Links the handler instance to a local config file
-	h = c.New(cfile, cfg)
+	h = c.New(cfgFilePath, cfg)
 
 	// Loads config values from the local config file
 	err := h.Load()
@@ -64,7 +59,7 @@ func main() {
 	}
 
 	// Stores the root command and the config map of the `adder` plugin
-	adderCmd, err := adder.AdderCommand(cfile)
+	adderCmd, err := adder.AdderCommand(cfgFilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,14 +72,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// Maps the plugin name to its imported config map
-	// h.SetPluginCfg("adder", adderCfg)
-
-	// Stores config of every imported plugin into the current config
-	// h.MergePluginCfg()
-
-	fmt.Println("Host Config: ", *cfg)
 
 	// Writes the current config into the local config file
 	err = h.Save()

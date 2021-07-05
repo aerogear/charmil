@@ -12,6 +12,4 @@ type Factory struct {
 	Logger logging.Logger
 	// Localizer localizes the text in commands
 	Localizer localize.Localizer
-
-	// TODO: Add config.CfgFile struct over here
 }
