@@ -12,12 +12,20 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Handler defines the fields required to manage config.
 type Handler struct {
-	cfg      interface{}
+	// Pointer to an instance of the host CLI config struct
+	cfg interface{}
+
+	// Path of the local config file
 	filePath string
-	fileExt  string
+
+	// Extension of the local config file
+	fileExt string
 }
 
+// NewHandler links the specified arguments to a
+// new instance of handler and returns a pointer to it.
 func NewHandler(path string, cfg interface{}) *Handler {
 	// TODO: Add code to verify if cfg is a pointer to struct
 
@@ -30,16 +38,18 @@ func NewHandler(path string, cfg interface{}) *Handler {
 	return h
 }
 
+// Load reads config values from the local config file
+// (using the file path linked to the handler) and stores
+// them into the linked instance of host CLI config struct.
 func (h *Handler) Load() error {
-	// Add code to read local config file
 
+	// Reads the local config file
 	buf, err := readFile(h.filePath)
 	if err != nil {
 		return err
 	}
 
-	// Add code to store values (read from file) to the host config struct [ie. Unmarshal]
-
+	// Stores values (read from file) to the host config struct instance
 	err = h.unmarshal(buf, h.cfg)
 	if err != nil {
 		return err
@@ -48,36 +58,49 @@ func (h *Handler) Load() error {
 	return nil
 }
 
+// Save writes config values from the linked instance
+// of host CLI config struct to the local config file
+// (using the file path linked to the handler).
 func (h *Handler) Save() error {
-	// Add code to store values (read from host config struct) to the local config file [ie. Marshal]
-
+	// To store the current contents of the local config file
 	dst := &map[string]interface{}{}
+
+	// To store contents of the linked instance of host CLI config struct
 	src := &map[string]interface{}{}
 
+	// Reads the local config file
 	buf, err := readFile(h.filePath)
 	if err != nil {
 		return err
 	}
 
+	// Stores current contents of the local config file to `dst`
 	err = h.unmarshal(buf, &dst)
 	if err != nil {
 		return err
 	}
 
+	// Initializes a `map[string]interface{}` holding the values of `h.cfg`.
+	//
+	// Done with the intention to maintain similar types as `mergo.Merge`
+	// doesn't accept 2 differently typed objects as arguments
 	err = mergo.Map(src, h.cfg)
 	if err != nil {
 		return err
 	}
 
+	// Merges current host CLI config with the existing config in the local file
 	if err := mergo.Merge(dst, src, mergo.WithSliceDeepCopy); err != nil {
 		return err
 	}
 
+	// Converts the merged config into a byte array
 	bs, err := h.marshal(*dst)
 	if err != nil {
 		return err
 	}
 
+	// Writes the merged config to the local config file
 	err = writeFile(h.filePath, bs)
 	if err != nil {
 		return err
@@ -86,23 +109,26 @@ func (h *Handler) Save() error {
 	return nil
 }
 
+// MergePluginCfg adds plugin config into the local config file.
 func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) error {
 	// TODO: Add code to verify if cfg is a pointer to struct
 
-	// Load local config file content into a byte-array/string [Marshal]
-
+	// Reads the local config file
 	buf, err := readFile(cfgFilePath)
 	if err != nil {
 		return err
 	}
 
 	// TODO: Specific only to JSON files currently. Extend to other formats too
+
+	// Adds a field (specified by `pluginName`) under the `plugins` parent key
+	// in the local config file and adds the specified plugin config under that key
 	mergedBuf, err := sjson.Set(string(buf), "plugins."+pluginName, cfg)
 	if err != nil {
 		return err
 	}
 
-	// Write final string to the local config file
+	// Writes final merged contents to the local config file
 	err = writeFile(cfgFilePath, []byte(mergedBuf))
 	if err != nil {
 		return err
@@ -111,6 +137,8 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 	return nil
 }
 
+// marshal identifies extension of the local config file and performs
+// a marshalling operation on the passed object, based on it.
 func (h *Handler) marshal(in interface{}) ([]byte, error) {
 	var marshalFunc func(in interface{}) ([]byte, error)
 
@@ -140,6 +168,8 @@ func (h *Handler) marshal(in interface{}) ([]byte, error) {
 	return buf, nil
 }
 
+// unmarshal identifies extension of the local config file and performs
+// an unmarshalling operation on the passed arguments, based on it.
 func (h *Handler) unmarshal(in []byte, out interface{}) error {
 	var unmarshalFunc func(in []byte, out interface{}) (err error)
 
@@ -162,6 +192,7 @@ func (h *Handler) unmarshal(in []byte, out interface{}) error {
 	return nil
 }
 
+// readFile reads the file specified by filePath and returns its contents.
 func readFile(filePath string) ([]byte, error) {
 	buf, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -171,6 +202,7 @@ func readFile(filePath string) ([]byte, error) {
 	return buf, nil
 }
 
+// writeFile writes data to the file specified by filePath.
 func writeFile(filePath string, data []byte) error {
 	err := ioutil.WriteFile(filePath, data, 0644)
 	if err != nil {

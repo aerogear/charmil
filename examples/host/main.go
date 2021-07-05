@@ -10,7 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// CONSTRAINT: All fields of config struct need to be exportable
+// Defines the configuration keys of the host CLI.
+//
+// CONSTRAINT: All fields of the config struct need to be exportable
 type config struct {
 	Key1 string
 	Key2 string
@@ -18,12 +20,14 @@ type config struct {
 	Key4 string
 }
 
+// Stores the path of the local config file
 const cfgFilePath = "./examples/host/config.json"
 
 var (
 	// Stores an instance of the charmil config handler
 	h *c.Handler
 
+	// Initializes a zero-valued struct and stores its address
 	cfg = &config{}
 
 	// Root command of the host CLI
@@ -35,8 +39,8 @@ var (
 )
 
 func init() {
-	// Assigns a new instance of the charmil config handler
-	// Links the handler instance to a local config file
+	// Links the specified local config file path and current config
+	// struct pointer to a new handler instance and returns it
 	h = c.NewHandler(cfgFilePath, cfg)
 
 	// Loads config values from the local config file
@@ -58,7 +62,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Stores the root command and the config map of the `adder` plugin
+	// Stores the root command of the `adder` plugin
 	adderCmd, err := adder.AdderCommand(cfgFilePath)
 	if err != nil {
 		log.Fatal(err)

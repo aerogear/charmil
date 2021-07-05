@@ -11,6 +11,9 @@ import (
 	"golang.org/x/text/language"
 )
 
+// Defines the configuration keys of the plugin.
+//
+// CONSTRAINT: All fields of the config struct need to be exportable
 type config struct {
 	Key5 string
 	Key6 string
@@ -18,6 +21,7 @@ type config struct {
 	Key8 string
 }
 
+// Initializes a zero-valued struct and stores its address
 var cfg = &config{}
 
 // AdderCommand returns the root command of plugin.
@@ -68,12 +72,11 @@ func AdderCommand(cfgFilePath string) (*cobra.Command, error) {
 		},
 	}
 
-	// Writes the current config into the local config file
+	// Merges the current plugin config into the local config file
 	err = c.MergePluginCfg("adder", cfgFilePath, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Returns the root command of plugin along with the plugin config map
 	return adderCmd, nil
 }
