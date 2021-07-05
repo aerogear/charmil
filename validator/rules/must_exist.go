@@ -21,8 +21,8 @@ var MustExistRule = "MUST_EXIST_RULE"
 // MustExist is a struct that provides
 // Fields defined for MustExist validation
 type MustExist struct {
-	Verbose bool
-	Fields  map[string]bool
+	Verbose bool            `json:"Verbose"`
+	Fields  map[string]bool `json:"Fields"`
 }
 
 func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {

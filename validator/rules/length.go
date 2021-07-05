@@ -24,15 +24,16 @@ var LengthRule = "LENGTH_RULE"
 
 // Limit defines min, max length of string
 type Limit struct {
-	Min, Max int
+	Min int `json:"Min"`
+	Max int `json:"Max"`
 }
 
 // Length is a struct that provides a map
 // with key as attribute for which length is controlled
 // and value limit as Limit struct
 type Length struct {
-	Verbose bool
-	Limits  map[string]Limit
+	Verbose bool             `json:"Verbose"`
+	Limits  map[string]Limit `json:"Limits"`
 }
 
 func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {

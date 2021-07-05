@@ -2,11 +2,9 @@ package rules
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/aerogear/charmil/validator"
-	"github.com/imdario/mergo"
 	"github.com/spf13/cobra"
 )
 
@@ -23,19 +21,19 @@ type RuleConfig struct {
 	Rules   []Rules
 }
 
-// ExecuteRules executes all the rules
-// according to the RuleConfig provided
-func (config *RuleConfig) ExecuteRules(cmd *cobra.Command) []validator.ValidationError {
+// ExecuteRulesInternal executes all the rules
+// provided by ruleConfig
+func (ruleConfig *RuleConfig) ExecuteRulesInternal(cmd *cobra.Command, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
 	// initialize default rules
-	config.initDefaultRules()
+	ruleConfig.initDefaultRules(userValidatorConfig)
 
 	// validate the root command
-	config.validate(cmd, &info)
+	ruleConfig.validate(cmd, &info)
 
-	return config.executeHelper(cmd, &info)
+	return ruleConfig.executeHelper(cmd, &info)
 }
 
 func (config *RuleConfig) executeHelper(cmd *cobra.Command, info *validator.StatusLog) []validator.ValidationError {
@@ -81,8 +79,6 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 
 	// traverse all rules and validate
 	for _, rule := range config.Rules {
-		// fmt.Println(reflect.TypeOf(rule))
-
 		validationErrors := rule.Validate(cmd)
 		info.TotalErrors += len(validationErrors)
 		info.Errors = append(info.Errors, validationErrors...)
@@ -93,26 +89,6 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
-func (config *RuleConfig) initDefaultRules() {
-	defaultVerbose := config.Verbose
-
-	defaultConfig := RuleConfig{
-		Verbose: defaultVerbose,
-		Rules: []Rules{
-			&Length{
-				Verbose: defaultVerbose,
-				Limits: map[string]Limit{
-					"Use":     {Min: 2},
-					"Short":   {Min: 15},
-					"Long":    {Min: 50},
-					"Example": {Min: 50},
-				}},
-			&MustExist{Verbose: defaultVerbose, Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true}},
-		},
-	}
-
-	if err := mergo.Merge(&defaultConfig, config, mergo.WithSliceDeepCopy); err != nil {
-		log.Fatal(err)
-	}
-	*config = defaultConfig
+func (config *RuleConfig) initDefaultRules(testCfg *ValidatorConfig) {
+	ValidatorConfigToRuleConfig(testCfg, config)
 }
