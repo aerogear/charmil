@@ -28,10 +28,6 @@ type MustExist struct {
 // Validate is a method of type Rule Interface
 // which returns validation errors
 func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
-	return m.validateMustExist(cmd)
-}
-
-func (m *MustExist) validateMustExist(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	for field, isTrue := range m.Fields {

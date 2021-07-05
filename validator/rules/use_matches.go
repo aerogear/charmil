@@ -23,12 +23,8 @@ type UseMatches struct {
 
 // Validate is a method of type Rule Interface
 // which returns validation errors
+// compares the regexp with Use attribute
 func (u *UseMatches) Validate(cmd *cobra.Command) []validator.ValidationError {
-	return u.validateUse(cmd)
-}
-
-// validateUse compares the regexp with Use attribute
-func (u *UseMatches) validateUse(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	r, err := regexp.Compile(u.Regexp)

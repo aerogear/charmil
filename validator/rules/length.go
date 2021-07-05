@@ -39,10 +39,6 @@ type Length struct {
 // Validate is a method of type Rule Interface
 // which returns validation errors
 func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
-	return l.validateLength(cmd)
-}
-
-func (l *Length) validateLength(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
 	for fieldName, limits := range l.Limits {
