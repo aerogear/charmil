@@ -68,6 +68,5 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 	validatorConfig = &configHelper
 
 	// append rules to execute
-	ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.Length)
-	ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.MustExist)
+	ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.Length, &validatorConfig.MustExist)
 }
