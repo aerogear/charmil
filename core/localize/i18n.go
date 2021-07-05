@@ -32,7 +32,7 @@ type Config struct {
 
 // LocalizeByID helps in localizing by passing id present in local file
 // pass dynamic value using template entries
-func (I *GoI18n) LocalizeByID(messageId string, template ...*TemplateEntry) string {
+func (i *GoI18n) LocalizeByID(messageId string, template ...*TemplateEntry) string {
 
 	// Putting back templateEntry into desired format
 	// required by go-i18n
@@ -42,7 +42,7 @@ func (I *GoI18n) LocalizeByID(messageId string, template ...*TemplateEntry) stri
 	}
 
 	localizeConfig := &i18n.LocalizeConfig{MessageID: messageId, PluralCount: 1, TemplateData: templateData}
-	res := I.Localizer.MustLocalize(localizeConfig)
+	res := i.Localizer.MustLocalize(localizeConfig)
 	return res
 }
 

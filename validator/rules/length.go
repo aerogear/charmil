@@ -3,7 +3,7 @@ package rules
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"reflect"
 
 	"github.com/aerogear/charmil/validator"
@@ -22,31 +22,28 @@ var (
 
 var LengthRule = "LENGTH_RULE"
 
+// Limit defines min, max length of string
+type Limit struct {
+	Min int `json:"Min"`
+	Max int `json:"Max"`
+}
+
 // Length is a struct that provides a map
 // with key as attribute for which length is controlled
 // and value limit as Limit struct
 type Length struct {
-	Limits map[string]Limit
+	Verbose bool             `json:"Verbose"`
+	Limits  map[string]Limit `json:"Limits"`
 }
 
-// Limit defines min, max length of string
-type Limit struct {
-	Min, Max int
+func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
+	return l.validateLength(cmd)
 }
 
-type LengthHelper struct {
-	cmd    *cobra.Command
-	config *RuleConfig
-}
-
-func (l *LengthHelper) Validate() []validator.ValidationError {
-	return validateLength(l.cmd, l.config)
-}
-
-func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.ValidationError {
+func (l *Length) validateLength(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
-	for fieldName, limits := range config.Length.Limits {
+	for fieldName, limits := range l.Limits {
 		// reflects the fieldName in cobra.Command struct
 		reflectValue := reflect.ValueOf(cmd).Elem().FieldByName(fieldName)
 
@@ -57,7 +54,7 @@ func validateLength(cmd *cobra.Command, config *RuleConfig) []validator.Validati
 		}
 
 		// validate fieldName
-		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, config.Verbose)
+		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, l.Verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}
@@ -78,7 +75,7 @@ func validateField(cmd *cobra.Command, limit Limit, value string, path string, f
 
 	// prints additional info in debug mode
 	if verbose {
-		log.Printf("%s Command %s -> %s: %v\n", LengthRule, path, value, limit)
+		fmt.Fprintf(os.Stderr, "%s Command %s -> %s: %v\n", LengthRule, path, value, limit)
 	}
 
 	if length < limit.Min {

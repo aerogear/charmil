@@ -1,8 +1,6 @@
-package date
+package echo
 
 import (
-	"time"
-
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/core/logging"
@@ -18,10 +16,10 @@ type Options struct {
 }
 
 // Date Command
-func DateCommand() (*cobra.Command, error) {
+func EchoCommand() (*cobra.Command, error) {
 
 	// Initialize localizer providing the language, locals and format of locals file
-	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locales/en/en.yaml", Format: "yaml"})
+	loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugin/locales/en/en.yaml", Format: "yaml"})
 	if err != nil {
 		return nil, err
 	}
@@ -33,19 +31,18 @@ func DateCommand() (*cobra.Command, error) {
 		Localize: newFactory.Localizer,
 	}
 
-	// creating new command
+	// creating new echo command
 	// using localizer to access default text by ID provided in locals
 	cmd := &cobra.Command{
-		Use:     opts.Localize.LocalizeByID("date.cmd.use"),
-		Short:   opts.Localize.LocalizeByID("date.cmd.short"),
-		Long:    opts.Localize.LocalizeByID("date.cmd.long"),
-		Example: opts.Localize.LocalizeByID("date.cmd.example"),
-		Args:    cobra.ExactArgs(0),
-		// SilenceUsage: true,
+		Use:     opts.Localize.LocalizeByID("echo.cmd.use"),
+		Short:   opts.Localize.LocalizeByID("echo.cmd.short"),
+		Long:    opts.Localize.LocalizeByID("echo.cmd.long"),
+		Example: opts.Localize.LocalizeByID("echo.cmd.example"),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			// Using logger for output
-			opts.Logger.Infof("Date Time is %s", time.Now())
+			opts.Logger.Info(args[0])
 
 			return nil
 		},
