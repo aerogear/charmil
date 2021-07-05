@@ -37,7 +37,7 @@ var (
 func init() {
 	// Assigns a new instance of the charmil config handler
 	// Links the handler instance to a local config file
-	h = c.New(cfgFilePath, cfg)
+	h = c.NewHandler(cfgFilePath, cfg)
 
 	// Loads config values from the local config file
 	err := h.Load()

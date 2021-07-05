@@ -17,7 +17,7 @@ type Handler struct {
 	fileExt  string
 }
 
-func New(path string, cfg interface{}) *Handler {
+func NewHandler(path string, cfg interface{}) *Handler {
 	// TODO: Add code to check if cfg is of type: struct
 
 	// fmt.Println(reflect.TypeOf(cfg))
