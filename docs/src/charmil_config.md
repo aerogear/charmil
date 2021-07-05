@@ -4,10 +4,9 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
 
 ## Features:
 
-- Uses [Viper](https://github.com/spf13/viper) under the hood.
-- Helps in maintaining all available configurations in a single central-local config file.
-- Provides the plugin developers with a set of methods to maintain a configuration map and export it to the host CLI.
-- Provides the host CLI developers with a set of methods to import plugin configuration maps and read/write configurations from/to a local config file.
+- Helps in maintaining all available configurations in a single, centralized local config file.
+- Provides the plugin developers with a functionality to add their CLI configurations to the host CLI local config file with ease.
+- Provides the host CLI developers with a set of methods to read/write configurations from/to a local config file.
 
 ## Steps to Use:
 
@@ -17,28 +16,30 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
 
   2.  Import the Charmil Config package by adding the following line at the top of that file:
       ```go
-      import "github.com/aerogear/charmil/core/config"
+      import c "github.com/aerogear/charmil/core/config"
       ```
-  3.  Store a new instance of the Charmil Config handler by calling the `New` function.
+  3.  Define a struct whose fields represent the keys to all the values that you want to store as config and create an instance of it.
+      **Important**: Every field of the defined struct needs to be exportable (ie. start with an uppercase letter). The unexportable fields cannot be stored as config.
+
+            _Example:_
+
+            ```go
+          	type config struct {
+          		Key1 string
+          		Key2 string
+          		Key3 string
+          		Key4 string
+          	}
+
+          	cfg = &config{}
+            ```
+
+  4.  Store a new instance of the Charmil Config handler by calling the `NewHandler` function while passing the path of local config file and the instance of the config struct (initialized in the last step) as arguments.
 
       _Example:_
 
       ```go
-      h := config.New()
-      ```
-
-  4.  Create an instance of the `CfgFile` struct, passing all the required settings for the local config file as fields. Once this is done, pass that `CfgFile` instance as an argument into the `InitFile` method, in order to link the local config file to the pointer receiver ie. handler.
-
-      _Example:_
-
-      ```go
-      f = config.CfgFile{
-      	Name: "config",
-      	Type: "yaml",
-      	Path: "./examples/host",
-      }
-
-      h.InitFile(f)
+      h = c.NewHandler("./examples/host/config.json", cfg)
       ```
 
   5.  Load config values from the local config file using the `Load` method.
@@ -52,45 +53,31 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
       }
       ```
 
-  6.  Use the `SetValue` and `GetValue` methods respectively to set and get values to/from the current config.
+  6.  You can set/get/modify values under any key of config using the idiomatic way to interact with structs in Golang.
 
       _Example:_
 
       ```go
-      h.SetValue("key0", "val0")
+      // Sets a value into config
+      cfg.Key4 = "val4"
 
-      val, err := h.GetValue("key0") // returns "val0"
-      if err != nil {
-      	log.Fatal(err)
-      }
+      // Overwrites a value in config
+      cfg.Key2 = "newVal2"
+
+      // Returns the value under specified key in config
+      fmt.Println(cfg.Key3) // Prints: val3
       ```
 
-  7.  Map a plugin name to its config map using the `SetPluginCfg` method by passing the name of the plugin (as you want it in the config file) as the first argument and the config map imported from the plugin, as the second argument.
+  7.  Write current config into the local config file using the `Save` method.
 
-      _Example:_
+          _Example:_
 
-      ```go
-      h.SetPluginCfg("pluginName", pluginCfg)
-      ```
-
-  8.  Call the `MergePluginCfg` method to store the config of every plugin (ie. mapped using the `SetPluginCfg` method) into the current config.
-
-      _Example:_
-
-      ```go
-      h.MergePluginCfg()
-      ```
-
-  9.  Write current config into the local config file using the `Save` method.
-
-      _Example:_
-
-      ```go
-      err = h.Save()
-      if err != nil {
-      	log.Fatal(err)
-      }
-      ```
+          ```go
+          err = h.Save()
+          if err != nil {
+          	log.Fatal(err)
+          }
+          ```
 
 - ### For plugin developers:
 
@@ -98,73 +85,96 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
 
   2.  Import the Charmil Config package by adding the following line at the top of that file:
       ```go
-      import "github.com/aerogear/charmil/core/config"
+      import c "github.com/aerogear/charmil/core/config"
       ```
-  3.  Store a new instance of the Charmil Config handler by calling the `New` function.
+  3.  Define a struct whose fields represent the keys to all the values that you want to store as config and create an instance of it.
+      **Important**: Every field of the defined struct needs to be exportable (ie. start with an uppercase letter). The unexportable fields cannot be stored as config.
+
+            _Example:_
+
+            ```go
+          	type config struct {
+          		Key5 string
+          		Key6 string
+          		Key7 string
+          		Key8 string
+          	}
+
+          	cfg = &config{}
+            ```
+
+  4.  You can set/get/modify values under any key of config using the idiomatic way to interact with structs in Golang.
 
       _Example:_
 
       ```go
-      h := config.New()
+      // Sets values into config
+      cfg.Key5 = "val5"
+      cfg.Key6 = "val6"
+      cfg.Key7 = "oldVal7"
+      cfg.Key8 = "val8"
+
+      // Overwrites a value in config
+      cfg.Key7 = "val7"
+
+      // Returns the value under specified key in config
+      fmt.Println(cfg.Key6) // Prints: val6
       ```
 
-  4.  Use the `SetValue` and `GetValue` methods respectively to set and get values to/from the current config.
+  5.  Use the `MergePluginCfg` function to merge the current plugin config into the local config file
 
       _Example:_
 
       ```go
-      h.SetValue("key0", "val0")
-
-      val, err := h.GetValue("key0") // returns "val0"
+      err = c.MergePluginCfg(pluginName, cfgFilePath, cfg)
       if err != nil {
       	log.Fatal(err)
       }
       ```
 
-  5.  Use the `GetAllSettings` to get the current config in the form of a map and export it to the host CLI.
-
-      _Example:_
-
-      ```go
-      cfg := h.GetAllSettings()
-
-      return cfg
-      ```
+      where `pluginName` is the name of the plugin (as you want it in the local config file), `cfgFilePath` is the file path passed from the host CLI and `cfg` is a pointer to an instance of the current config file (initialized in step 3).
 
 ## Here's an example for the same:
 
 - #### Initial Configurations [Before running the Host CLI]:
 
-  - _`config.yaml`_ file:
+  - _`config.json`_ file:
 
-    ```yaml
-    key1: "val1"
-    key2: "val2"
-    key3: "val3"
+    ```json
+    {
+      "key1": "val1",
+      "key2": "val2",
+      "key3": "val3"
+    }
     ```
 
-  - Plugin A's Config Map:
+  - Plugin A's Config Struct:
     ```go
-    map[key4:value4 key5:value5 key6:value6]
+    {val4 val5 val6}
     ```
-  - Plugin B's Config Map:
+  - Plugin B's Config Struct:
     ```go
-    map[key7:value7 key8:value8 key9:value9]
+    {val7 val8 val9}
     ```
 
 - #### Final Configurations [After running the Host CLI]:
-  - _`config.yaml`_ file:
-    ```yaml
-    key1: "val1"
-    key2: "val2"
-    key3: "val3"
-    plugins:
-      pluginA:
-        key4: "val4"
-        key5: "val5"
-        key6: "val6"
-      pluginB:
-        key7: "val7"
-        key8: "val8"
-        key9: "val9"
+  - _`config.json`_ file:
+    ```json
+    {
+      "key1": "val1",
+      "key2": "val2",
+      "key3": "val3",
+      "plugins": {
+        "pluginA": {
+          "Key4": "val4",
+          "Key5": "val5",
+          "Key6": "val6"
+        },
+        "pluginB": {
+          "Key7": "val7",
+          "Key8": "val8",
+          "Key9": "val9"
+        }
+      }
+    }
     ```
