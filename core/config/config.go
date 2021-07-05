@@ -19,17 +19,7 @@ type Handler struct {
 }
 
 func NewHandler(path string, cfg interface{}) *Handler {
-	// TODO: Add code to check if cfg is of type: struct
-
-	// fmt.Println(reflect.TypeOf(cfg))
-	// t := reflect.ValueOf(cfg).Kind()
-	// if t != reflect.Struct {
-	// 	return fmt.Errorf("The object passed in as argument is not a struct.", t)
-	// }
-
-	// if dst != nil && reflect.ValueOf(dst).Kind() != reflect.Ptr {
-	// 	return [some error]
-	// }
+	// TODO: Add code to verify if cfg is a pointer to struct
 
 	h := &Handler{
 		filePath: path,
@@ -97,7 +87,7 @@ func (h *Handler) Save() error {
 }
 
 func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) error {
-	// TODO: Add code to check if cfg is of type: struct
+	// TODO: Add code to verify if cfg is a pointer to struct
 
 	// Load local config file content into a byte-array/string [Marshal]
 
@@ -106,7 +96,7 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 		return err
 	}
 
-	// TODO: Specific to JSON files currently. Extend to other formats too
+	// TODO: Specific only to JSON files currently. Extend to other formats too
 	mergedBuf, err := sjson.Set(string(buf), "plugins."+pluginName, cfg)
 	if err != nil {
 		return err
