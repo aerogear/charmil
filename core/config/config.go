@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"github.com/imdario/mergo"
 	"github.com/pelletier/go-toml"
 	"github.com/tidwall/sjson"
 	"gopkg.in/yaml.v2"
@@ -24,6 +25,10 @@ func NewHandler(path string, cfg interface{}) *Handler {
 	// t := reflect.ValueOf(cfg).Kind()
 	// if t != reflect.Struct {
 	// 	return fmt.Errorf("The object passed in as argument is not a struct.", t)
+	// }
+
+	// if dst != nil && reflect.ValueOf(dst).Kind() != reflect.Ptr {
+	// 	return [some error]
 	// }
 
 	h := &Handler{
@@ -56,7 +61,29 @@ func (h *Handler) Load() error {
 func (h *Handler) Save() error {
 	// Add code to store values (read from host config struct) to the local config file [ie. Marshal]
 
-	bs, err := h.marshal()
+	dst := &map[string]interface{}{}
+	src := &map[string]interface{}{}
+
+	buf, err := readFile(h.filePath)
+	if err != nil {
+		return err
+	}
+
+	err = h.unmarshal(buf, &dst)
+	if err != nil {
+		return err
+	}
+
+	err = mergo.Map(src, h.cfg)
+	if err != nil {
+		return err
+	}
+
+	if err := mergo.Merge(dst, src, mergo.WithSliceDeepCopy); err != nil {
+		return err
+	}
+
+	bs, err := h.marshal(*dst)
 	if err != nil {
 		return err
 	}
@@ -74,19 +101,19 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 
 	// Load local config file content into a byte-array/string [Marshal]
 
-	bs, err := readFile(cfgFilePath)
+	buf, err := readFile(cfgFilePath)
 	if err != nil {
 		return err
 	}
 
 	// TODO: Specific to JSON files currently. Extend to other formats too
-	updatedBs, err := sjson.Set(string(bs), "plugins."+pluginName, cfg)
+	mergedBuf, err := sjson.Set(string(buf), "plugins."+pluginName, cfg)
 	if err != nil {
 		return err
 	}
 
 	// Write final string to the local config file
-	err = writeFile(cfgFilePath, []byte(updatedBs))
+	err = writeFile(cfgFilePath, []byte(mergedBuf))
 	if err != nil {
 		return err
 	}
@@ -94,7 +121,7 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 	return nil
 }
 
-func (h *Handler) marshal() ([]byte, error) {
+func (h *Handler) marshal(in interface{}) ([]byte, error) {
 	var marshalFunc func(in interface{}) ([]byte, error)
 
 	switch h.fileExt {
@@ -105,22 +132,22 @@ func (h *Handler) marshal() ([]byte, error) {
 		marshalFunc = toml.Marshal
 
 	case ".json":
-		bs, err := json.MarshalIndent(h.cfg, "", "  ")
+		buf, err := json.MarshalIndent(in, "", "  ")
 		if err != nil {
 			return nil, err
 		}
-		return bs, nil
+		return buf, nil
 
 	default:
 		return nil, fmt.Errorf("Unsupported file extension \"%v\"", h.fileExt)
 	}
 
-	bs, err := marshalFunc(h.cfg)
+	buf, err := marshalFunc(in)
 	if err != nil {
 		return nil, err
 	}
 
-	return bs, nil
+	return buf, nil
 }
 
 func (h *Handler) unmarshal(in []byte, out interface{}) error {
