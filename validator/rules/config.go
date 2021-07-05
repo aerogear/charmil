@@ -11,10 +11,10 @@ import (
 
 // ValidatorConfig is provided to user for overriding default rules
 type ValidatorConfig struct {
-	Options        `json:"Options"`
-	ValidatorRules `json:"ValidatorRules"`
+	ValidatorOptions `json:"ValidatorOptions"`
+	ValidatorRules   `json:"ValidatorRules"`
 }
-type Options struct {
+type ValidatorOptions struct {
 	Verbose bool `json:"Verbose"`
 }
 type ValidatorRules struct {
@@ -30,9 +30,10 @@ func (validatorConfig *ValidatorConfig) ExecuteRules(cmd *cobra.Command) []valid
 }
 
 func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *RuleConfig) {
+	defaultVerbose := validatorConfig.ValidatorOptions.Verbose
 
 	defaultConfigJson := `{
-		"Options": {
+		"ValidatorOptions": {
 			"Verbose": false
 		},
 		"ValidatorRules": {
@@ -56,6 +57,9 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 		log.Fatal(err)
 	}
 
+	configHelper.Length.Verbose = defaultVerbose
+	configHelper.MustExist.Verbose = defaultVerbose
+
 	// Merge user provided config into configHelper
 	if err := mergo.Merge(&configHelper, validatorConfig, mergo.WithSliceDeepCopy); err != nil {
 		log.Fatal(err)
@@ -63,7 +67,6 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 	validatorConfig = &configHelper
 
 	// append rules to execute
-	ruleConfig.Verbose = validatorConfig.Verbose
 	ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.Length)
 	ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.MustExist)
 }

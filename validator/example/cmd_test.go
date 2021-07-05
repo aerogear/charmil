@@ -12,11 +12,11 @@ func Test_ExecuteCommand(t *testing.T) {
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
 	ruleCfg := rules.ValidatorConfig{
-		Options: rules.Options{Verbose: false},
+		ValidatorOptions: rules.ValidatorOptions{Verbose: false},
 		ValidatorRules: rules.ValidatorRules{
 			Length: rules.Length{
 				Limits: map[string]rules.Limit{
-					"Use": {Min: 1},
+					"Use": {Min: 100},
 				},
 			},
 		},

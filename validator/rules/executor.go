@@ -17,8 +17,7 @@ type Rules interface {
 // RuleConfig is the struct that stores
 // configuration of rules
 type RuleConfig struct {
-	Verbose bool
-	Rules   []Rules
+	Rules []Rules
 }
 
 // ExecuteRulesInternal executes all the rules
@@ -89,6 +88,6 @@ func (config *RuleConfig) validate(cmd *cobra.Command, info *validator.StatusLog
 
 // initDefaultRules initialize default rules
 // and overrides the default rules if RuleConfig is provided by the user
-func (config *RuleConfig) initDefaultRules(testCfg *ValidatorConfig) {
-	ValidatorConfigToRuleConfig(testCfg, config)
+func (config *RuleConfig) initDefaultRules(validatorConfig *ValidatorConfig) {
+	ValidatorConfigToRuleConfig(validatorConfig, config)
 }
