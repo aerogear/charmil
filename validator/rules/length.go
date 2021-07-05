@@ -36,6 +36,8 @@ type Length struct {
 	Limits  map[string]Limit `json:"Limits"`
 }
 
+// Validate is a method of type Rule Interface
+// which returns validation errors
 func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
 	return l.validateLength(cmd)
 }

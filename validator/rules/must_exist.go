@@ -25,6 +25,8 @@ type MustExist struct {
 	Fields  map[string]bool `json:"Fields"`
 }
 
+// Validate is a method of type Rule Interface
+// which returns validation errors
 func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
 	return m.validateMustExist(cmd)
 }
