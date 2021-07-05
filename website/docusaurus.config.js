@@ -5,16 +5,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 module.exports = {
   title: 'Areogear-Charmil',
   tagline: 'Charmil provides ecosystem of tools to build production ready command line tools with Cobra Framework.',
-  url: 'https://github.com/aerogear/charmil',
-  baseUrl: '/',
-  onBrokenLinks: 'throw',
+  url: 'https://aerogear.github.io',
+  baseUrl: '/charmil/',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/logo.JPG',
-  organizationName: 'aerogear', // Usually your GitHub org/user name.
-  projectName: 'areogear-charmil', // Usually your repo name.
+  favicon: 'img/logo.jpg',
+  organizationName: 'aerogear',
+  projectName: 'charmil',
   themeConfig: {
     navbar: {
-      
       items: [
         {
           type: 'doc',
@@ -37,7 +36,7 @@ module.exports = {
           items: [
             {
               label: 'Documentation',
-              to: '/docs/intro',
+              to: 'docs/',
             },
           ],
         },
@@ -74,7 +73,6 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
             'https://github.com/aerogear/charmil',
         },

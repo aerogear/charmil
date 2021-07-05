@@ -1,7 +1,8 @@
 ---
-title: Charmil i18n
+title: Charmil Localization
+slug: /charmil_localization
 ---
-## Charmil Internationalization
+
 Localization has never been easier. Charmil provides out of the box support for the localization of your CLI.
 
 ## How to use

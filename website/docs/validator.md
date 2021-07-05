@@ -1,4 +1,8 @@
-## Validator
+---
+title: Charmil Validator
+slug: /charmil_validator
+---
+
 Validator can be used for testing and controlling many aspects of cobra commands. It provides many rules out of the box for validating the commands.
 
 ## Rules provided by validator
