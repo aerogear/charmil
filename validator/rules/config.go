@@ -59,9 +59,6 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 				Verbose: defaultVerbose,
 				Fields:  map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true},
 			},
-			UseMatches: UseMatches{
-				Regexp: `^[^-_]+$`,
-			},
 		},
 	}
 

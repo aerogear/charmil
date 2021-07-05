@@ -18,6 +18,8 @@ func Test_ExecuteCommand(t *testing.T) {
 					"Use": {Min: 1},
 				},
 			},
+			MustExist:  rules.MustExist{Fields: map[string]bool{"Run": true}},
+			UseMatches: rules.UseMatches{Regexp: `^[^-_+]+$`},
 		},
 	}
 

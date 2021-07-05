@@ -21,8 +21,7 @@ func NewCommand() *cobra.Command {
 		Short:   "This is the short",
 		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
 		Example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+		Run: func(cmd *cobra.Command, args []string) {
 		},
 	}
 
