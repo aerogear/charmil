@@ -14,9 +14,15 @@ type ValidatorConfig struct {
 	ValidatorOptions `json:"ValidatorOptions"`
 	ValidatorRules   `json:"ValidatorRules"`
 }
+
+// ValidatorOptions provide additional configurations
+// to the rules
 type ValidatorOptions struct {
 	Verbose bool `json:"Verbose"`
 }
+
+// ValidatorRules consists of all the rules
+// present in validator
 type ValidatorRules struct {
 	Length    `json:"Length"`
 	MustExist `json:"MustExist"`
@@ -29,6 +35,8 @@ func (validatorConfig *ValidatorConfig) ExecuteRules(cmd *cobra.Command) []valid
 	return ruleConfig.ExecuteRulesInternal(cmd, validatorConfig)
 }
 
+// ValidatorConfigToRuleConfig intializes the default config
+// and overrides default with user provided config
 func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *RuleConfig) {
 	defaultVerbose := validatorConfig.ValidatorOptions.Verbose
 

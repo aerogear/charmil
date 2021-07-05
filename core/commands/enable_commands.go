@@ -2,4 +2,4 @@
 
 package commands
 
-const inDev = true 
+const inDev = true
