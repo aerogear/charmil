@@ -16,12 +16,12 @@
 ## Introduction
 
 
-Charmil provides ecosystem of tools to build production ready comand line tools with Cobra Framework.
+Charmil provides ecosystem of tools to build production ready command line tools with Cobra Framework.
 
 
 ### Architecture
 
-Charmil provides way to build CLI ecosystem where developers can build multiple fragmented CLI's in various repositories 
+Charmil provides a way to build a CLI ecosystem where developers can build multiple fragmented CLI's in various repositories 
 and embed them later in the single host CLI. Charmil provides core base functionality that helps to abstract various elements 
 of the CLI ecosystem:
 
@@ -33,7 +33,7 @@ of the CLI ecosystem:
 Charmil SDK will typically be introduced into two different CLI
 
 - Host CLI - CLI that is being used by end user that can embed one or more Plugins CLI
-- Plugins CLI - Separate CLI that can be also embeeded into host CLI
+- Plugins CLI - Separate CLI that can be also embedded into host CLI
 
 
 ## Components
@@ -52,7 +52,7 @@ Provides ability to embed modular CLI into hosts CLI at compile time.
  
 ### Charmil Validator
 
-Charmil Validator gives developers ability to validate group of their cobra commands against common practices. 
+Charmil Validator gives developers the ability to validate a group of their cobra commands against common practices. 
 Validator can check if commands are providing proper documentation, doesn't have overriden flags or provide shell completions. 
 Validator can be used as go unit test and run during CI/CD that simplifies review of CLI's that contain commands that are hosted in multiple repositories.
 
@@ -60,7 +60,7 @@ Validator can be used as go unit test and run during CI/CD that simplifies revie
 ### Charmil Command Registry
 
 Charmil command registry lets you provide external index of the command line tools that can be installed dynamically and embeeded into your host CLI.
-Developers can create CLI profiles to install multiple individual CLi's at the same time and keep them updated with various backends like Kubernetes/OpenShift etc.
+Developers can create CLI profiles to install multiple individual CLI's at the same time and keep them updated with various backends like Kubernetes/OpenShift etc.
 
 > Under Construction
 
