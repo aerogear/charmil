@@ -17,7 +17,8 @@ type ValidatorConfig struct {
 // ValidatorOptions provide additional configurations
 // to the rules
 type ValidatorOptions struct {
-	Verbose bool `json:"Verbose"`
+	Verbose        bool            `json:"Verbose"`
+	IgnoreCommands map[string]bool `json:"IgnoreCommands"`
 }
 
 // ValidatorRules consists of all the rules

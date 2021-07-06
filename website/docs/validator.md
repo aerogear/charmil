@@ -43,3 +43,13 @@ for _, errs := range validationErr {
 	}
 }
 ```
+
+## Ignore Commands
+Validation for selected commands can be ignored, by passing the `Use` of commands to be skipped in `IgnoreCommands` attribute in ValidatorOptions
+```go
+ruleCfg := rules.ValidatorConfig{
+	ValidatorOptions: rules.ValidatorOptions{
+		IgnoreCommands: map[string]bool{"echo": true},
+	},
+}
+```
