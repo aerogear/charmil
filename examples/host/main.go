@@ -52,8 +52,6 @@ func init() {
 }
 
 func main() {
-	// TODO: Initialize the factory struct here and pass it to the plugins
-
 	// Sets a value into config
 	cfg.Key4 = "val4"
 

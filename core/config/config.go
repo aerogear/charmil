@@ -26,8 +26,6 @@ type CfgHandler struct {
 // NewHandler links the specified arguments to a
 // new instance of config handler and returns a pointer to it.
 func NewHandler(path string, cfg interface{}) *CfgHandler {
-	// TODO: Add code to verify if cfg is a pointer to struct
-
 	h := &CfgHandler{
 		filePath: path,
 		cfg:      cfg,
@@ -78,15 +76,12 @@ func (h *CfgHandler) Save() error {
 
 // MergePluginCfg adds config of specified plugin into the host CLI config struct.
 func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) error {
-	// TODO: Add code to verify if `pluginCfg` is a pointer to struct
 
 	// Stores the host CLI config struct as a byte array
 	buf, err := h.marshal()
 	if err != nil {
 		return err
 	}
-
-	// TODO: Specific only to JSON files currently. Extend to other formats too
 
 	// Adds a field (specified by `pluginName`) under the `Plugins` field of
 	// host CLI config struct and stores the specified plugin config under that sub-field
