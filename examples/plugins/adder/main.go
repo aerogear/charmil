@@ -72,7 +72,7 @@ func AdderCommand(h *c.CfgHandler) (*cobra.Command, error) {
 		},
 	}
 
-	// Merges the current plugin config into the local config file
+	// Merges the current plugin config into the host CLI config
 	err = c.MergePluginCfg("adder", h, cfg)
 	if err != nil {
 		log.Fatal(err)

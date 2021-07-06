@@ -76,7 +76,7 @@ func (h *CfgHandler) Save() error {
 	return nil
 }
 
-// MergePluginCfg adds plugin config into the local config file.
+// MergePluginCfg adds config of specified plugin into the host CLI config struct.
 func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) error {
 	// TODO: Add code to verify if `pluginCfg` is a pointer to struct
 

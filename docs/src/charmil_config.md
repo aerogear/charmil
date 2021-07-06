@@ -121,18 +121,18 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
       fmt.Println(cfg.Key6) // Prints: val6
       ```
 
-  5.  Use the `MergePluginCfg` function to merge the current plugin config into the local config file
+  5.  Use the `MergePluginCfg` function to merge the current plugin config into the host CLI config struct.
 
       _Example:_
 
       ```go
-      err = c.MergePluginCfg(pluginName, cfgFilePath, cfg)
+      err = c.MergePluginCfg(pluginName, h, cfg)
       if err != nil {
       	log.Fatal(err)
       }
       ```
 
-      where `pluginName` is the name of the plugin (as you want it in the local config file), `cfgFilePath` is the file path passed from the host CLI and `cfg` is a pointer to an instance of the current config file (initialized in step 3).
+      where `pluginName` is the name of the plugin (as you want it in the local config file), `h` is the config handler passed from the host CLI and `cfg` is a pointer to an instance of the current config file (initialized in step 3).
 
 ## Here's an example for the same:
 
