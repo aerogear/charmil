@@ -90,7 +90,7 @@ func (h *Handler) Save() error {
 	}
 
 	// Merges current host CLI config with the existing config in the local file
-	if err := mergo.Merge(dst, src, mergo.WithSliceDeepCopy); err != nil {
+	if err = mergo.Merge(dst, src, mergo.WithSliceDeepCopy); err != nil {
 		return err
 	}
 
@@ -204,7 +204,7 @@ func readFile(filePath string) ([]byte, error) {
 
 // writeFile writes data to the file specified by filePath.
 func writeFile(filePath string, data []byte) error {
-	err := ioutil.WriteFile(filePath, data, 0644)
+	err := ioutil.WriteFile(filePath, data, 0600)
 	if err != nil {
 		return err
 	}
