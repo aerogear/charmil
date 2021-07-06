@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/imdario/mergo"
 	"github.com/pelletier/go-toml"
 	"github.com/tidwall/sjson"
 	"gopkg.in/yaml.v2"
@@ -62,46 +61,14 @@ func (h *CfgHandler) Load() error {
 // of host CLI config struct to the local config file
 // (using the file path linked to the handler).
 func (h *CfgHandler) Save() error {
-	// To store the current contents of the local config file
-	dst := &map[string]interface{}{}
-
-	// To store contents of the linked instance of host CLI config struct
-	src := &map[string]interface{}{}
-
-	// Reads the local config file
-	buf, err := readFile(h.filePath)
+	// Stores the host CLI config as a byte array
+	buf, err := h.marshal(h.cfg)
 	if err != nil {
 		return err
 	}
 
-	// Stores current contents of the local config file to `dst`
-	err = h.unmarshal(buf, &dst)
-	if err != nil {
-		return err
-	}
-
-	// Initializes a `map[string]interface{}` holding the values of `h.cfg`.
-	//
-	// Done with the intention to maintain similar types as `mergo.Merge`
-	// doesn't accept 2 differently typed objects as arguments
-	err = mergo.Map(src, h.cfg)
-	if err != nil {
-		return err
-	}
-
-	// Merges current host CLI config with the existing config in the local file
-	if err = mergo.Merge(dst, src, mergo.WithSliceDeepCopy); err != nil {
-		return err
-	}
-
-	// Converts the merged config into a byte array
-	bs, err := h.marshal(*dst)
-	if err != nil {
-		return err
-	}
-
-	// Writes the merged config to the local config file
-	err = writeFile(h.filePath, bs)
+	// Writes the current host CLI config to the local config file
+	err = writeFile(h.filePath, buf)
 	if err != nil {
 		return err
 	}
