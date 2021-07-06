@@ -138,7 +138,7 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 }
 
 // marshal identifies extension of the local config file and performs
-// a marshalling operation on the passed object, based on it.
+// a marshaling operation on the passed object, based on it.
 func (h *Handler) marshal(in interface{}) ([]byte, error) {
 	var marshalFunc func(in interface{}) ([]byte, error)
 
