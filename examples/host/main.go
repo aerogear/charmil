@@ -5,8 +5,8 @@ import (
 
 	"github.com/aerogear/charmil/core/commands"
 	c "github.com/aerogear/charmil/core/config"
-	echo "github.com/aerogear/charmil/examples/plugin"
 	"github.com/aerogear/charmil/examples/plugins/adder"
+	"github.com/aerogear/charmil/examples/plugins/echo"
 	"github.com/spf13/cobra"
 )
 
