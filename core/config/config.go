@@ -12,8 +12,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Handler defines the fields required to manage config.
-type Handler struct {
+// CfgHandler defines the fields required to manage config.
+type CfgHandler struct {
 	// Pointer to an instance of the host CLI config struct
 	cfg interface{}
 
@@ -25,11 +25,11 @@ type Handler struct {
 }
 
 // NewHandler links the specified arguments to a
-// new instance of handler and returns a pointer to it.
-func NewHandler(path string, cfg interface{}) *Handler {
+// new instance of config handler and returns a pointer to it.
+func NewHandler(path string, cfg interface{}) *CfgHandler {
 	// TODO: Add code to verify if cfg is a pointer to struct
 
-	h := &Handler{
+	h := &CfgHandler{
 		filePath: path,
 		cfg:      cfg,
 		fileExt:  filepath.Ext(path),
@@ -41,7 +41,7 @@ func NewHandler(path string, cfg interface{}) *Handler {
 // Load reads config values from the local config file
 // (using the file path linked to the handler) and stores
 // them into the linked instance of host CLI config struct.
-func (h *Handler) Load() error {
+func (h *CfgHandler) Load() error {
 
 	// Reads the local config file
 	buf, err := readFile(h.filePath)
@@ -61,7 +61,7 @@ func (h *Handler) Load() error {
 // Save writes config values from the linked instance
 // of host CLI config struct to the local config file
 // (using the file path linked to the handler).
-func (h *Handler) Save() error {
+func (h *CfgHandler) Save() error {
 	// To store the current contents of the local config file
 	dst := &map[string]interface{}{}
 
@@ -139,7 +139,7 @@ func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) erro
 
 // marshal identifies extension of the local config file and performs
 // a marshaling operation on the passed object, based on it.
-func (h *Handler) marshal(in interface{}) ([]byte, error) {
+func (h *CfgHandler) marshal(in interface{}) ([]byte, error) {
 	var marshalFunc func(in interface{}) ([]byte, error)
 
 	switch h.fileExt {
@@ -170,7 +170,7 @@ func (h *Handler) marshal(in interface{}) ([]byte, error) {
 
 // unmarshal identifies extension of the local config file and performs
 // an unmarshalling operation on the passed arguments, based on it.
-func (h *Handler) unmarshal(in []byte, out interface{}) error {
+func (h *CfgHandler) unmarshal(in []byte, out interface{}) error {
 	var unmarshalFunc func(in []byte, out interface{}) (err error)
 
 	switch h.fileExt {

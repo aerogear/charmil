@@ -25,7 +25,7 @@ const cfgFilePath = "./examples/host/config.json"
 
 var (
 	// Stores an instance of the charmil config handler
-	h *c.Handler
+	h *c.CfgHandler
 
 	// Initializes a zero-valued struct and stores its address
 	cfg = &config{}
@@ -40,7 +40,7 @@ var (
 
 func init() {
 	// Links the specified local config file path and current config
-	// struct pointer to a new handler instance and returns it
+	// struct pointer to a new config handler instance and returns it
 	h = c.NewHandler(cfgFilePath, cfg)
 
 	// Loads config values from the local config file
