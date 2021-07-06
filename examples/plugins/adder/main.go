@@ -26,7 +26,7 @@ var cfg = &config{}
 
 // AdderCommand returns the root command of plugin.
 // This will be added to the host CLI as an extension.
-func AdderCommand(cfgFilePath string) (*cobra.Command, error) {
+func AdderCommand(h *c.CfgHandler) (*cobra.Command, error) {
 	// Sets dummy values into config
 	cfg.Key5 = "val5"
 	cfg.Key6 = "val6"
@@ -73,7 +73,7 @@ func AdderCommand(cfgFilePath string) (*cobra.Command, error) {
 	}
 
 	// Merges the current plugin config into the local config file
-	err = c.MergePluginCfg("adder", cfgFilePath, cfg)
+	err = c.MergePluginCfg("adder", h, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -14,10 +14,11 @@ import (
 //
 // CONSTRAINT: All fields of the config struct need to be exportable
 type config struct {
-	Key1 string
-	Key2 string
-	Key3 string
-	Key4 string
+	Key1    string
+	Key2    string
+	Key3    string
+	Key4    string
+	Plugins map[string]interface{}
 }
 
 // Stores the path of the local config file
@@ -63,7 +64,7 @@ func main() {
 	}
 
 	// Stores the root command of the `adder` plugin
-	adderCmd, err := adder.AdderCommand(cfgFilePath)
+	adderCmd, err := adder.AdderCommand(h)
 	if err != nil {
 		log.Fatal(err)
 	}

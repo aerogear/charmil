@@ -110,26 +110,26 @@ func (h *CfgHandler) Save() error {
 }
 
 // MergePluginCfg adds plugin config into the local config file.
-func MergePluginCfg(pluginName string, cfgFilePath string, cfg interface{}) error {
-	// TODO: Add code to verify if cfg is a pointer to struct
+func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) error {
+	// TODO: Add code to verify if `pluginCfg` is a pointer to struct
 
-	// Reads the local config file
-	buf, err := readFile(cfgFilePath)
+	// Stores the host CLI config struct as a byte array
+	buf, err := h.marshal(h.cfg)
 	if err != nil {
 		return err
 	}
 
 	// TODO: Specific only to JSON files currently. Extend to other formats too
 
-	// Adds a field (specified by `pluginName`) under the `plugins` parent key
-	// in the local config file and adds the specified plugin config under that key
-	mergedBuf, err := sjson.Set(string(buf), "plugins."+pluginName, cfg)
+	// Adds a field (specified by `pluginName`) under the `Plugins` field of
+	// host CLI config struct and stores the specified plugin config under that sub-field
+	mergedBuf, err := sjson.Set(string(buf), "Plugins."+pluginName, pluginCfg)
 	if err != nil {
 		return err
 	}
 
-	// Writes final merged contents to the local config file
-	err = writeFile(cfgFilePath, []byte(mergedBuf))
+	// Updates the host CLI config struct with merged plugin config
+	err = h.unmarshal([]byte(mergedBuf), h.cfg)
 	if err != nil {
 		return err
 	}
