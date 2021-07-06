@@ -83,8 +83,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// fmt.Println("Viper host settings are: ", h.GetAllSettings())
-
 	if err := root.Execute(); err != nil {
 		log.Fatal(err)
 	}
