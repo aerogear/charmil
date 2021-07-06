@@ -49,7 +49,7 @@ func (h *CfgHandler) Load() error {
 	}
 
 	// Stores values (read from file) to the host config struct instance
-	err = h.unmarshal(buf, h.cfg)
+	err = h.unmarshal(buf)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (h *CfgHandler) Load() error {
 // (using the file path linked to the handler).
 func (h *CfgHandler) Save() error {
 	// Stores the host CLI config as a byte array
-	buf, err := h.marshal(h.cfg)
+	buf, err := h.marshal()
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) err
 	// TODO: Add code to verify if `pluginCfg` is a pointer to struct
 
 	// Stores the host CLI config struct as a byte array
-	buf, err := h.marshal(h.cfg)
+	buf, err := h.marshal()
 	if err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) err
 	}
 
 	// Updates the host CLI config struct with merged plugin config
-	err = h.unmarshal([]byte(mergedBuf), h.cfg)
+	err = h.unmarshal([]byte(mergedBuf))
 	if err != nil {
 		return err
 	}
@@ -105,8 +105,8 @@ func MergePluginCfg(pluginName string, h *CfgHandler, pluginCfg interface{}) err
 }
 
 // marshal identifies extension of the local config file and performs
-// a marshaling operation on the passed object, based on it.
-func (h *CfgHandler) marshal(in interface{}) ([]byte, error) {
+// a marshaling operation on the host CLI config, based on it.
+func (h *CfgHandler) marshal() ([]byte, error) {
 	var marshalFunc func(in interface{}) ([]byte, error)
 
 	switch h.fileExt {
@@ -117,7 +117,7 @@ func (h *CfgHandler) marshal(in interface{}) ([]byte, error) {
 		marshalFunc = toml.Marshal
 
 	case ".json":
-		buf, err := json.MarshalIndent(in, "", "  ")
+		buf, err := json.MarshalIndent(h.cfg, "", "  ")
 		if err != nil {
 			return nil, err
 		}
@@ -127,7 +127,7 @@ func (h *CfgHandler) marshal(in interface{}) ([]byte, error) {
 		return nil, fmt.Errorf("Unsupported file extension \"%v\"", h.fileExt)
 	}
 
-	buf, err := marshalFunc(in)
+	buf, err := marshalFunc(h.cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -136,8 +136,8 @@ func (h *CfgHandler) marshal(in interface{}) ([]byte, error) {
 }
 
 // unmarshal identifies extension of the local config file and performs
-// an unmarshalling operation on the passed arguments, based on it.
-func (h *CfgHandler) unmarshal(in []byte, out interface{}) error {
+// an unmarshalling operation on the passed argument and the host CLI config
+func (h *CfgHandler) unmarshal(in []byte) error {
 	var unmarshalFunc func(in []byte, out interface{}) (err error)
 
 	switch h.fileExt {
@@ -151,7 +151,7 @@ func (h *CfgHandler) unmarshal(in []byte, out interface{}) error {
 		return fmt.Errorf("Unsupported file extension \"%v\"", h.fileExt)
 	}
 
-	err := unmarshalFunc(in, out)
+	err := unmarshalFunc(in, h.cfg)
 	if err != nil {
 		return err
 	}
