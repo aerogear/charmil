@@ -18,5 +18,5 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-/host
+/host_example
 validator_example
