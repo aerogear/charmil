@@ -1,0 +1,16 @@
+[root.cmd.use]
+one = 'starter <command> <subcommand> [flags]'
+
+[root.cmd.shortDescription]
+one = 'starter cli'
+
+[root.cmd.longDescription]
+one = 'command line.'
+
+[root.cmd.example]
+one = '''
+ 
+'''
+
+[root.cmd.flag.help.description]
+one = 'Show help for a command'
