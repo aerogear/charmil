@@ -15,11 +15,6 @@ import (
 //
 // CONSTRAINT: All fields of the config struct need to be exportable
 type config struct {
-	Key5 string
-	Key6 string
-	Key7 string
-	Key8 string
-
 	LocConfig localize.Config
 }
 
@@ -29,12 +24,6 @@ var cfg = &config{}
 // AdderCommand returns the root command of plugin.
 // This will be added to the host CLI as an extension.
 func AdderCommand(h *c.CfgHandler, f *factory.Factory) (*cobra.Command, error) {
-
-	// Sets dummy values into config
-	cfg.Key5 = "val5"
-	cfg.Key6 = "val6"
-	cfg.Key7 = "val7"
-	cfg.Key8 = "val8"
 
 	// Stores the config for localizer
 	cfg.LocConfig = localize.Config{
