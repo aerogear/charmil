@@ -6,7 +6,7 @@
 
 
 <p align="center">
-  <img width="400" src="https://github.com/aerogear/charmil/resources/logo.png">
+  <img width="400" src="https://github.com/aerogear/charmil/raw/main/logo.png">
   <br/>
   Framework for building command line plugins on top of Golang Cobra Library.  <br/>
   Charmil will let you control your cobra based CLIs. 🚀
@@ -31,7 +31,7 @@ of the CLI ecosystem:
 - Configuration
 - Commands and Flags standards.
 
-Charmil SDK will typically be introduced into two different CLI:
+Charmil SDK will typically be introduced into two different CLIs:
 
 - Host CLI - CLI that is being used by end user that can embed one or more plugin CLIs
 - Plugin CLIs - Separate CLIs that can be embedded into the host CLI
@@ -40,7 +40,7 @@ Charmil SDK will typically be introduced into two different CLI:
 ## Components
 <p align="center">
   <img width="400" src="https://github.com/aerogear/charmil/resources/charmil-base-ssv-3-pillar.png">
-  </p>
+</p>
 
 ### Charmil Plugin framework starter template 
 
