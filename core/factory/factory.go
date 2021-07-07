@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/core/logging"
 )
@@ -12,4 +13,6 @@ type Factory struct {
 	Logger logging.Logger
 	// Localizer localizes the text in commands
 	Localizer localize.Localizer
+	// CfgHandler provides the fields required for managing config
+	CfgHandler *config.CfgHandler
 }

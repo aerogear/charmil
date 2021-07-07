@@ -55,7 +55,7 @@ func init() {
 	}
 
 	// Creates a new factory instance with default settings
-	cmdFactory = factory.Default(nil)
+	cmdFactory = factory.Default(nil, h)
 }
 
 func main() {
@@ -63,13 +63,13 @@ func main() {
 	cfg.Key4 = "val4"
 
 	// Add plugin CLI into host
-	echoCmd, err := echo.EchoCommand()
+	echoCmd, err := echo.EchoCommand(cmdFactory)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Stores the root command of the `adder` plugin
-	adderCmd, err := adder.AdderCommand(h, cmdFactory)
+	adderCmd, err := adder.AdderCommand(cmdFactory)
 	if err != nil {
 		log.Fatal(err)
 	}

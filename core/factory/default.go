@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/core/logging"
 )
 
 // Default creates new instance of factory for plugins
-func Default(localizer localize.Localizer) *Factory {
+func Default(localizer localize.Localizer, cfgHandler *config.CfgHandler) *Factory {
 
 	// initializing logger
 	loggerFunc := func() (logging.Logger, error) {
@@ -30,7 +31,8 @@ func Default(localizer localize.Localizer) *Factory {
 	}
 
 	return &Factory{
-		Logger:    logger,
-		Localizer: localizer,
+		Logger:     logger,
+		Localizer:  localizer,
+		CfgHandler: cfgHandler,
 	}
 }

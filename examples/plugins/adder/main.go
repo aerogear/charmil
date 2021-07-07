@@ -23,7 +23,7 @@ var cfg = &config{}
 
 // AdderCommand returns the root command of plugin.
 // This will be added to the host CLI as an extension.
-func AdderCommand(h *c.CfgHandler, f *factory.Factory) (*cobra.Command, error) {
+func AdderCommand(f *factory.Factory) (*cobra.Command, error) {
 
 	// Stores the config for localizer
 	cfg.LocConfig = localize.Config{
@@ -39,8 +39,9 @@ func AdderCommand(h *c.CfgHandler, f *factory.Factory) (*cobra.Command, error) {
 	}
 
 	opts := &factory.Factory{
-		Logger:    f.Logger,
-		Localizer: loc,
+		Logger:     f.Logger,
+		Localizer:  loc,
+		CfgHandler: f.CfgHandler,
 	}
 
 	// Stores the root command of plugin
@@ -67,7 +68,7 @@ func AdderCommand(h *c.CfgHandler, f *factory.Factory) (*cobra.Command, error) {
 	}
 
 	// Merges the current plugin config into the host CLI config
-	err = c.MergePluginCfg("adder", h, cfg)
+	err = c.MergePluginCfg("adder", opts.CfgHandler, cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
