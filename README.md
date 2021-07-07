@@ -39,7 +39,7 @@ Charmil SDK will typically be introduced into two different CLIs:
 
 ## Components
 <p align="center">
-  <img width="400" src="https://github.com/aerogear/charmil/resources/charmil-base-ssv-3-pillar.png">
+  <img width="400" src="https://github.com/aerogear/charmil/raw/main/resources/charmil-base-ssv-3-pillar.png">
 </p>
 
 ### Charmil Plugin framework starter template 
