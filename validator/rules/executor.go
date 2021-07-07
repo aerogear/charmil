@@ -26,17 +26,25 @@ func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValida
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
+	// if command needs to be ignored
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
+		if val {
+			return info.Errors
+		}
+	}
+
 	// initialize default rules
 	initDefaultRules(userValidatorConfig, ruleConfig)
 
 	// validate the root command
-	validate(cmd, &info, ruleConfig)
+	validate(cmd, &info, ruleConfig, userValidatorConfig)
 
-	return executeHelper(cmd, &info, ruleConfig)
+	return executeHelper(cmd, &info, ruleConfig, userValidatorConfig)
 }
 
-func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
-	info.Errors = executeRecursive(cmd, info, ruleConfig)
+func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
+
+	info.Errors = executeRecursive(cmd, info, ruleConfig, userValidatorConfig)
 
 	// prints additional info for the checks
 	fmt.Fprintf(os.Stderr, "commands checked: %d\nchecks failed: %d\n", info.TotalTested, info.TotalErrors)
@@ -46,35 +54,42 @@ func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *Ru
 
 // executeRecursive recursively traverse over all the subcommands
 // and validate using executeRulesChildren function
-func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
+func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 	for _, child := range cmd.Commands() {
 		// base case
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
 		// recursive call
-		info.Errors = executeRecursive(child, info, ruleConfig)
+		info.Errors = executeRecursive(child, info, ruleConfig, userValidatorConfig)
 	}
-	info.Errors = executeRulesChildren(cmd, info, ruleConfig)
+	info.Errors = executeRulesChildren(cmd, info, ruleConfig, userValidatorConfig)
 
 	return info.Errors
 }
 
 // executeRulesChildren execute rules on children of cmd
-func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) []validator.ValidationError {
+func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 	children := cmd.Commands()
 	for _, child := range children {
 
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		validate(child, info, ruleConfig)
+		validate(child, info, ruleConfig, userValidatorConfig)
 	}
 	return info.Errors
 }
 
 // validate returns validation errors by executing the rules
-func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig) {
+func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) {
+
+	// if command needs to be ignored
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipCommands[cmd.CommandPath()]; ok {
+		if val {
+			return
+		}
+	}
 
 	// traverse all rules and validate
 	for _, rule := range ruleConfig.Rules {

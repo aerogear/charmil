@@ -43,3 +43,32 @@ for _, errs := range validationErr {
 	}
 }
 ```
+
+## Ignore Commands
+Sometimes during development, you want to pass the tests for certain commands, but at the same time use Validator for tests. Validation can be skipped/ignored for the commands, mentioned in the validator configuration.
+To ignore the commands you need to specify the path of the command in validator configuration.
+
+ Skip single command `mycli actions create`
+```go
+ValidatorOptions: rules.ValidatorOptions{
+	SkipCommands: map[string]bool{"mycli actions create": true},
+},
+```
+
+2. Skip the command including all children
+```go
+ValidatorOptions: rules.ValidatorOptions{
+	SkipChildren: map[string]bool{"mycli": true},
+},
+```
+
+3. Skip the command for specific rule
+```go
+Length: rules.Length{
+	RuleOptions: validator.RuleOptions{
+		SkipCommands: map[string]bool{"mycli actions create": true},
+	},
+	Limits: map[string]rules.Limit{
+		"Use": {Min: 1},
+	},
+},

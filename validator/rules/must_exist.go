@@ -21,14 +21,21 @@ var MustExistRule = "MUST_EXIST_RULE"
 // MustExist is a struct that provides
 // Fields defined for MustExist validation
 type MustExist struct {
-	Verbose bool            `json:"Verbose"`
-	Fields  map[string]bool `json:"Fields"`
+	RuleOptions validator.RuleOptions
+	Fields      map[string]bool `json:"Fields"`
 }
 
 // Validate is a method of type Rule Interface
 // which returns validation errors
 func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
+
+	// if command needs to be ignored
+	if val, ok := m.RuleOptions.SkipCommands[cmd.CommandPath()]; ok {
+		if val {
+			return errors
+		}
+	}
 
 	for field, isTrue := range m.Fields {
 		// reflects the field in cobra.Command struct
@@ -42,7 +49,7 @@ func (m *MustExist) Validate(cmd *cobra.Command) []validator.ValidationError {
 
 		// validate field and append errors
 		if isTrue {
-			errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), m.Verbose)...)
+			errors = append(errors, validateByType(cmd, &reflectValue, field, cmd.CommandPath(), m.RuleOptions.Verbose)...)
 		}
 	}
 	return errors
