@@ -17,8 +17,9 @@ type ValidatorConfig struct {
 // ValidatorOptions provide additional configurations
 // to the rules
 type ValidatorOptions struct {
-	Verbose        bool            `json:"Verbose"`
-	IgnoreCommands map[string]bool `json:"IgnoreCommands"`
+	Verbose      bool            `json:"Verbose"`
+	SkipChildren map[string]bool `json:"SkipChildren"`
+	SkipCommands map[string]bool `json:"SkipCommands"`
 }
 
 // ValidatorRules consists of all the rules
@@ -48,7 +49,9 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 		},
 		ValidatorRules: ValidatorRules{
 			Length: Length{
-				Verbose: defaultVerbose,
+				RuleOptions: validator.RuleOptions{
+					Verbose: defaultVerbose,
+				},
 				Limits: map[string]Limit{
 					"Use":     {Min: 2},
 					"Short":   {Min: 15},
@@ -57,8 +60,10 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 				},
 			},
 			MustExist: MustExist{
-				Verbose: defaultVerbose,
-				Fields:  map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true},
+				RuleOptions: validator.RuleOptions{
+					Verbose: defaultVerbose,
+				},
+				Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true},
 			},
 		},
 	}

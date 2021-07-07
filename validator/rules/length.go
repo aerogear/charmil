@@ -32,14 +32,21 @@ type Limit struct {
 // with key as attribute for which length is controlled
 // and value limit as Limit struct
 type Length struct {
-	Verbose bool             `json:"Verbose"`
-	Limits  map[string]Limit `json:"Limits"`
+	RuleOptions validator.RuleOptions
+	Limits      map[string]Limit `json:"Limits"`
 }
 
 // Validate is a method of type Rule Interface
 // which returns validation errors
 func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
+
+	// if command needs to be ignored
+	if val, ok := l.RuleOptions.SkipCommands[cmd.CommandPath()]; ok {
+		if val {
+			return errors
+		}
+	}
 
 	for fieldName, limits := range l.Limits {
 		// reflects the fieldName in cobra.Command struct
@@ -52,7 +59,7 @@ func (l *Length) Validate(cmd *cobra.Command) []validator.ValidationError {
 		}
 
 		// validate fieldName
-		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, l.Verbose)
+		err := validateField(cmd, limits, reflectValue.String(), cmd.CommandPath(), fieldName, l.RuleOptions.Verbose)
 		if err.Err != nil {
 			errors = append(errors, err)
 		}

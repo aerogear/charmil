@@ -4,6 +4,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RuleOptions is present in each rule
+// to control the options limited to the rule
+type RuleOptions struct {
+	Verbose      bool
+	SkipCommands map[string]bool
+}
+
 // ValidationError is a default validation error
 type ValidationError struct {
 	Name string

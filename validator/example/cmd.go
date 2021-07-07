@@ -18,6 +18,7 @@ func NewCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "cmd0",
+		Short:   "This is the short description",
 		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
 		Example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -27,7 +28,6 @@ func NewCommand() *cobra.Command {
 	var commands []command = []command{
 		{
 			use:     "subcmd01",
-			short:   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
 			long:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
 			example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
 		},
@@ -45,6 +45,16 @@ func NewCommand() *cobra.Command {
 		},
 	}
 
+	cmd100 := &cobra.Command{
+		Use:     "cmd100",
+		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
+		Example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
+		Run: func(cmd *cobra.Command, args []string) {
+		},
+	}
+
+	cmd100.AddCommand(cmd)
+
 	for _, cm := range commands {
 		cm.name = &cobra.Command{
 			Use:     cm.use,
@@ -56,7 +66,7 @@ func NewCommand() *cobra.Command {
 		cmd.AddCommand(cm.name)
 	}
 
-	return cmd
+	return cmd100
 }
 
 func main() {

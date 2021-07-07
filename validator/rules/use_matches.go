@@ -18,7 +18,8 @@ var UseMatchesRule = "USE_MATCHES_RULE"
 
 // UseMatches defines Regexp to be compared
 type UseMatches struct {
-	Regexp string `json:"Regexp"`
+	RuleOptions validator.RuleOptions
+	Regexp      string `json:"Regexp"`
 }
 
 // Validate is a method of type Rule Interface
@@ -26,6 +27,13 @@ type UseMatches struct {
 // compares the regexp with Use attribute
 func (u *UseMatches) Validate(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
+
+	// if command needs to be ignored
+	if val, ok := u.RuleOptions.SkipCommands[cmd.CommandPath()]; ok {
+		if val {
+			return errors
+		}
+	}
 
 	r, err := regexp.Compile(u.Regexp)
 	if err != nil {

@@ -26,6 +26,13 @@ func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValida
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
+	// if command needs to be ignored
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
+		if val {
+			return info.Errors
+		}
+	}
+
 	// initialize default rules
 	initDefaultRules(userValidatorConfig, ruleConfig)
 
@@ -36,6 +43,7 @@ func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValida
 }
 
 func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
+
 	info.Errors = executeRecursive(cmd, info, ruleConfig, userValidatorConfig)
 
 	// prints additional info for the checks
@@ -77,7 +85,7 @@ func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleCon
 func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) {
 
 	// if command needs to be ignored
-	if val, ok := userValidatorConfig.ValidatorOptions.IgnoreCommands[cmd.Use]; ok {
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipCommands[cmd.CommandPath()]; ok {
 		if val {
 			return
 		}

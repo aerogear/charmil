@@ -45,11 +45,30 @@ for _, errs := range validationErr {
 ```
 
 ## Ignore Commands
-Validation for selected commands can be ignored, by passing the `Use` of commands to be skipped in `IgnoreCommands` attribute in ValidatorOptions
+Sometimes during development, you want to pass the tests for certain commands, but at the same time use Validator for tests. Validation can be skipped/ignored for the commands, mentioned in the validator configuration.
+To ignore the commands you need to specify the path of the command in validator configuration.
+
+1. Skip single command
 ```go
-ruleCfg := rules.ValidatorConfig{
-	ValidatorOptions: rules.ValidatorOptions{
-		IgnoreCommands: map[string]bool{"echo": true},
-	},
-}
+ValidatorOptions: rules.ValidatorOptions{
+	SkipCommands: map[string]bool{"cmd100 cmd0 subcmd01": true},
+},
 ```
+
+2. Skip the command including all children
+```go
+ValidatorOptions: rules.ValidatorOptions{
+	SkipChildren: map[string]bool{"cmd100": true},
+},
+```
+
+3. Skip the command for specific rule
+```go
+Length: rules.Length{
+	RuleOptions: validator.RuleOptions{
+		SkipCommands: map[string]bool{"cmd100": true},
+	},
+	Limits: map[string]rules.Limit{
+		"Use": {Min: 1},
+	},
+},
