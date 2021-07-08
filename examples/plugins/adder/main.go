@@ -1,6 +1,7 @@
 package adder
 
 import (
+	"embed"
 	"log"
 	"strconv"
 
@@ -9,6 +10,11 @@ import (
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
+)
+
+var (
+	//go:embed locales
+	defaultLocales embed.FS
 )
 
 // Defines the configuration keys of the plugin.
@@ -26,14 +32,15 @@ var cfg = &config{}
 func AdderCommand(f *factory.Factory) (*cobra.Command, error) {
 
 	// Stores the config for localizer
-	cfg.LocConfig = localize.Config{
-		Language: language.English,
+	locConfig := localize.Config{
+		Language: &language.English,
+		Files:    defaultLocales,
 		Path:     "examples/plugins/adder/locales/en/adder.en.yaml",
 		Format:   "yaml",
 	}
 
 	// Initializes the localizer by passing config
-	loc, err := localize.InitLocalizer(cfg.LocConfig)
+	loc, err := localize.New(&locConfig)
 	if err != nil {
 		return nil, err
 	}

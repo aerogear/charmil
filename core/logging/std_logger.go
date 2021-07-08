@@ -12,20 +12,33 @@ import (
 // the configuration to build the logger which uses
 // standard output and error streams or custom writers
 type StdLoggerBuilder struct {
-	outStream io.Writer
-	errStream io.Writer
+	debugEnabled bool
+	infoEnabled  bool
+	errorEnabled bool
+	outStream    io.Writer
+	errStream    io.Writer
 }
 
 // StdLogger is a type of logger which uses
 // standard output and error streams, or custom writers
 type StdLogger struct {
-	outStream io.Writer
-	errStream io.Writer
+	debugEnabled bool
+	infoEnabled  bool
+	errorEnabled bool
+	outStream    io.Writer
+	errStream    io.Writer
 }
 
 // NewStdLoggerBuilder returns new StdLoggerBuilder object
 func NewStdLoggerBuilder() *StdLoggerBuilder {
+	// Allocate the object:
 	builder := new(StdLoggerBuilder)
+
+	// Set default values:
+	builder.debugEnabled = false
+	builder.infoEnabled = true
+	builder.errorEnabled = true
+
 	return builder
 }
 
@@ -36,10 +49,47 @@ func (b *StdLoggerBuilder) Streams(out io.Writer, err io.Writer) *StdLoggerBuild
 	return b
 }
 
+// Debug enables or disables the debug level.
+func (b *StdLoggerBuilder) Debug(flag bool) *StdLoggerBuilder {
+	b.debugEnabled = flag
+	return b
+}
+
+// Info enables or disables the information level.
+func (b *StdLoggerBuilder) Info(flag bool) *StdLoggerBuilder {
+	b.infoEnabled = flag
+	return b
+}
+
+// Error enables or disables the error level.
+func (b *StdLoggerBuilder) Error(flag bool) *StdLoggerBuilder {
+	b.errorEnabled = flag
+	return b
+}
+
+// DebugEnabled returns true iff the debug level is enabled.
+func (l *StdLogger) DebugEnabled() bool {
+	return l.debugEnabled
+}
+
+// InfoEnabled returns true iff the information level is enabled.
+func (l *StdLogger) InfoEnabled() bool {
+	return l.infoEnabled
+}
+
+// ErrorEnabled returns true iff the error level is enabled.
+func (l *StdLogger) ErrorEnabled() bool {
+	return l.errorEnabled
+}
+
 // Build creates a new logger instance
 // with configuration stored in builder
 func (b *StdLoggerBuilder) Build() (logger *StdLogger, err error) {
+	// Allocate and populate the object:
 	logger = new(StdLogger)
+	logger.debugEnabled = b.debugEnabled
+	logger.infoEnabled = b.infoEnabled
+	logger.errorEnabled = b.errorEnabled
 	logger.outStream = b.outStream
 	logger.errStream = b.errStream
 	if logger.outStream == nil {
@@ -48,7 +98,6 @@ func (b *StdLoggerBuilder) Build() (logger *StdLogger, err error) {
 	if logger.errStream == nil {
 		logger.errStream = os.Stderr
 	}
-
 	return
 }
 
