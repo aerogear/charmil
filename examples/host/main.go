@@ -5,6 +5,7 @@ import (
 
 	"github.com/aerogear/charmil/core/commands"
 	c "github.com/aerogear/charmil/core/config"
+	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/examples/plugins/adder"
 	"github.com/aerogear/charmil/examples/plugins/echo"
 	"github.com/spf13/cobra"
@@ -25,6 +26,9 @@ type config struct {
 const cfgFilePath = "./examples/host/config.json"
 
 var (
+	// Stores an instance of the charmil factory
+	cmdFactory *factory.Factory
+
 	// Stores an instance of the charmil config handler
 	h *c.CfgHandler
 
@@ -49,6 +53,9 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Creates a new factory instance with default settings
+	cmdFactory = factory.Default(nil, h)
 }
 
 func main() {
@@ -56,13 +63,13 @@ func main() {
 	cfg.Key4 = "val4"
 
 	// Add plugin CLI into host
-	echoCmd, err := echo.EchoCommand()
+	echoCmd, err := echo.EchoCommand(cmdFactory)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Stores the root command of the `adder` plugin
-	adderCmd, err := adder.AdderCommand(h)
+	adderCmd, err := adder.AdderCommand(cmdFactory)
 	if err != nil {
 		log.Fatal(err)
 	}
