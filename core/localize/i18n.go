@@ -2,7 +2,8 @@ package localize
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
+	"io/fs"
 
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -15,6 +16,7 @@ import (
 // GoI18n is a type which
 // stores the details to create bundle
 type GoI18n struct {
+	files     fs.FS
 	language  *language.Tag
 	bundle    *i18n.Bundle
 	Localizer *i18n.Localizer
@@ -25,7 +27,8 @@ type GoI18n struct {
 // Config is a type which helps to get the
 // information to initialize the localizer
 type Config struct {
-	Language language.Tag
+	Files    fs.FS
+	Language *language.Tag
 	Path     string
 	Format   string
 }
@@ -46,41 +49,74 @@ func (i *GoI18n) LocalizeByID(messageId string, template ...*TemplateEntry) stri
 	return res
 }
 
-// InitLocalizer initialize the localizer
-// and create new instance for plugin
-// Pass Config including lang, path & format of locals
-func InitLocalizer(cfg Config) (*GoI18n, error) {
-
-	// create bundle of choose language
-	bundle := i18n.NewBundle(cfg.Language)
-	var unmarshalFunc i18n.UnmarshalFunc
-
-	// choose unmarshal func according to format of local
-	switch cfg.Format {
-	case "toml":
-		unmarshalFunc = toml.Unmarshal
-	case "json":
-		unmarshalFunc = json.Unmarshal
-	case "yaml":
-		unmarshalFunc = yaml.Unmarshal
-	default:
-		return nil, errors.New("unsupported format of local file " + cfg.Format)
+func New(cfg *Config) (Localizer, error) {
+	if cfg == nil {
+		cfg = &Config{}
+	}
+	// if cfg.Files == nil {
+	// 	cfg.Files = LocalizerGetDefaultLocales()
+	// 	cfg.Path = "locales"
+	// 	cfg.Format = "toml"
+	// }
+	// if cfg.Language == nil {
+	// 	cfg.Language = localize.GetDefaultLanguage()
+	// }
+	if cfg.Format == "" {
+		cfg.Format = "toml"
 	}
 
-	// load translations during initialization
-	bundle.RegisterUnmarshalFunc(cfg.Format, unmarshalFunc)
-	_, err := bundle.LoadMessageFile(cfg.Path)
-	if err != nil {
-		return nil, err
-	}
-
+	bundle := i18n.NewBundle(*cfg.Language)
 	loc := &GoI18n{
-		language:  &cfg.Language,
+		files:     cfg.Files,
+		language:  cfg.Language,
 		bundle:    bundle,
+		Localizer: i18n.NewLocalizer(bundle),
 		format:    cfg.Format,
 		path:      cfg.Path,
-		Localizer: i18n.NewLocalizer(bundle),
 	}
 
-	return loc, nil
+	err := loc.load()
+	return loc, err
+}
+
+// walk the file system and load each file into memory
+func (i *GoI18n) load() error {
+	// localesRoot := filepath.Join(i.path, i.language.String())
+	return fs.WalkDir(i.files, ".", func(path string, info fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		return i.MustLocalizeFile(i.files, path)
+	})
+}
+
+// read the message file from the file system
+func (i *GoI18n) MustLocalizeFile(files fs.FS, path string) (err error) {
+	// open the static i18n file
+	buf, err := fs.ReadFile(files, path)
+	if err != nil {
+		return err
+	}
+	fileext := fmt.Sprintf("%v.%v", i.language.String(), i.format)
+	var unmarshalFunc i18n.UnmarshalFunc
+	switch i.format {
+	case "toml":
+		unmarshalFunc = toml.Unmarshal
+	case "yaml", "yml":
+		unmarshalFunc = yaml.Unmarshal
+	case "json":
+		unmarshalFunc = json.Unmarshal
+	default:
+		return fmt.Errorf("unsupported format \"%v\"", i.format)
+	}
+
+	i.bundle.RegisterUnmarshalFunc(i.format, unmarshalFunc)
+	_, err = i.bundle.ParseMessageFileBytes(buf, fileext)
+
+	return
 }

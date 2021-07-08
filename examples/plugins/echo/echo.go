@@ -1,20 +1,26 @@
 package echo
 
 import (
+	"embed"
 	"log"
 
-	c "github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/core/logging"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
 )
 
-// Defines the configuration keys of the plugin.
-//
-// CONSTRAINT: All fields of the config struct need to be exportable
-type config struct {
-	LocConfig localize.Config
+var (
+	//go:embed locales
+	defaultLocales embed.FS
+)
+
+// Options is a type to access factory functions
+// User can limit the options to use comming from factory
+type Options struct {
+	Logger   logging.Logger
+	Localize localize.Localizer
 }
 
 // Initializes a zero-valued struct and stores its address
@@ -30,7 +36,12 @@ func EchoCommand(f *factory.Factory) (*cobra.Command, error) {
 		Format:   "yaml"}
 
 	// Initialize localizer providing the language, locals and format of locals file
-	loc, err := localize.InitLocalizer(cfg.LocConfig)
+	loc, err := localize.New(&localize.Config{
+		Language: &language.English,
+		Files:    defaultLocales,
+		Path:     "examples/plugins/echo/locales",
+		Format:   "yaml",
+	})
 	if err != nil {
 		return nil, err
 	}
