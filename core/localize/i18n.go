@@ -53,14 +53,7 @@ func New(cfg *Config) (Localizer, error) {
 	if cfg == nil {
 		cfg = &Config{}
 	}
-	// if cfg.Files == nil {
-	// 	cfg.Files = LocalizerGetDefaultLocales()
-	// 	cfg.Path = "locales"
-	// 	cfg.Format = "toml"
-	// }
-	// if cfg.Language == nil {
-	// 	cfg.Language = localize.GetDefaultLanguage()
-	// }
+
 	if cfg.Format == "" {
 		cfg.Format = "toml"
 	}

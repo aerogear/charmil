@@ -55,7 +55,7 @@ func init() {
 	}
 
 	// Creates a new factory instance with default settings
-	cmdFactory = factory.Default(nil, h)
+	cmdFactory = factory.Default(nil)
 }
 
 func main() {
@@ -63,7 +63,7 @@ func main() {
 	cfg.Key4 = "val4"
 
 	// Add plugin CLI into host
-	echoCmd, err := echo.EchoCommand(cmdFactory)
+	echoCmd, err := echo.EchoCommand()
 	if err != nil {
 		log.Fatal(err)
 	}

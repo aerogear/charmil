@@ -2,9 +2,17 @@ package logging
 
 // Logger is an Interface for logging messages in unified way
 type Logger interface {
+
+	// DebugEnabled returns true if the debug level is enabled.
+	DebugEnabled() bool
+
+	// InfoEnabled returns true if the information level is enabled.
+	InfoEnabled() bool
+
 	// Info prints an formatted output message
 	// using fmt.Fprint function
 	Info(args ...interface{})
+
 	// Error prints an formatted error message
 	// using fmt.Fprint function
 	Error(args ...interface{})
@@ -12,6 +20,7 @@ type Logger interface {
 	// Infof prints an formatted output message
 	// using fmt.Fprintf function
 	Infof(format string, args ...interface{})
+
 	// Errorf prints an formatted error message
 	// using fmt.Fprintf function
 	Errorf(format string, args ...interface{})

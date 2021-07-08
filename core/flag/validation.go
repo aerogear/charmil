@@ -1,7 +1,7 @@
 package flag
 
 import (
-	flagutil "github.com/aerogear/charmil/pkg/cmdutil/flags"
+	flagutil "github.com/aerogear/charmil/core/cmdutil/flags"
 )
 
 // ValidOutput checks if value v is a valid value for --output

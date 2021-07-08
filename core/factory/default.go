@@ -2,20 +2,30 @@ package factory
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/aerogear/charmil/core/config"
+	"github.com/aerogear/charmil/core/debug"
+	"github.com/aerogear/charmil/core/iostreams"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/core/logging"
 )
 
 // Default creates new instance of factory for plugins
-func Default(localizer localize.Localizer, cfgHandler *config.CfgHandler) *Factory {
+func Default(localizer localize.Localizer) *Factory {
+	io := iostreams.System()
 
+	var logger logging.Logger
 	// initializing logger
 	loggerFunc := func() (logging.Logger, error) {
+		if logger != nil {
+			return logger, nil
+		}
+
 		loggerBuilder := logging.NewStdLoggerBuilder()
-		loggerBuilder = loggerBuilder.Streams(os.Stdout, os.Stdin)
+		loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
+
+		debugEnabled := debug.Enabled()
+		loggerBuilder = loggerBuilder.Debug(debugEnabled)
+
 		logger, err := loggerBuilder.Build()
 		if err != nil {
 			return nil, err
@@ -31,8 +41,8 @@ func Default(localizer localize.Localizer, cfgHandler *config.CfgHandler) *Facto
 	}
 
 	return &Factory{
-		Logger:     logger,
-		Localizer:  localizer,
-		CfgHandler: cfgHandler,
+		IOStreams: io,
+		Logger:    logger,
+		Localizer: localizer,
 	}
 }
