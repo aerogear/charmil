@@ -1,0 +1,30 @@
+#!/bin/sh
+
+staged_go_files=$(git diff --cached --name-only | grep ".go$")
+[ -z "$staged_go_files" ] && exit 0
+
+# Ensure code is formatted correctly
+unformatted_files=$(gofmt -l $staged_go_files)
+if [ -n "$unformatted_files" ]; then
+    echo >&2 "Formatting issues found. Please run 'make format' to fix them."
+    exit 1
+fi
+
+# Ensure packages which the staged .go files belongs to passes standard checks
+staged_go_files=$(git diff --cached --name-only | grep ".go$" | awk -F/ '{print $1}' | uniq)
+[ -z "$staged_go_files" ] && exit 0
+
+go_vet_results=""
+for file in $staged_go_files
+do
+    go_vet_results+=$(go vet ./${file}/... 2>&1 >/dev/null)
+done
+
+go_vet_results=$(echo "${go_vet_results}" | sed "s/# command-line-arguments//g")
+
+if [ -n "$go_vet_results" ]; then
+    echo >&2 "Standard checks failed. Please fix the following issues before continuing: ${go_vet_results}"
+    exit 1
+fi
+
+exit 0
