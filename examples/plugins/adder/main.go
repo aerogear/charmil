@@ -32,19 +32,20 @@ var cfg = &config{}
 func AdderCommand(f *factory.Factory) (*cobra.Command, error) {
 
 	// Stores the config for localizer
-	locConfig := localize.Config{
+	cfg.LocConfig = localize.Config{
 		Language: &language.English,
 		Files:    defaultLocales,
-		Path:     "examples/plugins/adder/locales/en/adder.en.yaml",
+		Path:     "examples/plugins/adder/locales",
 		Format:   "yaml",
 	}
 
 	// Initializes the localizer by passing config
-	loc, err := localize.New(&locConfig)
+	loc, err := localize.New(&cfg.LocConfig)
 	if err != nil {
 		return nil, err
 	}
 
+	// User can limit the options to use comming from factory
 	opts := &factory.Factory{
 		Logger:     f.Logger,
 		Localizer:  loc,

@@ -1,14 +1,5 @@
 {
   "Key1": "val1",
   "Key2": "val2",
-  "Key3": "val3",
-  "Key4": "val4",
-  "Plugins": {
-    "adder": {
-      "Key5": "val5",
-      "Key6": "val6",
-      "Key7": "val7",
-      "Key8": "val8"
-    }
-  }
+  "Key3": "val3"
 }
