@@ -1,0 +1,12 @@
+charmil.cmd.use:
+  description: "Use of charmil command"
+  one: "charmil"
+charmil.cmd.short:
+  description: "Short description of charmil command"
+  one: "Charmil is the charmil command for charmil CLI"
+charmil.cmd.long:
+  description: "Long description of charmil command"
+  one: "Charmil CLI allows to init a charmil project"
+charmil.cmd.example: 
+  description: "Examples"
+  one: "$ charmil init CLI_NAME"

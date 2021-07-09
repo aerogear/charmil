@@ -18,11 +18,12 @@ var (
 	// Language used, can be overridden by Makefile or CI
 	Language = "en"
 
+	// Need to make them configurable from the CLI
 	// RepositoryOwner is the remote GitHub organization for the releases
-	RepositoryOwner = "redhat-developer"
+	RepositoryOwner = ""
 
 	// RepositoryName is the remote GitHub repository for the releases
-	RepositoryName = "app-services-cli"
+	RepositoryName = ""
 )
 
 func init() {

@@ -4,7 +4,7 @@ import (
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/spf13/cobra"
 
-	Cliversion "github.com/aerogear/charmil/starter-1/pkg/cmd/version"
+	cliversion "github.com/aerogear/charmil/starter-1/pkg/cmd/version"
 )
 
 func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
@@ -20,7 +20,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.Version = version
 
-	cmd.AddCommand(Cliversion.NewVersionCmd(f))
+	cmd.AddCommand(cliversion.NewVersionCmd(f))
 
 	return cmd
 }
