@@ -9,7 +9,7 @@ help:
 	@echo "make test                 	run  tests"
 	@echo "make format             		format files"
 	@echo "make build             		build files"
-
+	@echo "make setup/git/hooks      	setup git hooks"
 .PHONY: help
 
 run:
@@ -43,3 +43,8 @@ format:
 
 	@gofmt -w `find . -type f -name '*.go'`
 .PHONY: format
+
+# Set git hook path to .githooks/
+setup/git/hooks:
+	git config core.hooksPath .githooks
+.PHONY: setup/git/hooks

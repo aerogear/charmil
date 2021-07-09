@@ -69,6 +69,10 @@ Developers can create CLI profiles to install multiple individual CLI's at the s
 
 > Under Construction
 
+## Contributing
+
+We would love to have you contribute. For contributing guidance please refer to [CONTRIBUTING](https://github.com/aerogear/charmil/contributing.md).
+
 ## Documentation
 
 Visit the [Charmil Documentation](https://aerogear.github.io/charmil/docs/)
