@@ -1,0 +1,19 @@
+root.cmd.use:
+  description: "The one-line usage message"
+  one: "root [args]"
+
+root.cmd.shortDescription:
+  description: "The short description shown in the 'help' output"
+  one: "Short description of root command"
+
+root.cmd.longDescription:
+  description: "The long description shown in the 'help' output"
+  one: "Long description of root command"
+
+root.cmd.example:
+  description: "Examples of how to use the command"
+  one: "$ root arg1 arg2"
+
+root.cmd.flag.help.description:
+  description: "Description of the help flag"
+  one: "help flag"

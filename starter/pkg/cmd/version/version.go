@@ -3,17 +3,17 @@ package version
 import (
 	"fmt"
 
-	"github.com/aerogear/charmil/internal/build"
-	"github.com/aerogear/charmil/pkg/cmd/factory"
-	"github.com/aerogear/charmil/pkg/iostreams"
-	"github.com/aerogear/charmil/pkg/localize"
-	"github.com/aerogear/charmil/pkg/logging"
+	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/core/iostreams"
+	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/core/logging"
+	"github.com/aerogear/charmil/starter/internal/build"
 	"github.com/spf13/cobra"
 )
 
 type Options struct {
 	IO        *iostreams.IOStreams
-	Logger    func() (logging.Logger, error)
+	Logger    logging.Logger
 	localizer localize.Localizer
 }
 
@@ -25,8 +25,8 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:    opts.localizer.MustLocalize("version.cmd.use"),
-		Short:  opts.localizer.MustLocalize("version.cmd.shortDescription"),
+		Use:    opts.localizer.LocalizeByID("version.cmd.use"),
+		Short:  opts.localizer.LocalizeByID("version.cmd.shortDescription"),
 		Hidden: true,
 		Args:   cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
@@ -38,6 +38,6 @@ func NewVersionCmd(f *factory.Factory) *cobra.Command {
 }
 
 func runCmd(opts *Options) (err error) {
-	fmt.Fprintln(opts.IO.Out, opts.localizer.MustLocalize("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
+	fmt.Fprintln(opts.IO.Out, opts.localizer.LocalizeByID("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 	return nil
 }
