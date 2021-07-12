@@ -34,5 +34,15 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	cmd.AddCommand(starter.NewServiceRegistryCommand(f))
 
+	// Uncomment the following snippet to add a plugin to this CLI:
+	/*
+		pluginRootCmd, err := pluginAlias.RootCommand(f)
+		if err != nil {
+			f.Logger.Errorln(f.IOStreams.ErrOut, err)
+			os.Exit(1)
+		}
+		cmd.AddCommand(pluginRootCmd)
+	*/
+
 	return cmd
 }
