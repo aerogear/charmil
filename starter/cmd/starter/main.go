@@ -82,11 +82,6 @@ func main() {
 
 	rootCmd.InitDefaultHelpCmd()
 
-	if generateDocs {
-		generateDocumentation(rootCmd)
-		os.Exit(0)
-	}
-
 	// Writes the current config into the local config file
 	err := h.Save()
 	if err != nil {
@@ -97,6 +92,10 @@ func main() {
 	if err = rootCmd.Execute(); err != nil {
 		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
+	}
+
+	if generateDocs {
+		generateDocumentation(rootCmd)
 	}
 }
 
