@@ -39,9 +39,11 @@ var (
 	// Initializes a zero-valued struct and stores its address
 	cfg = &config{}
 
+	// Stores embedded contents of all the locales files
 	//go:embed locales/*
 	defaultLocales embed.FS
 
+	// Stores an instance of the charmil localizer
 	localizer localize.Localizer
 
 	buildVersion string
@@ -49,7 +51,7 @@ var (
 
 func init() {
 	// Links the specified local config file path and current config
-	// struct pointer to a new config handler instance and returns it
+	// struct pointer to a new charmil config handler instance and returns it
 	h = c.NewHandler(cfgFilePath, cfg)
 
 	// Loads config values from the local config file
@@ -65,6 +67,7 @@ func init() {
 		Format:   "yaml",
 	}
 
+	// Initializes the localizer by passing config
 	localizer, err := localize.New(&cfg.LocConfig)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -78,8 +81,10 @@ func init() {
 }
 
 func main() {
+	// Stores the root command of CLI
 	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
 
+	// Adds a default help command to root command
 	rootCmd.InitDefaultHelpCmd()
 
 	// Writes the current config into the local config file
@@ -94,6 +99,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Generates documentation files for commands
 	if generateDocs {
 		generateDocumentation(rootCmd)
 	}
