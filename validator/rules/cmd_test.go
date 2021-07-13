@@ -8,13 +8,13 @@ import (
 )
 
 func Test_ExecuteCommand(t *testing.T) {
-	cmd := rootCmd
 
 	// Testing cobra commands with default recommended config
 	// default config can also be overrided
 	ruleCfg := ValidatorConfig{
 		ValidatorOptions: ValidatorOptions{
 			SkipCommands: map[string]bool{"cmd100 cmd0 subcmd01": true},
+			Verbose:      true,
 		},
 		ValidatorRules: ValidatorRules{
 			Length: Length{
@@ -37,10 +37,8 @@ func Test_ExecuteCommand(t *testing.T) {
 		},
 	}
 
-	validationErr := ExecuteRules(cmd, &ruleCfg)
-	if len(validationErr) != 0 {
-		t.Errorf("validationErr was not empty, got length: %d; want %d", len(validationErr), 0)
-	}
+	validationErr := ExecuteRules(rootCmd, &ruleCfg)
+
 	for _, errs := range validationErr {
 		if errs.Err != nil {
 			t.Errorf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
@@ -76,7 +74,7 @@ var echoCmd = &cobra.Command{
 var echoSubCmd = &cobra.Command{
 	Use:     "echosub [string to print]",
 	Short:   "second sub command for echo",
-	Long:    "an absolutely utterly useless command for testing gendocs!.",
+	Long:    "an absolutely utterly useless command for testing",
 	Example: "root echo echosub",
 	Run:     emptyRun,
 }

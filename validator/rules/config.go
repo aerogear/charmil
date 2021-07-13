@@ -66,6 +66,11 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 				},
 				Fields: map[string]bool{"Use": true, "Short": true, "Long": true, "Example": true},
 			},
+			ExampleMatches: ExampleMatches{
+				RuleOptions: validator.RuleOptions{
+					Verbose: defaultVerbose,
+				},
+			},
 		},
 	}
 

@@ -2,6 +2,8 @@ package rules
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/aerogear/charmil/validator"
@@ -22,7 +24,7 @@ type ExampleMatches struct {
 
 // Validate is a method of type Rule Interface
 // which returns validation errors
-// compares the regexp with Use attribute
+// checks if the example is updated as per command
 func (e *ExampleMatches) Validate(cmd *cobra.Command) []validator.ValidationError {
 	var errors []validator.ValidationError
 
@@ -36,9 +38,13 @@ func (e *ExampleMatches) Validate(cmd *cobra.Command) []validator.ValidationErro
 	cmdPath := cmd.CommandPath()
 	cmdExample := cmd.Example
 
+	if e.RuleOptions.Verbose {
+		fmt.Fprintf(os.Stderr, "%s Command %s -> Example:%s, Path:%s\n", ExampleMatchesRule, cmd.CommandPath(), cmdExample, cmdPath)
+	}
+
 	// check if cmdPath is not the substring of cmdExample
 	if cmdPath != "" && cmdExample != "" && !strings.Contains(cmdExample, cmdPath) {
-		errors = append(errors, validator.ValidationError{Name: "provided example doesn't match with command", Err: ErrExampleMistmatch, Rule: ExampleMatchesRule, Cmd: cmd})
+		errors = append(errors, validator.ValidationError{Name: "provided example doesn't contain command path", Err: ErrExampleMistmatch, Rule: ExampleMatchesRule, Cmd: cmd})
 	}
 
 	return errors
