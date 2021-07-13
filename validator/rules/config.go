@@ -25,9 +25,10 @@ type ValidatorOptions struct {
 // ValidatorRules consists of all the rules
 // present in validator
 type ValidatorRules struct {
-	Length     `json:"Length"`
-	MustExist  `json:"MustExist"`
-	UseMatches `json:"UseMatches"`
+	Length         `json:"Length"`
+	MustExist      `json:"MustExist"`
+	UseMatches     `json:"UseMatches"`
+	ExampleMatches `json:"ExampleMatches"`
 }
 
 // ExecuteRules executes all the rules
@@ -80,5 +81,6 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 		&validatorConfig.Length,
 		&validatorConfig.MustExist,
 		&validatorConfig.UseMatches,
+		&validatorConfig.ExampleMatches,
 	)
 }

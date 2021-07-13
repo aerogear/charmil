@@ -16,11 +16,19 @@ type command struct {
 
 func NewCommand() *cobra.Command {
 
+	cmd100 := &cobra.Command{
+		Use:     "cmd100",
+		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
+		Example: "cmd100",
+		Run: func(cmd *cobra.Command, args []string) {
+		},
+	}
+
 	cmd := &cobra.Command{
 		Use:     "cmd0",
 		Short:   "This is the short description",
 		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
-		Example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
+		Example: "cmd100 cmd0",
 		Run: func(cmd *cobra.Command, args []string) {
 		},
 	}
@@ -29,27 +37,19 @@ func NewCommand() *cobra.Command {
 		{
 			use:     "subcmd01",
 			long:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-			example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
+			example: "cmd100 cmd0 subcmd01",
 		},
 		{
 			use:     "subcmd12",
 			short:   "This is the description short12",
 			long:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-			example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
+			example: "cmd100 cmd0 subcmd12",
 		},
 		{
 			use:     "subcmd03",
 			short:   "This is the description short03",
 			long:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-			example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-		},
-	}
-
-	cmd100 := &cobra.Command{
-		Use:     "cmd100",
-		Long:    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.`,
-		Example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis malesuada varius lacus, sit amet dictum risus convallis nec. Quisque suscipit at neque in blandit. Proin a accumsan ante. Aenean cursus suscipit sem. Nunc sollicitudin, ante et vehicula pharetra, mauris elit porta felis, et ultricies nulla justo eleifend justo. Proin sit amet.",
-		Run: func(cmd *cobra.Command, args []string) {
+			example: "cmd100 cmd0 subcmd03",
 		},
 	}
 

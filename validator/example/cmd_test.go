@@ -22,7 +22,8 @@ func Test_ExecuteCommand(t *testing.T) {
 					SkipCommands: map[string]bool{"cmd100": true},
 				},
 				Limits: map[string]rules.Limit{
-					"Use": {Min: 1},
+					"Use":     {Min: 1},
+					"Example": {Min: 3},
 				},
 			},
 			MustExist: rules.MustExist{
