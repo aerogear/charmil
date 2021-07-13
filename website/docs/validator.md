@@ -9,6 +9,7 @@ Validator can be used for testing and controlling many aspects of cobra commands
 - LengthRule
 - MustExistRule
 - UseMatchesRule
+- ExampleMatchesRule
 > We are working on the validator library to provide more rules
 
 ## How to use
