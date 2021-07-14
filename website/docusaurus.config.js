@@ -72,9 +72,10 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          path: '../docs/src',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/aerogear/charmil',
+            'https://github.com/aerogear/charmil/tree/main/docs/src',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
