@@ -11,12 +11,9 @@ import (
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/starter/internal/build"
 	"github.com/aerogear/charmil/starter/pkg/cmd/root"
-	"github.com/redhat-developer/app-services-cli/pkg/doc"
-	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 	"golang.org/x/text/language"
 )
-
-var generateDocs = os.Getenv("GENERATE_DOCS") == "true"
 
 // Defines the configuration keys of the host CLI.
 //
@@ -100,27 +97,8 @@ func main() {
 	}
 
 	// Generates documentation files for commands
-	if generateDocs {
-		generateDocumentation(rootCmd)
-	}
-}
-
-/**
-* Generates documentation files
- */
-func generateDocumentation(rootCommand *cobra.Command) {
-	fmt.Fprint(os.Stderr, "Generating docs.\n\n")
-	filePrepender := func(filename string) string {
-		return ""
-	}
-
-	rootCommand.DisableAutoGenTag = true
-
-	linkHandler := func(s string) string { return s }
-
-	err := doc.GenAsciidocTreeCustom(rootCommand, "./docs/commands", filePrepender, linkHandler)
+	err = doc.GenMarkdownTree(rootCmd, "./docs/commands")
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
