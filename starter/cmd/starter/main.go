@@ -94,6 +94,7 @@ func main() {
 	// Generates documentation files for commands
 	err = doc.GenMarkdownTree(rootCmd, "./docs/commands")
 	if err != nil {
-		log.Fatal(err)
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
+		os.Exit(1)
 	}
 }
