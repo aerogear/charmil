@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/pelletier/go-toml"
@@ -42,7 +43,9 @@ func (h *CfgHandler) Load() error {
 
 	// Reads the local config file
 	buf, err := readFile(h.filePath)
-	if err != nil {
+	if os.IsNotExist(err) {
+		return nil
+	} else if err != nil {
 		return err
 	}
 
