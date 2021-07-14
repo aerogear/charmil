@@ -54,7 +54,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	// TODO: Execute this only when the local config file doesn't have a LocConfig value already present
+	// Initializes localizer config and adds it's value to the CLI config
 	cfg.LocConfig = localize.Config{
 		Language: &language.English,
 		Files:    defaultLocales,
@@ -62,7 +62,7 @@ func init() {
 	}
 
 	// Initializes the localizer by passing config
-	localizer, err := localize.New(&cfg.LocConfig)
+	localizer, err = localize.New(&cfg.LocConfig)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
