@@ -26,7 +26,8 @@ func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValida
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
-	// if command needs to be ignored
+	// if command's children needs to be ignored
+	// only for root
 	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
 		if val {
 			return info.Errors
@@ -55,6 +56,7 @@ func executeHelper(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *Ru
 // executeRecursive recursively traverse over all the subcommands
 // and validate using executeRulesChildren function
 func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
+
 	for _, child := range cmd.Commands() {
 		// base case
 		if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
@@ -70,6 +72,14 @@ func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig 
 
 // executeRulesChildren execute rules on children of cmd
 func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
+
+	// if command's children needs to be ignored
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
+		if val {
+			return info.Errors
+		}
+	}
+
 	children := cmd.Commands()
 	for _, child := range children {
 
@@ -86,6 +96,13 @@ func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleCon
 
 	// if command needs to be ignored
 	if val, ok := userValidatorConfig.ValidatorOptions.SkipCommands[cmd.CommandPath()]; ok {
+		if val {
+			return
+		}
+	}
+
+	// if command's children needs to be ignored
+	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
 		if val {
 			return
 		}
