@@ -3,7 +3,6 @@ package rules
 import (
 	"testing"
 
-	"github.com/aerogear/charmil/validator"
 	"github.com/spf13/cobra"
 )
 
@@ -13,14 +12,12 @@ func Test_ExecuteCommand(t *testing.T) {
 	// default config can also be overrided
 	ruleCfg := ValidatorConfig{
 		ValidatorOptions: ValidatorOptions{
-			SkipCommands: map[string]bool{"cmd100 cmd0 subcmd01": true},
-			Verbose:      true,
+			SkipChildren: map[string]bool{
+				"root echo": true,
+			},
 		},
 		ValidatorRules: ValidatorRules{
 			Length: Length{
-				RuleOptions: validator.RuleOptions{
-					SkipCommands: map[string]bool{"cmd100": true},
-				},
 				Limits: map[string]Limit{
 					"Use":     {Min: 1},
 					"Example": {Min: 3},
@@ -28,9 +25,6 @@ func Test_ExecuteCommand(t *testing.T) {
 				},
 			},
 			MustExist: MustExist{
-				RuleOptions: validator.RuleOptions{
-					SkipCommands: map[string]bool{"cmd100": true},
-				},
 				Fields: map[string]bool{"Run": true},
 			},
 			UseMatches: UseMatches{Regexp: `^[^-_+]+$`},
@@ -50,8 +44,8 @@ func Test_ExecuteCommand(t *testing.T) {
 func emptyRun(*cobra.Command, []string) {}
 
 func init() {
-	echoCmd.AddCommand(timesCmd, echoSubCmd)
-	rootCmd.AddCommand(printCmd, echoCmd, dummyCmd)
+	echoCmd.AddCommand(timesCmd, echoSubCmd, printCmd)
+	rootCmd.AddCommand(echoCmd, dummyCmd)
 }
 
 var rootCmd = &cobra.Command{
@@ -93,6 +87,7 @@ var printCmd = &cobra.Command{
 	Short:   "Print anything to the screen",
 	Long:    `an absolutely utterly useless command for testing.`,
 	Example: "print",
+	Run:     emptyRun,
 }
 
 var dummyCmd = &cobra.Command{
