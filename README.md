@@ -5,12 +5,10 @@
   <img alt="Discord Server" src="https://img.shields.io/discord/632220458137419776?logo=Discord&logoColor=%23fff">
 </a>
 
-
 <p align="center">
-  <img width="400" src="https://github.com/aerogear/charmil/raw/main/resources/logo.png">
+  <img width="350" src="./docs/images/logo_cropped.png">
   <br/>
-  Framework for building command line plugins on top of Golang Cobra Library.  <br/>
-  Charmil will let you control your cobra based CLIs. 🚀
+  Framework for building command line plugins on top of Golang <a href="https://github.com/spf13/cobra"> Cobra </a> Library
 </p>
 
 
@@ -40,7 +38,7 @@ Charmil SDK will typically be introduced into two different CLIs:
 
 ## Components
 <p align="center">
-  <img width="400" src="https://github.com/aerogear/charmil/raw/main/resources/charmil-base-ssv-3-pillar.png">
+  <img width="400" src="./docs/images/charmil_pillar.png">
 </p>
 
 ### Charmil Plugin framework starter template 
@@ -71,7 +69,7 @@ Developers can create CLI profiles to install multiple individual CLI's at the s
 
 ## Contributing
 
-We would love to have you contribute. For contributing guidance please refer to [CONTRIBUTING](https://github.com/aerogear/charmil/contributing.md).
+We would love to have you contribute. For contributing guidance please refer to [CONTRIBUTING](./CONTRIBUTING.md).
 
 ## Documentation
 
