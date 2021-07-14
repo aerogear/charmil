@@ -6,9 +6,9 @@
 </a>
 
 <p align="center">
-  <img width="400" src="./docs/images/logo_cropped.png">
+  <img width="350" src="./docs/images/logo_cropped.png">
   <br/>
-  Framework for building command line plugins on top of Golang Cobra Library
+  Framework for building command line plugins on top of Golang <a href="https://github.com/spf13/cobra"> Cobra </a> Library
 </p>
 
 
@@ -69,7 +69,7 @@ Developers can create CLI profiles to install multiple individual CLI's at the s
 
 ## Contributing
 
-We would love to have you contribute. For contributing guidance please refer to [CONTRIBUTING](https://github.com/aerogear/charmil/contributing.md).
+We would love to have you contribute. For contributing guidance please refer to [CONTRIBUTING](./CONTRIBUTING.md).
 
 ## Documentation
 

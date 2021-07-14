@@ -44,6 +44,6 @@ format:
 .PHONY: format
 
 # Set git hook path to .githooks/
-setup/git/hooks:
+setup/githooks:
 	git config core.hooksPath .githooks
 .PHONY: setup/git/hooks
