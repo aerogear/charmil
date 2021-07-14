@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
+func NewRootCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		SilenceUsage:  true,
@@ -27,9 +27,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 
 	fs.BoolVarP(&help, "help", "h", false, f.Localizer.LocalizeByID("root.cmd.flag.help.description"))
 
-	cmd.Version = version
-
-	// cmd.SetVersionTemplate(f.Localizer.LocalizeByID("version.cmd.outputText", localize.NewEntry("Version", build.Version)))
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	cmd.AddCommand(starter.NewServiceRegistryCommand(f))

@@ -9,7 +9,6 @@ import (
 	c "github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
-	"github.com/aerogear/charmil/starter/internal/build"
 	"github.com/aerogear/charmil/starter/pkg/cmd/root"
 	"github.com/spf13/cobra/doc"
 	"golang.org/x/text/language"
@@ -42,8 +41,6 @@ var (
 
 	// Stores an instance of the charmil localizer
 	localizer localize.Localizer
-
-	buildVersion string
 )
 
 func init() {
@@ -73,13 +70,11 @@ func init() {
 
 	// Creates a new factory instance with default settings
 	cmdFactory = factory.Default(localizer, h)
-
-	buildVersion = build.Version
 }
 
 func main() {
 	// Stores the root command of CLI
-	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
+	rootCmd := root.NewRootCommand(cmdFactory)
 
 	// Adds a default help command to root command
 	rootCmd.InitDefaultHelpCmd()

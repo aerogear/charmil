@@ -15,8 +15,7 @@ $ root arg1 arg2
 ### Options
 
 ```
-  -h, --help      help flag
-  -v, --version   version for root
+  -h, --help   help flag
 ```
 
 ### SEE ALSO
