@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aerogear/charmil/core/build"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
@@ -29,12 +28,11 @@ func abc() *cobra.Command {
 		os.Exit(1)
 	}
 
-	buildVersion := build.Version
 	// init factory
 	cmdFactory := factory.Default(localizer)
 
 	// root command
-	rootCmd := root.NewRootCommand(cmdFactory, buildVersion)
+	rootCmd := root.NewRootCommand(cmdFactory)
 	rootCmd.InitDefaultHelpCmd()
 
 	return rootCmd

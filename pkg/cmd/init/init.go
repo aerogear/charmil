@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func InitCommand(f *factory.Factory, version string) *cobra.Command {
+func InitCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:           f.Localizer.LocalizeByID("init.cmd.use"),
@@ -15,8 +15,6 @@ func InitCommand(f *factory.Factory, version string) *cobra.Command {
 		SilenceErrors: true,
 		Run:           func(cmd *cobra.Command, args []string) {},
 	}
-
-	cmd.Version = version
 
 	return cmd
 }

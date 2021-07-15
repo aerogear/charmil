@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
+func NewRootCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           f.Localizer.LocalizeByID("charmil.cmd.use"),
 		Short:         f.Localizer.LocalizeByID("charmil.cmd.short"),
@@ -15,9 +15,7 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 		SilenceErrors: true,
 	}
 
-	cmd.Version = version
-
-	cmd.AddCommand(initialize.InitCommand(f, version))
+	cmd.AddCommand(initialize.InitCommand(f))
 
 	return cmd
 }

@@ -16,7 +16,6 @@ run:
 	go run ./examples/host
 
 build:
-	go build -o host_example ./examples/host
 
 build/tags:
 	go build -tags ${TAGS} ./examples/host

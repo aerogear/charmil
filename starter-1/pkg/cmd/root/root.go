@@ -7,7 +7,7 @@ import (
 	cliversion "github.com/aerogear/charmil/starter-1/pkg/cmd/version"
 )
 
-func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
+func NewRootCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:           f.Localizer.LocalizeByID("root.cmd.use"),
@@ -17,8 +17,6 @@ func NewRootCommand(f *factory.Factory, version string) *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}
-
-	cmd.Version = version
 
 	cmd.AddCommand(cliversion.NewVersionCmd(f))
 
