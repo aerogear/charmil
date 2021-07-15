@@ -28,10 +28,8 @@ func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValida
 
 	// if command's children needs to be ignored
 	// only for root
-	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
-		if val {
-			return info.Errors
-		}
+	if skipCommand(userValidatorConfig, cmd.CommandPath()+"*") {
+		return info.Errors
 	}
 
 	// initialize default rules
@@ -74,10 +72,8 @@ func executeRecursive(cmd *cobra.Command, info *validator.StatusLog, ruleConfig 
 func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 
 	// if command's children needs to be ignored
-	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
-		if val {
-			return info.Errors
-		}
+	if skipCommand(userValidatorConfig, cmd.CommandPath()+"*") {
+		return info.Errors
 	}
 
 	children := cmd.Commands()
@@ -95,17 +91,13 @@ func executeRulesChildren(cmd *cobra.Command, info *validator.StatusLog, ruleCon
 func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) {
 
 	// if command needs to be ignored
-	if val, ok := userValidatorConfig.ValidatorOptions.SkipCommands[cmd.CommandPath()]; ok {
-		if val {
-			return
-		}
+	if skipCommand(userValidatorConfig, cmd.CommandPath()) {
+		return
 	}
 
 	// if command's children needs to be ignored
-	if val, ok := userValidatorConfig.ValidatorOptions.SkipChildren[cmd.CommandPath()]; ok {
-		if val {
-			return
-		}
+	if skipCommand(userValidatorConfig, cmd.CommandPath()+"*") {
+		return
 	}
 
 	// traverse all rules and validate
@@ -122,4 +114,13 @@ func validate(cmd *cobra.Command, info *validator.StatusLog, ruleConfig *RuleCon
 // and overrides the default rules if RuleConfig is provided by the user
 func initDefaultRules(validatorConfig *ValidatorConfig, ruleConfig *RuleConfig) {
 	ValidatorConfigToRuleConfig(validatorConfig, ruleConfig)
+}
+
+// skipCommand checks that command need to be skipped or not
+func skipCommand(userValidatorConfig *ValidatorConfig, cmdPath string) bool {
+	val, ok := userValidatorConfig.ValidatorOptions.SkipCommands[cmdPath]
+	if !ok {
+		return ok
+	}
+	return val
 }

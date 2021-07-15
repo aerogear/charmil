@@ -18,7 +18,6 @@ type ValidatorConfig struct {
 // to the rules
 type ValidatorOptions struct {
 	Verbose      bool            `json:"Verbose"`
-	SkipChildren map[string]bool `json:"SkipChildren"`
 	SkipCommands map[string]bool `json:"SkipCommands"`
 }
 
