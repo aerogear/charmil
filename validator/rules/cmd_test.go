@@ -12,8 +12,8 @@ func Test_ExecuteCommand(t *testing.T) {
 	// default config can also be overrided
 	ruleCfg := ValidatorConfig{
 		ValidatorOptions: ValidatorOptions{
-			SkipChildren: map[string]bool{
-				"root echo": true,
+			SkipCommands: map[string]bool{
+				"root echo*": true,
 			},
 		},
 		ValidatorRules: ValidatorRules{
@@ -59,18 +59,18 @@ var rootCmd = &cobra.Command{
 var echoCmd = &cobra.Command{
 	Use:     "echo [string to echo]",
 	Aliases: []string{"say"},
-	Short:   "Echo anything to the screen",
+	// Short:   "Echo anything to the screen",
 	Long:    "an utterly useless command for testing",
 	Example: "Just run root echo",
 	Run:     emptyRun,
 }
 
 var echoSubCmd = &cobra.Command{
-	Use:     "echosub [string to print]",
-	Short:   "second sub command for echo",
-	Long:    "an absolutely utterly useless command for testing",
-	Example: "root echo echosub",
-	Run:     emptyRun,
+	Use:   "echosub [string to print]",
+	Short: "second sub command for echo",
+	Long:  "an absolutely utterly useless command for testing",
+	// Example: "root echo echosub",
+	Run: emptyRun,
 }
 
 var timesCmd = &cobra.Command{
@@ -86,7 +86,7 @@ var printCmd = &cobra.Command{
 	Use:     "print [string to print]",
 	Short:   "Print anything to the screen",
 	Long:    `an absolutely utterly useless command for testing.`,
-	Example: "print",
+	Example: "root echo print",
 	Run:     emptyRun,
 }
 
