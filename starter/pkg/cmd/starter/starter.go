@@ -2,7 +2,7 @@
 package starter
 
 import (
-	"github.com/aerogear/charmil/pkg/cmd/factory"
+	"github.com/aerogear/charmil/core/factory"
 
 	"github.com/spf13/cobra"
 )
@@ -10,9 +10,9 @@ import (
 func NewServiceRegistryCommand(f *factory.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "starter",
-		Short:   f.Localizer.MustLocalize("root.cmd.shortDescription"),
-		Long:    f.Localizer.MustLocalize("root.cmd.longDescription"),
-		Example: f.Localizer.MustLocalize("root.cmd.example"),
+		Short:   f.Localizer.LocalizeByID("root.cmd.shortDescription"),
+		Long:    f.Localizer.LocalizeByID("root.cmd.longDescription"),
+		Example: f.Localizer.LocalizeByID("root.cmd.example"),
 		Args:    cobra.MinimumNArgs(1),
 	}
 

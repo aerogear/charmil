@@ -18,7 +18,6 @@ type config struct {
 	Key1    string
 	Key2    string
 	Key3    string
-	Key4    string
 	Plugins map[string]interface{}
 }
 
@@ -55,15 +54,13 @@ func init() {
 	}
 
 	// Creates a new factory instance with default settings
-	cmdFactory = factory.Default(nil)
+	cmdFactory = factory.Default(nil, h)
 }
 
 func main() {
-	// Sets a value into config
-	cfg.Key4 = "val4"
 
 	// Add plugin CLI into host
-	echoCmd, err := echo.EchoCommand()
+	echoCmd, err := echo.EchoCommand(cmdFactory)
 	if err != nil {
 		log.Fatal(err)
 	}

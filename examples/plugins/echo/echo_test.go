@@ -3,12 +3,18 @@ package echo
 import (
 	"testing"
 
+	c "github.com/aerogear/charmil/core/config"
+	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/validator"
 	"github.com/aerogear/charmil/validator/rules"
 )
 
 func Test_ExecuteCommand(t *testing.T) {
-	cmd, err := EchoCommand()
+	cfg := &config{}
+	h := c.NewHandler("./examples/plugins/echo/test_config.json", cfg)
+	cmdFactory := factory.Default(nil, h)
+
+	cmd, err := EchoCommand(cmdFactory)
 	if err != nil {
 		t.Fatal(err)
 	}

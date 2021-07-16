@@ -1,6 +1,7 @@
 package localize
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io/fs"
@@ -27,7 +28,7 @@ type GoI18n struct {
 // Config is a type which helps to get the
 // information to initialize the localizer
 type Config struct {
-	Files    fs.FS
+	Files    embed.FS
 	Language *language.Tag
 	Path     string
 	Format   string
