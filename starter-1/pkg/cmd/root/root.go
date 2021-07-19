@@ -3,8 +3,6 @@ package root
 import (
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/spf13/cobra"
-
-	cliversion "github.com/aerogear/charmil/starter-1/pkg/cmd/version"
 )
 
 func NewRootCommand(f *factory.Factory) *cobra.Command {
@@ -17,8 +15,6 @@ func NewRootCommand(f *factory.Factory) *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}
-
-	cmd.AddCommand(cliversion.NewVersionCmd(f))
 
 	return cmd
 }

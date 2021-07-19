@@ -5,8 +5,6 @@ go 1.16
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/fatih/color v1.12.0
-	github.com/google/go-github v17.0.0+incompatible
-	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/imdario/mergo v0.3.12
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.13
