@@ -2,6 +2,7 @@ package root
 
 import (
 	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/starter/pkg/cmd/completion"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +18,8 @@ func NewRootCommand(f *factory.Factory) *cobra.Command {
 
 		},
 	}
+
+	cmd.AddCommand(completion.NewCompletionCommand(f))
 
 	return cmd
 }
