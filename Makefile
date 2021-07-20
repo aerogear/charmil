@@ -13,12 +13,13 @@ help:
 .PHONY: help
 
 run:
-	go run ./examples/host
+	go run ./cmd/charmil
 
 build:
+	go build ./cmd/charmil
 
 build/tags:
-	go build -tags ${TAGS} ./examples/host
+	go build -tags ${TAGS} ./cmd/charmil
 
 test/validator:
 	go test ./validator/rules
