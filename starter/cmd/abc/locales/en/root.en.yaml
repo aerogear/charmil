@@ -7,6 +7,9 @@ root.cmd.short:
 root.cmd.long:
   description: "Long description of root command"
   one: "Long description of command"
-root.cmd.example: 
+root.cmd.example:
   description: "Examples"
-  one: "$ root"
+  one: "
+  Explain how to run the command
+  $ root
+  "

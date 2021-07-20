@@ -10,7 +10,6 @@ Validator can be used for testing and controlling many aspects of cobra commands
 - MustExistRule
 - UseMatchesRule
 - ExampleMatchesRule
-> We are working on the validator library to provide more rules
 
 ## How to use
 It is recommended to use the validator while writing unit tests for cobra commands.

@@ -52,7 +52,7 @@ install:
 .PHONY: install
 
 test/unit: install
-	go test ./pkg/...
+	go test ./cmd/... ./pkg/...
 .PHONY: test/unit
 
 # clean up code and dependencies

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/debug"
 	"github.com/aerogear/charmil/core/iostreams"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/core/logging"
@@ -24,7 +23,7 @@ func Default(localizer localize.Localizer, cfgHandler *config.CfgHandler) *Facto
 		loggerBuilder := logging.NewStdLoggerBuilder()
 		loggerBuilder = loggerBuilder.Streams(io.Out, io.ErrOut)
 
-		debugEnabled := debug.Enabled()
+		debugEnabled := true
 		loggerBuilder = loggerBuilder.Debug(debugEnabled)
 
 		logger, err := loggerBuilder.Build()

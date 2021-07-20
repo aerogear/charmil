@@ -10,13 +10,13 @@ import (
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
 	"golang.org/x/text/language"
 
-	"github.com/aerogear/charmil/starter-1/pkg/cmd/root"
+	"github.com/aerogear/charmil/starter/pkg/cmd/root"
 )
 
 // Defines the configuration keys of the host CLI.
-//
 // CONSTRAINT: All fields of the config struct need to be exportable
 type config struct {
 	LocConfig localize.Config
@@ -83,6 +83,10 @@ func abc() *cobra.Command {
 
 func main() {
 	cmd := abc()
+
+	if err := doc.GenMarkdownTree(cmd, "starter/docs/commands"); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)

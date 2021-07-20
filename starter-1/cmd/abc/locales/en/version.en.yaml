@@ -1,9 +1,0 @@
-version.cmd.use:
-  description: "Use of version command"
-  one: "version"
-version.cmd.short:
-  description: "Short description of version command"
-  one: "Version command provides version of the CLI"
-version.cmd.outputText:
-  description: "Version of CLI"
-  one: "{{.Version}}"
