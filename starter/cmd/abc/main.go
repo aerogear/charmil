@@ -84,12 +84,19 @@ func abc() *cobra.Command {
 func main() {
 	cmd := abc()
 
-	if err := doc.GenMarkdownTree(cmd, "starter/docs/commands"); err != nil {
-		log.Fatal(err)
+	if err := doc.GenMarkdownTree(cmd, "./docs/commands"); err != nil {
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
+		os.Exit(1)
+	}
+
+	// Writes the current config into the local config file
+	if err := h.Save(); err != nil {
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
+		os.Exit(1)
 	}
 
 	if err := cmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
 		os.Exit(1)
 	}
 }
