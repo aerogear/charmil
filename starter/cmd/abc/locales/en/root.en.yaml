@@ -1,0 +1,15 @@
+root.cmd.use:
+  description: "Use of root command"
+  one: "root"
+root.cmd.short:
+  description: "Short description of root command"
+  one: "Short description of command"
+root.cmd.long:
+  description: "Long description of root command"
+  one: "Long description of command"
+root.cmd.example:
+  description: "Examples"
+  one: "
+  Explain how to run the command
+  $ root
+  "

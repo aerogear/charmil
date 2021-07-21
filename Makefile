@@ -13,13 +13,13 @@ help:
 .PHONY: help
 
 run:
-	go run ./examples/host
+	go run ./cmd/charmil
 
 build:
-	go build -o host_example ./examples/host
+	go build ./cmd/charmil
 
 build/tags:
-	go build -tags ${TAGS} ./examples/host
+	go build -tags ${TAGS} ./cmd/charmil
 
 test/validator:
 	go test ./validator/rules
@@ -32,7 +32,7 @@ test/unit: install
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
-	golangci-lint run cmd/... pkg/... internal/...
+	golangci-lint run cmd/... pkg/... 
 .PHONY: lint
 
 

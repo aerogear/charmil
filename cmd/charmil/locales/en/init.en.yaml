@@ -1,0 +1,12 @@
+init.cmd.use:
+  description: "Use of init command"
+  one: "init"
+init.cmd.short:
+  description: "Short description of init command"
+  one: "Initializes the charmil project"
+init.cmd.long:
+  description: "Long description of init command"
+  one: "Initializes the charmil project"
+init.cmd.example: 
+  description: "Examples"
+  one: "$ charmil init CLI_NAME"
