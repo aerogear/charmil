@@ -1,5 +1,6 @@
 package template
 
+// CreateCrudTemplate returns the template of the `create` file as a byte array
 func CreateCrudTemplate() []byte {
 	return []byte(`// Create file for {{.Singular}} instances
 
@@ -40,6 +41,7 @@ func runCreate(opts *createOptions, f *factory.Factory) error {
 `)
 }
 
+// DeleteCrudTemplate returns the template of the `delete` file as a byte array
 func DeleteCrudTemplate() []byte {
 	return []byte(`// Delete file for {{.Singular}} instances
 	
@@ -81,6 +83,7 @@ func runDelete(opts *deleteOptions, f *factory.Factory) error {
 `)
 }
 
+// DescribeCrudTemplate returns the template of the `describe` file as a byte array
 func DescribeCrudTemplate() []byte {
 	return []byte(`// Describe file for {{.Singular}} instances
 
@@ -122,6 +125,7 @@ func runDescribe(opts *describeOptions, f *factory.Factory) error {
 `)
 }
 
+// ListCrudTemplate returns the template of the `list` file as a byte array
 func ListCrudTemplate() []byte {
 	return []byte(`// List file for {{.Singular}} instances
 	
@@ -163,6 +167,7 @@ func runList(opts *listOptions, f *factory.Factory) error {
 `)
 }
 
+// UseCrudTemplate returns the template of the `use` file as a byte array
 func UseCrudTemplate() []byte {
 	return []byte(`// Use file for {{.Singular}} instances
 	
