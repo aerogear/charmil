@@ -4,6 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
 
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/go-git/go-git/v5"
@@ -54,6 +57,9 @@ func InitCommand(f *factory.Factory) *cobra.Command {
 			f.Logger.Info(templateContext)
 
 			cloneStarter(f)
+			if err := renderTemplates(templateContext, f); err != nil {
+				f.Logger.Error(err)
+			}
 		},
 	}
 
@@ -101,4 +107,58 @@ func cloneStarter(f *factory.Factory) {
 		f.Logger.Error(cloneErr)
 		os.Exit(1)
 	}
+}
+
+// render templates
+func renderTemplates(templateContext TemplateContext, f *factory.Factory) error {
+	path, pathErr := os.Getwd()
+	if pathErr != nil {
+		f.Logger.Error(pathErr)
+		os.Exit(1)
+	}
+
+	err := filepath.Walk(path+"/cloned",
+		func(path string, info os.FileInfo, err error) error {
+
+			ignoreSlice := []string{".git", ".github", ".chglog", ".goreleaser.yml", "bin"}
+
+			pathSplit := strings.Split(path, string(os.PathSeparator))
+
+			for _, value := range ignoreSlice {
+				fmt.Println(value, pathSplit[len(pathSplit)-1])
+				if value == pathSplit[len(pathSplit)-1] {
+					return nil
+				}
+			}
+
+			fi, err := os.Stat(path)
+			if err != nil {
+				return fmt.Errorf("failed to read file info: %w", err)
+			}
+
+			if fi.IsDir() {
+				return nil
+			}
+
+			tmpl, err := template.ParseFiles(path)
+			if err != nil {
+				return fmt.Errorf("failed to parse template: %w", err)
+			}
+
+			f, err := os.Create(path)
+			if err != nil {
+				return fmt.Errorf("failed to create file: %w", err)
+			}
+
+			if err := tmpl.Execute(f, templateContext); err != nil {
+				return fmt.Errorf("failed to execute template: %w", err)
+			}
+
+			return nil
+		})
+	if err != nil {
+		return fmt.Errorf("failed to walk directory: %w", err)
+	}
+
+	return nil
 }
