@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/aerogear/charmil/core/factory"
+	"github.com/go-git/go-git/v5"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
@@ -51,6 +52,8 @@ func InitCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			f.Logger.Info(templateContext)
+
+			cloneStarter(f)
 		},
 	}
 
@@ -80,4 +83,22 @@ func promptGetInput(pc promptContent) string {
 	}
 
 	return result
+}
+
+// clone a git repository to a local path using go-git
+func cloneStarter(f *factory.Factory) {
+	path, pathErr := os.Getwd()
+	if pathErr != nil {
+		f.Logger.Error(pathErr)
+		os.Exit(1)
+	}
+
+	_, cloneErr := git.PlainClone(path+"/cloned", false, &git.CloneOptions{
+		URL:      "https://github.com/ankithans/charmil-starter-template",
+		Progress: f.IOStreams.Out,
+	})
+	if cloneErr != nil {
+		f.Logger.Error(cloneErr)
+		os.Exit(1)
+	}
 }
