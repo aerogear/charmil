@@ -7,6 +7,7 @@ require (
 	github.com/fatih/color v1.12.0
 	github.com/imdario/mergo v0.3.12
 	github.com/kr/text v0.2.0 // indirect
+	github.com/manifoldco/promptui v0.8.0
 	github.com/mattn/go-isatty v0.0.13
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect

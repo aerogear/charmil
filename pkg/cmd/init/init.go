@@ -1,9 +1,26 @@
 package init
 
 import (
+	"errors"
+	"fmt"
+	"os"
+
 	"github.com/aerogear/charmil/core/factory"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
+
+// promptContent is a struct to hold the prompt content
+type promptContent struct {
+	errorMsg string
+	label    string
+}
+
+type TemplateContext struct {
+	Owner   string
+	Repo    string
+	CliName string
+}
 
 func InitCommand(f *factory.Factory) *cobra.Command {
 
@@ -13,8 +30,54 @@ func InitCommand(f *factory.Factory) *cobra.Command {
 		Long:          f.Localizer.LocalizeByID("init.cmd.long"),
 		Example:       f.Localizer.LocalizeByID("init.cmd.example"),
 		SilenceErrors: true,
-		Run:           func(cmd *cobra.Command, args []string) {},
+		Run: func(cmd *cobra.Command, args []string) {
+			owner := promptGetInput(promptContent{
+				label:    "GitHub Organization or Username",
+				errorMsg: "Please Provide a username",
+			})
+			repo := promptGetInput(promptContent{
+				label:    "GitHub Repo Name",
+				errorMsg: "Please Provide a repo name",
+			})
+			cli_name := promptGetInput(promptContent{
+				label:    "CLI Name",
+				errorMsg: "Please Provide a cli name",
+			})
+
+			templateContext := TemplateContext{
+				Owner:   owner,
+				Repo:    repo,
+				CliName: cli_name,
+			}
+
+			f.Logger.Info(templateContext)
+		},
 	}
 
 	return cmd
+}
+
+// promptGetInput returns a string got by prompting the user
+func promptGetInput(pc promptContent) string {
+
+	// validate function for validating prompts
+	validate := func(input string) error {
+		if len(input) == 0 {
+			return errors.New(pc.errorMsg)
+		}
+		return nil
+	}
+
+	prompt := promptui.Prompt{
+		Label:    pc.label,
+		Validate: validate,
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		os.Exit(1)
+	}
+
+	return result
 }
