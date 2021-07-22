@@ -80,7 +80,13 @@ func charmil() *cobra.Command {
 	rootCmd := root.NewRootCommand(cmdFactory)
 	rootCmd.InitDefaultHelpCmd()
 
-	rootCmd.AddCommand(crud.CrudCommand(cmdFactory))
+	crudCmd, err := crud.CrudCommand(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
+		os.Exit(1)
+	}
+
+	rootCmd.AddCommand(crudCmd)
 
 	return rootCmd
 }

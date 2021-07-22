@@ -29,7 +29,7 @@ var (
 	}
 )
 
-func CrudCommand(f *factory.Factory) *cobra.Command {
+func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 	cmd := &cobra.Command{
 		Use:           f.Localizer.LocalizeByID("crud.cmd.use"),
 		Short:         f.Localizer.LocalizeByID("crud.cmd.short"),
@@ -45,10 +45,17 @@ func CrudCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&flagVars.Singular, "singular", "s", "", "name in singular form")
 	cmd.Flags().StringVarP(&flagVars.Plural, "plural", "p", "", "name in plural form")
 
-	cmd.MarkFlagRequired("singular")
-	cmd.MarkFlagRequired("plural")
+	err := cmd.MarkFlagRequired("singular")
+	if err != nil {
+		return nil, err
+	}
 
-	return cmd
+	err = cmd.MarkFlagRequired("plural")
+	if err != nil {
+		return nil, err
+	}
+
+	return cmd, nil
 }
 
 func generateCrudFiles(tmplMap map[string]func() []byte, flagVars FlagVariables) error {
