@@ -19,3 +19,28 @@ Add command adds a new command into the CLI
 ```bash
 $ charmil add CMD_NAME
 ```
+
+## Crud Command
+With the help of `crud` command, developers can eliminate a lot of boilerplate in CLIs containing multiple services that perform standard CRUD operations.
+
+Using a set of pre-defined templates, this command generates CRUD files in the directory specified with the `path` flag.
+
+These generated files can be modified by developers to fit their own needs.
+
+### Usage:
+```bash
+charmil crud [flags]
+```
+
+### Example:
+```bash
+$ charmil crud --path "./pkg" -s kafka -p kafkas
+```
+
+### Flags:
+```
+  -h, --help              help for crud
+      --path string       path where CRUD files need to be generated (default ".")
+  -p, --plural string     name in plural form (REQUIRED)
+  -s, --singular string   name in singular form (REQUIRED)
+```
