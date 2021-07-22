@@ -1,0 +1,98 @@
+# Create Command
+
+crud.cmd.create.use:
+  one: create
+
+crud.cmd.create.shortDescription:
+  one: Create an instance
+
+crud.cmd.create.longDescription:
+  one: Create an instance.
+
+crud.cmd.create.example:
+  one: cli_name create [args] [flags]
+
+# Delete Command
+
+crud.cmd.delete.use:
+  one: delete
+
+crud.cmd.delete.shortDescription:
+  one: Delete an instance
+
+crud.cmd.delete.longDescription:
+  one: Delete an instance.
+
+crud.cmd.delete.example:
+  one: cli_name delete [args] [flags]
+
+# Describe Command
+
+crud.cmd.describe.use:
+  one: describe
+
+crud.cmd.describe.shortDescription:
+  one: Describe an instance
+
+crud.cmd.describe.longDescription:
+  one: Describe an instance.
+
+crud.cmd.describe.example:
+  one: cli_name describe [args] [flags]
+
+# List Command
+
+crud.cmd.list.use:
+  one: list
+
+crud.cmd.list.shortDescription:
+  one: List instances
+
+crud.cmd.list.longDescription:
+  one: List all instances.
+
+crud.cmd.list.example:
+  one: cli_name list [args] [flags]
+
+# Use Command
+
+crud.cmd.use.use:
+  one: use
+
+crud.cmd.use.shortDescription:
+  one: Use an instance
+
+crud.cmd.use.longDescription:
+  one: Select an instance to use with all instance-specific commands.
+
+crud.cmd.use.example:
+  one: cli_name use [args] [flags]
+
+# Flag
+
+crud.cmd.create.flag.use.description:
+  one: Set the new instance to the current instance
+
+crud.common.flag.id:
+  description: Description for the --id flag
+  one: Unique ID of the instance you want to delete. If not set, the current instance is used.
+
+crud.common.flag.yes:
+  description: "Description for the --yes flag"
+  one: "Skip confirmation to forcibly delete this instance."
+
+crud.cmd.flag.output.description:
+  description: Description for --output flag
+  one: "Format in which to display the instance. Choose from: json, yml, yaml."
+
+crud.list.flag.page:
+  description: Description for the --page flag
+  one: Display the instances from the specified page number.
+
+crud.list.flag.limit:
+  description: Description for the --limit flag
+  one: The maximum number of instances to be returned.
+
+crud.list.flag.search:
+  description: Description for the --search flag
+  one: Text search to filter the instances by name.

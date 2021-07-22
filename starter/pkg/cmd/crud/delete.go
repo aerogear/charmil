@@ -18,7 +18,7 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &deleteOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "delete",
+		Use:     f.Localizer.LocalizeByID("crud.cmd.delete.use"),
 		Short:   f.Localizer.LocalizeByID("crud.cmd.delete.shortDescription"),
 		Long:    f.Localizer.LocalizeByID("crud.cmd.delete.longDescription"),
 		Example: f.Localizer.LocalizeByID("crud.cmd.delete.example"),

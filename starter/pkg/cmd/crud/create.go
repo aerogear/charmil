@@ -19,7 +19,7 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &createOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "create",
+		Use:     f.Localizer.LocalizeByID("crud.cmd.create.use"),
 		Short:   f.Localizer.LocalizeByID("crud.cmd.create.shortDescription"),
 		Long:    f.Localizer.LocalizeByID("crud.cmd.create.longDescription"),
 		Example: f.Localizer.LocalizeByID("crud.cmd.create.example"),

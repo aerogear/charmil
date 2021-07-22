@@ -18,7 +18,7 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &describeOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "describe",
+		Use:     f.Localizer.LocalizeByID("crud.cmd.describe.use"),
 		Short:   f.Localizer.LocalizeByID("crud.cmd.describe.shortDescription"),
 		Long:    f.Localizer.LocalizeByID("crud.cmd.describe.longDescription"),
 		Example: f.Localizer.LocalizeByID("crud.cmd.describe.example"),

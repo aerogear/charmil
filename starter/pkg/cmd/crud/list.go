@@ -19,7 +19,7 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	opts := &listOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "list",
+		Use:     f.Localizer.LocalizeByID("crud.cmd.list.use"),
 		Short:   f.Localizer.LocalizeByID("crud.cmd.list.shortDescription"),
 		Long:    f.Localizer.LocalizeByID("crud.cmd.list.longDescription"),
 		Example: f.Localizer.LocalizeByID("crud.cmd.list.example"),

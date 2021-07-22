@@ -1,0 +1,12 @@
+crud.cmd.use:
+  description: "Use of crud command"
+  one: "crud"
+crud.cmd.short:
+  description: "Short description of crud command"
+  one: "Adds CRUD commands to your CLI"
+crud.cmd.long:
+  description: "Long description of crud command"
+  one: "Generates and adds template CRUD commands to your CLI that can help you avoid a lots of boilerplate"
+crud.cmd.example:
+  description: "Examples"
+  one: "$ charmil crud"
