@@ -8,6 +8,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/aerogear/charmil/core/color"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/go-git/go-git/v5"
 	"github.com/manifoldco/promptui"
@@ -20,12 +21,14 @@ type promptContent struct {
 	label    string
 }
 
+// TemplateContext contains the context for rendering templates
 type TemplateContext struct {
 	Owner   string
 	Repo    string
 	CliName string
 }
 
+// InitCommand initializes the starter project
 func InitCommand(f *factory.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -54,12 +57,13 @@ func InitCommand(f *factory.Factory) *cobra.Command {
 				CliName: cli_name,
 			}
 
-			f.Logger.Info(templateContext)
-
 			cloneStarter(f)
+			f.Logger.Infoln(color.Info("updating starter code with names"))
 			if err := renderTemplates(templateContext, f); err != nil {
 				f.Logger.Error(err)
+				os.Exit(1)
 			}
+			f.Logger.Infof(color.Success("Your %s CLI has been initialized in this directory.\n"), templateContext.CliName)
 		},
 	}
 
@@ -99,7 +103,7 @@ func cloneStarter(f *factory.Factory) {
 		os.Exit(1)
 	}
 
-	_, cloneErr := git.PlainClone(path+"/cloned", false, &git.CloneOptions{
+	_, cloneErr := git.PlainClone(path, false, &git.CloneOptions{
 		URL:      "https://github.com/ankithans/charmil-starter-template",
 		Progress: f.IOStreams.Out,
 	})
@@ -117,18 +121,25 @@ func renderTemplates(templateContext TemplateContext, f *factory.Factory) error 
 		os.Exit(1)
 	}
 
-	err := filepath.Walk(path+"/cloned",
+	// rename cli name as given by user
+	oldPath := path + "/cmd/cli"
+	newPath := path + "/cmd/" + templateContext.CliName
+	if err := os.Rename(oldPath, newPath); err != nil {
+		return err
+	}
+
+	err := filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
 
-			ignoreSlice := []string{".git", ".github", ".chglog", ".goreleaser.yml", "bin"}
-
+			// ignore folders
+			ignoreSlice := []string{".git", ".github", ".chglog", ".goreleaser.yml", "CONTRIBUTING.md", "bin"}
 			pathSplit := strings.Split(path, string(os.PathSeparator))
-
-			for _, value := range ignoreSlice {
-				fmt.Println(value, pathSplit[len(pathSplit)-1])
-				if value == pathSplit[len(pathSplit)-1] {
-					return nil
-				}
+			intersected := intersection(pathSplit, ignoreSlice)
+			if len(intersected) > 0 {
+				return nil
 			}
 
 			fi, err := os.Stat(path)
@@ -140,16 +151,17 @@ func renderTemplates(templateContext TemplateContext, f *factory.Factory) error 
 				return nil
 			}
 
-			tmpl, err := template.ParseFiles(path)
-			if err != nil {
+			tmpl, tmplErr := template.ParseFiles(path)
+			if tmplErr != nil {
 				return fmt.Errorf("failed to parse template: %w", err)
 			}
 
-			f, err := os.Create(path)
-			if err != nil {
+			f, PathErr := os.Create(path)
+			if PathErr != nil {
 				return fmt.Errorf("failed to create file: %w", err)
 			}
 
+			// apply templateContext to cloned repo
 			if err := tmpl.Execute(f, templateContext); err != nil {
 				return fmt.Errorf("failed to execute template: %w", err)
 			}
@@ -161,4 +173,19 @@ func renderTemplates(templateContext TemplateContext, f *factory.Factory) error 
 	}
 
 	return nil
+}
+
+// find intersection between two slices
+func intersection(s1, s2 []string) (inter []string) {
+	hash := make(map[string]bool)
+	for _, e := range s1 {
+		hash[e] = true
+	}
+	for _, e := range s2 {
+		// If elements present in the hashmap then append intersection list.
+		if hash[e] {
+			inter = append(inter, e)
+		}
+	}
+	return
 }

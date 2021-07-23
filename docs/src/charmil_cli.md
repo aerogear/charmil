@@ -10,8 +10,9 @@ Charmil CLI provides a way to create and manage the Charmil project.  CLI gives 
 ## Init Command
 Init command initializes a Charmil project boilerplate(starter). This will generate shell commands, readme, licence, etc to get you started easily.
 ```bash
-$ charmil init CLI_NAME
+$ charmil init
 ```
+Fill in the prompted info(github owner, repository and cli name) to get started!
 
 ## Add Command
 Add command adds a new command into the CLI
