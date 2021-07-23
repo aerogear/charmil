@@ -6,7 +6,7 @@ import (
 	"text/template"
 
 	"github.com/aerogear/charmil/core/factory"
-	tmpl "github.com/aerogear/charmil/pkg/template"
+	"github.com/aerogear/charmil/pkg/template/crud"
 	"github.com/spf13/cobra"
 )
 
@@ -22,19 +22,8 @@ type FlagVariables struct {
 	Plural string
 }
 
-var (
-	// Initializes a zero-valued struct
-	flagVars = FlagVariables{}
-
-	// Maps the template names to their template generation functions
-	tmplMap = map[string]func() []byte{
-		"create":   tmpl.CreateCrudTemplate,
-		"delete":   tmpl.DeleteCrudTemplate,
-		"describe": tmpl.DescribeCrudTemplate,
-		"list":     tmpl.ListCrudTemplate,
-		"use":      tmpl.UseCrudTemplate,
-	}
-)
+// Initializes a zero-valued struct
+var flagVars = FlagVariables{}
 
 // CrudCommand returns the crud command. This will be
 // added to the charmil CLI as a sub-command
@@ -46,7 +35,7 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 		Example:       f.Localizer.LocalizeByID("crud.cmd.example"),
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return generateCrudFiles(tmplMap, flagVars)
+			return generateCrudFiles(flagVars)
 		},
 	}
 
@@ -75,7 +64,7 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 }
 
 // generateCrudFiles generates the CRUD files in the path specified by the `path` flag
-func generateCrudFiles(tmplMap map[string]func() []byte, flagVars FlagVariables) error {
+func generateCrudFiles(flagVars FlagVariables) error {
 
 	// Creates a folder named `crud` in the path specified using flag
 	err := os.Mkdir(flagVars.path+"/crud", 0755)
@@ -84,14 +73,14 @@ func generateCrudFiles(tmplMap map[string]func() []byte, flagVars FlagVariables)
 	}
 
 	// Generates CRUD files in the newly created `crud` folder
-	for tmplName, tmplFunc := range tmplMap {
+	for tmplName, tmplContent := range crud.TmplMap {
 		crudFile, err := os.Create(fmt.Sprintf("%s/crud/%s.go", flagVars.path, tmplName))
 		if err != nil {
 			return err
 		}
 		defer crudFile.Close()
 
-		crudTemplate := template.Must(template.New(tmplName).Parse(string(tmplFunc())))
+		crudTemplate := template.Must(template.New(tmplName).Parse(tmplContent))
 		err = crudTemplate.Execute(crudFile, flagVars)
 		if err != nil {
 			return err
