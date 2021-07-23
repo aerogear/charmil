@@ -2,8 +2,9 @@ package crud
 
 import (
 	"fmt"
+	"html/template"
+	"io/fs"
 	"os"
-	"text/template"
 
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/pkg/template/crud"
@@ -35,7 +36,7 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 		Example:       f.Localizer.LocalizeByID("crud.cmd.example"),
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return generateCrudFiles(flagVars)
+			return generateCrudFiles()
 		},
 	}
 
@@ -64,27 +65,59 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 }
 
 // generateCrudFiles generates the CRUD files in the path specified by the `path` flag
-func generateCrudFiles(flagVars FlagVariables) error {
+func generateCrudFiles() error {
+	// Stores path of the directory named `crud` that
+	// will be created to store generated CRUD files
+	crudDirPath := flagVars.path + "/crud"
 
-	// Creates a folder named `crud` in the path specified using flag
-	err := os.Mkdir(flagVars.path+"/crud", 0755)
+	// Creates a directory using value in the `crudDirPath` variable
+	err := os.Mkdir(crudDirPath, 0755)
 	if err != nil {
 		return err
 	}
 
-	// Generates CRUD files in the newly created `crud` folder
-	for tmplName, tmplContent := range crud.TmplMap {
-		crudFile, err := os.Create(fmt.Sprintf("%s/crud/%s.go", flagVars.path, tmplName))
+	// Generates CRUD files in the `crud` directory by looping through the template files
+	fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		defer crudFile.Close()
+		if info.Name() == "." || info.Name() == "tmpl.go" {
+			return nil
+		}
 
-		crudTemplate := template.Must(template.New(tmplName).Parse(tmplContent))
-		err = crudTemplate.Execute(crudFile, flagVars)
+		// Stores the current template file contents as a byte array
+		buf, err := fs.ReadFile(crud.CrudTemplates, info.Name())
 		if err != nil {
 			return err
 		}
+
+		// Generate CRUD file from the current template
+		err = generateFileFromTemplate(info.Name(), crudDirPath, string(buf), flagVars)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return nil
+}
+
+// generateFileFromTemplate uses the passed contents and data object of a
+// template to generate a new file using the specified file name and output path
+func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
+	// Creates a new file using the specified name and path
+	f, err := os.Create(fmt.Sprintf("%s/%s", path, name))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	// Adds content to the generated file using the specified template
+	tmpl := template.Must(template.New(name).Parse(tmplContent))
+	err = tmpl.Execute(f, tmplData)
+	if err != nil {
+		return err
 	}
 
 	return nil
