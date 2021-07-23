@@ -28,6 +28,7 @@ type ValidatorRules struct {
 	MustExist      `json:"MustExist"`
 	UseMatches     `json:"UseMatches"`
 	ExampleMatches `json:"ExampleMatches"`
+	Punctuation    `json:"Punctuation"`
 }
 
 // ExecuteRules executes all the rules
@@ -86,5 +87,6 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 		&validatorConfig.MustExist,
 		&validatorConfig.UseMatches,
 		&validatorConfig.ExampleMatches,
+		&validatorConfig.Punctuation,
 	)
 }
