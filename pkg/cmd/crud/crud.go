@@ -77,7 +77,7 @@ func generateCrudFiles() error {
 	}
 
 	// Generates CRUD files in the `crud` directory by looping through the template files
-	fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -99,6 +99,9 @@ func generateCrudFiles() error {
 
 		return nil
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
