@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
 
+	"github.com/aerogear/charmil/pkg/cmd/crud"
 	"github.com/aerogear/charmil/pkg/cmd/root"
 )
 
@@ -78,6 +79,16 @@ func charmil() *cobra.Command {
 	// root command
 	rootCmd := root.NewRootCommand(cmdFactory)
 	rootCmd.InitDefaultHelpCmd()
+
+	// Stores the command that helps in CRUD files generation
+	crudCmd, err := crud.CrudCommand(cmdFactory)
+	if err != nil {
+		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
+		os.Exit(1)
+	}
+
+	// Add CRUD generation command as a child to the root command of Charmil CLI
+	rootCmd.AddCommand(crudCmd)
 
 	return rootCmd
 }

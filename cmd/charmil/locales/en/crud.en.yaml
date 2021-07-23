@@ -1,0 +1,18 @@
+crud.cmd.use:
+  description: "Use of crud command"
+  one: "crud"
+
+crud.cmd.short:
+  description: "Short description of crud command"
+  one: "Generates CRUD files for your CLI"
+
+crud.cmd.long:
+  description: "Long description of crud command"
+  one: >
+    With the help of crud command, you can eliminate a lot of boilerplate in CLIs containing multiple services that perform standard CRUD operations.
+    Using a set of pre-defined templates, this command generates CRUD files in the directory specified with the path flag.
+    You can modify these generated files to fit your requirements.
+    
+crud.cmd.example:
+  description: Examples
+  one: '$ charmil crud --path="./pkg" --singular=kafka --plural=kafkas'
