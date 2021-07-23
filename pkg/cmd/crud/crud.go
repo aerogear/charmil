@@ -81,6 +81,8 @@ func generateCrudFiles() error {
 		if err != nil {
 			return err
 		}
+
+		// Excludes non-template files from generation
 		if info.Name() == "." || info.Name() == "tmpl.go" {
 			return nil
 		}
@@ -109,6 +111,11 @@ func generateCrudFiles() error {
 // generateFileFromTemplate uses the passed contents and data object of a
 // template to generate a new file using the specified file name and output path
 func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
+	// Sets appropriate target path for the locale file
+	if name == "crud.en.yaml" {
+		path = "./cmd/abc/locales/en"
+	}
+
 	// Creates a new file using the specified name and path
 	f, err := os.Create(fmt.Sprintf("%s/%s", path, name))
 	if err != nil {

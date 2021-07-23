@@ -1,0 +1,69 @@
+# Create Command
+
+crud.cmd.create.use:
+  one: create
+
+crud.cmd.create.shortDescription:
+  one: Create an instance
+
+crud.cmd.create.longDescription:
+  one: Create an instance.
+
+crud.cmd.create.example:
+  one: cli_name create [args] [flags]
+
+# Delete Command
+
+crud.cmd.delete.use:
+  one: delete
+
+crud.cmd.delete.shortDescription:
+  one: Delete an instance
+
+crud.cmd.delete.longDescription:
+  one: Delete an instance.
+
+crud.cmd.delete.example:
+  one: cli_name delete [args] [flags]
+
+# Describe Command
+
+crud.cmd.describe.use:
+  one: describe
+
+crud.cmd.describe.shortDescription:
+  one: Describe an instance
+
+crud.cmd.describe.longDescription:
+  one: Describe an instance.
+
+crud.cmd.describe.example:
+  one: cli_name describe [args] [flags]
+
+# List Command
+
+crud.cmd.list.use:
+  one: list
+
+crud.cmd.list.shortDescription:
+  one: List instances
+
+crud.cmd.list.longDescription:
+  one: List all instances.
+
+crud.cmd.list.example:
+  one: cli_name list [args] [flags]
+
+# Use Command
+
+crud.cmd.use.use:
+  one: use
+
+crud.cmd.use.shortDescription:
+  one: Use an instance
+
+crud.cmd.use.longDescription:
+  one: Select an instance to use with all instance-specific commands.
+
+crud.cmd.use.example:
+  one: cli_name use [args] [flags]
