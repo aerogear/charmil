@@ -18,6 +18,9 @@ run:
 build:
 	go build ./cmd/charmil
 
+install:
+	go install ./cmd/charmil
+
 build/tags:
 	go build -tags ${TAGS} ./cmd/charmil
 
