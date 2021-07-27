@@ -1,0 +1,31 @@
+name: Update CHANGELOG
+on: 
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  generate_changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Fetch changes
+        run: git fetch --prune --tags --unshallow
+    
+      - 
+        name: Install git-chglog
+        uses: craicoverflow/install-git-chglog@v1
+
+      -
+        name: Generate a CHANGELOG
+        run: git-chglog -o CHANGELOG.md
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: main
+          file_pattern: CHANGELOG.md
+          commit_message: 'chore: update CHANGELOG'
