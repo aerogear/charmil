@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/fs"
 	"os"
+	"path/filepath"
 
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/pkg/template/crud"
@@ -111,9 +112,14 @@ func generateCrudFiles() error {
 // generateFileFromTemplate uses the passed contents and data object of a
 // template to generate a new file using the specified file name and output path
 func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
+	localePath, err := getLocalePath()
+	if err != nil {
+		return err
+	}
+
 	// Sets appropriate target path for the locale file
 	if name == "crud.en.yaml" {
-		path = "./cmd/abc/locales/en"
+		path = fmt.Sprintf("./%s/en", localePath)
 	}
 
 	// Creates a new file using the specified name and path
@@ -131,4 +137,26 @@ func generateFileFromTemplate(name, path, tmplContent string, tmplData interface
 	}
 
 	return nil
+}
+
+// getLocalePath returns the path of the `locale` directory of CLI
+func getLocalePath() (string, error) {
+	var localePath string
+
+	err := filepath.Walk("./cmd", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() && info.Name() == "locales" {
+			localePath = path
+		}
+
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return localePath, nil
 }
