@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -116,6 +117,11 @@ func generateCrudFiles() error {
 func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
 	localePath, err := getLocalePath()
 	if err != nil {
+		// Removes the broken `crud` directory if there is an error
+		if err := os.RemoveAll(path); err != nil {
+			log.Fatal(err)
+		}
+
 		return err
 	}
 
