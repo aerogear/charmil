@@ -8,8 +8,12 @@ import (
 )
 
 type listOptions struct {
-	// Add your option fields here
+	outputFormat string
+	page         int32
+	limit        int32
+	search       string
 
+	// You can add more fields here according to your requirements
 }
 
 // NewListCommand creates a new command for listing instances.
@@ -26,6 +30,12 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 			return runList(opts, f)
 		},
 	}
+
+	// Adds local flags
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "", f.Localizer.LocalizeByID("crud.cmd.flag.output.description"))
+	cmd.Flags().Int32VarP(&opts.page, "page", "", 1, f.Localizer.LocalizeByID("crud.list.flag.page"))
+	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, f.Localizer.LocalizeByID("crud.list.flag.limit"))
+	cmd.Flags().StringVarP(&opts.search, "search", "", "", f.Localizer.LocalizeByID("crud.list.flag.search"))
 
 	return cmd
 }

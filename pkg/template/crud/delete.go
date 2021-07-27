@@ -8,8 +8,10 @@ import (
 )
 
 type deleteOptions struct {
-	// Add your option fields here
+	id    string
+	force bool
 
+	// You can add more fields here according to your requirements
 }
 
 // NewDeleteCommand creates a new command for deleting instances.
@@ -26,6 +28,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 			return runDelete(opts, f)
 		},
 	}
+
+	// Adds local flags
+	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("crud.common.flag.id"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, f.Localizer.LocalizeByID("crud.common.flag.yes"))
 
 	return cmd
 }
