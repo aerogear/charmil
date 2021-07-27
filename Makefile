@@ -21,14 +21,10 @@ build:
 build/tags:
 	go build -tags ${TAGS} ./cmd/charmil
 
-test/validator:
-	go test ./validator/v1/rules
+test:
+	go test ./...
+	cd validator && go test ./...
 
-test/unit: install
-	go test ./core/...
-.PHONY: test/unit
-	
-	
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
 lint:
