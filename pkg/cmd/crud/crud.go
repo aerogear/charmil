@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/fs"
 	"os"
+	"path/filepath"
 
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/pkg/template/crud"
@@ -71,16 +72,20 @@ func generateCrudFiles() error {
 	crudDirPath := flagVars.path + "/crud"
 
 	// Creates a directory using value in the `crudDirPath` variable
-	err := os.Mkdir(crudDirPath, 0755)
-	if err != nil {
-		return err
-	}
-
-	// Generates CRUD files in the `crud` directory by looping through the template files
-	err = fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
+	if _, err := os.Stat(crudDirPath); os.IsNotExist(err) {
+		err := os.Mkdir(crudDirPath, 0755)
 		if err != nil {
 			return err
 		}
+	}
+
+	// Generates CRUD files in the `crud` directory by looping through the template files
+	err := fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Excludes non-template files from generation
 		if info.Name() == "." || info.Name() == "tmpl.go" {
 			return nil
 		}
@@ -109,6 +114,21 @@ func generateCrudFiles() error {
 // generateFileFromTemplate uses the passed contents and data object of a
 // template to generate a new file using the specified file name and output path
 func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
+	localePath, err := getLocalePath()
+	if err != nil {
+		// Removes the broken `crud` directory if there is an error
+		if e := os.RemoveAll(path); e != nil {
+			return e
+		}
+
+		return err
+	}
+
+	// Sets appropriate target path for the locale file
+	if name == "crud.en.yaml" {
+		path = fmt.Sprintf("./%s/en", localePath)
+	}
+
 	// Creates a new file using the specified name and path
 	f, err := os.Create(fmt.Sprintf("%s/%s", path, name))
 	if err != nil {
@@ -124,4 +144,28 @@ func generateFileFromTemplate(name, path, tmplContent string, tmplData interface
 	}
 
 	return nil
+}
+
+// getLocalePath returns the path of the `locale` directory of CLI
+func getLocalePath() (string, error) {
+	// Stores the path of `locale` directory
+	var localePath string
+
+	// Walks through each directory and file in `cmd` dir to find the `locale` dir
+	err := filepath.Walk("./cmd", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() && info.Name() == "locales" {
+			localePath = path
+		}
+
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return localePath, nil
 }
