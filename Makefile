@@ -22,7 +22,7 @@ build/tags:
 	go build -tags ${TAGS} ./cmd/charmil
 
 test/validator:
-	go test ./validator/rules
+	go test ./validator/v1/rules
 
 test/unit: install
 	go test ./core/...

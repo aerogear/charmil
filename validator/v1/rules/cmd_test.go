@@ -32,7 +32,6 @@ func Test_ExecuteCommand(t *testing.T) {
 	}
 
 	validationErr := ExecuteRules(rootCmd, &ruleCfg)
-
 	for _, errs := range validationErr {
 		if errs.Err != nil {
 			t.Errorf("%s: cmd %s: %s", errs.Rule, errs.Cmd.CommandPath(), errs.Name)
@@ -46,6 +45,11 @@ func emptyRun(*cobra.Command, []string) {}
 func init() {
 	echoCmd.AddCommand(timesCmd, echoSubCmd, printCmd)
 	rootCmd.AddCommand(echoCmd, dummyCmd)
+
+	// add flags to the command
+	rootCmd.Flags().BoolP("source", "s", false, "Source directory to read from")
+	rootCmd.Flags().BoolP("testFlag", "t", false, "test flag with full stop")
+
 }
 
 var rootCmd = &cobra.Command{

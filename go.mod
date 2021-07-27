@@ -12,6 +12,7 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/pelletier/go-toml v1.9.3
 	github.com/spf13/cobra v1.2.1
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tidwall/sjson v1.1.7
 	golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40 // indirect
 	golang.org/x/text v0.3.6

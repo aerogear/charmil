@@ -6,10 +6,21 @@ slug: /charmil_validator
 Validator can be used for testing and controlling many aspects of cobra commands. It provides many rules out of the box for validating the commands.
 
 ## Rules provided by validator
-- LengthRule
-- MustExistRule
-- UseMatchesRule
-- ExampleMatchesRule
+
+#### LengthRule
+Length Rule can control the lengths of strings in different attributes of cobra.Command structure.
+
+#### MustExistRule
+Must Exist Rule ensures that the selected attributes from `cobra.Command` strcuture must be present in the command.
+
+#### UseMatchesRule
+Use Matches Rule compares the Use attribute of `cobra.Command` with the user provided regexp.
+
+#### ExampleMatchesRule
+Example Matches Rule ensures that the command is properly documented with the proper examples in it.
+
+#### PunctuationRule
+Punctuation Rule checks for the punctuation errors in the command according to industry standards.
 
 ## How to use
 It is recommended to use the validator while writing unit tests for cobra commands.
@@ -88,3 +99,5 @@ Length: rules.Length{
 		"Use": {Min: 1},
 	},
 },
+```
+
