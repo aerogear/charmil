@@ -16,10 +16,14 @@ It is recommended to use the validator while writing unit tests for cobra comman
 
 1. Create a configuration of type `rules.ValidatorConfig`. You can provide your own ValidatorConfig or use the default one by leaving it empty
 ```go
+import "github.com/aerogear/charmil/validator/v1"
+
 var ruleCfg rules.ValidatorConfig
 ```
 or overriding default config
 ```go
+import "github.com/aerogear/charmil/validator/v1"
+
 ruleCfg := rules.ValidatorConfig{
 	ValidatorRules: rules.ValidatorRules{
 		Length: rules.Length{Limits: map[string]rules.Limit{"Use": {Min: 1}}},
