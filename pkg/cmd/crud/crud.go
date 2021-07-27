@@ -149,8 +149,10 @@ func generateFileFromTemplate(name, path, tmplContent string, tmplData interface
 
 // getLocalePath returns the path of the `locale` directory of CLI
 func getLocalePath() (string, error) {
+	// Stores the path of `locale` directory
 	var localePath string
 
+	// Walks through each directory and file in `cmd` dir to find the `locale` dir
 	err := filepath.Walk("./cmd", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
