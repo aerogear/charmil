@@ -1,4 +1,12 @@
 
+<a name="v0.5.0"></a>
+## [v0.5.0](https://github.com/aerogear/charmil/compare/v0.4.0...v0.5.0) (2021-07-27)
+
+### Features
+
+* add flags to charmil crud commands ([#186](https://github.com/aerogear/charmil/issues/186))
+
+
 <a name="v0.4.0"></a>
 ## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.4.0) (2021-07-27)
 
