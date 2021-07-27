@@ -30,4 +30,4 @@ jobs:
       - name: Build
         run: make build
       - name: Test Validator Example
-        run: make test/validator
+        run: make test
