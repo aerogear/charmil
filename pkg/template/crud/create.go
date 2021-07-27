@@ -8,7 +8,10 @@ import (
 )
 
 type createOptions struct {
-	// Add your option fields here
+	outputFormat string
+	autoUse      bool
+
+	// You can add more fields here according to your requirements
 }
 
 // NewCreateCommand creates a new command for creating instances.
@@ -25,6 +28,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 			return runCreate(opts, f)
 		},
 	}
+
+	// Adds local flags
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("crud.cmd.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.autoUse, "use", true, f.Localizer.LocalizeByID("crud.cmd.create.flag.use.description"))
 
 	return cmd
 }

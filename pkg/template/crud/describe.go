@@ -8,8 +8,10 @@ import (
 )
 
 type describeOptions struct {
-	// Add your option fields here
+	id           string
+	outputFormat string
 
+	// You can add more fields here according to your requirements
 }
 
 // NewDescribeCommand creates a new command for describing instances.
@@ -26,6 +28,10 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 			return runDescribe(opts, f)
 		},
 	}
+
+	// Adds local flags
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("crud.cmd.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("crud.common.flag.id"))
 
 	return cmd
 }

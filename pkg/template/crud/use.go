@@ -8,8 +8,9 @@ import (
 )
 
 type useOptions struct {
-	// Add your option fields here
+	id string
 
+	// You can add more fields here according to your requirements
 }
 
 // NewUseCommand creates a new command for using instances.
@@ -26,6 +27,9 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 			return runUse(opts, f)
 		},
 	}
+
+	// Adds local flags
+	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("crud.use.flag.id"))
 
 	return cmd
 }
