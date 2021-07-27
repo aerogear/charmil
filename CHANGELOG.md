@@ -1,4 +1,17 @@
 
+<a name="v0.4.0"></a>
+## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.4.0) (2021-07-27)
+
+### Bug Fixes
+
+* makefile testing
+
+### Features
+
+* add CRUD files generation functionality to charmil CLI ([#171](https://github.com/aerogear/charmil/issues/171))
+* charmil init command ([#170](https://github.com/aerogear/charmil/issues/170))
+
+
 <a name="v0.3.1"></a>
 ## [v0.3.1](https://github.com/aerogear/charmil/compare/v0.3.0...v0.3.1) (2021-07-21)
 
