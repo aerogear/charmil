@@ -22,7 +22,7 @@ type RuleConfig struct {
 
 // ExecuteRulesInternal executes all the rules
 // provided by ruleConfig
-func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValidatorConfig *v1.ValidatorConfig) []validator.ValidationError {
+func ExecuteRulesInternal(cmd *cobra.Command, ruleConfig *RuleConfig, userValidatorConfig *ValidatorConfig) []validator.ValidationError {
 	var errors []validator.ValidationError
 	info := validator.StatusLog{TotalTested: 0, TotalErrors: 0, Errors: errors}
 
