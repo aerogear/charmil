@@ -26,7 +26,6 @@ build/tags:
 
 test:
 	go test ./...
-	cd validator && go test ./...
 
 # Requires golangci-lint to be installed @ $(go env GOPATH)/bin/golangci-lint
 # https://golangci-lint.run/usage/install/
