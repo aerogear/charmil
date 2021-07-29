@@ -16,7 +16,7 @@ env:
 builds:
   - <<: &build_defaults
       binary: bin/charmil
-      main: ./cmd/charmil
+      main: ./cli/cmd/charmil
     id: macos
     goos: [darwin]
     goarch: [amd64]

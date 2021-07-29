@@ -20,7 +20,7 @@ Charmil repository contains a number of components that can be consumed independ
 ### Running Charmil CLI Commands
 You can run the CLI commands files directly with go run. All commands and subcommands are in the ./pkg/cmd folder.
 ```bash
-go run ./cmd/charmil
+go run ./cli/cmd/charmil
 ```
 
 ### Development Commands
