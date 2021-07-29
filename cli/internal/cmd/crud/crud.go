@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"io/fs"
 	"os"
-	"path/filepath"
 
 	"github.com/aerogear/charmil/cli/internal/template/crud"
 	"github.com/aerogear/charmil/core/factory"
@@ -14,8 +13,11 @@ import (
 
 // FlagVariables defines variables that will store the local flag values
 type FlagVariables struct {
-	// Stores value of the `path` local flag. Default Value: "."
-	path string
+	// Stores value of the `crudPath` local flag. Default Value: "."
+	crudPath string
+
+	// Stores value of the `localePath` local flag. Default Value: "."
+	localePath string
 
 	// Stores value of the `singular` local flag
 	Singular string
@@ -42,9 +44,10 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 	}
 
 	// Adds local flags
-	cmd.Flags().StringVar(&flagVars.path, "path", ".", "path where CRUD files need to be generated")
-	cmd.Flags().StringVarP(&flagVars.Singular, "singular", "s", "", "name in singular form")
-	cmd.Flags().StringVarP(&flagVars.Plural, "plural", "p", "", "name in plural form")
+	cmd.Flags().StringVarP(&flagVars.crudPath, f.Localizer.LocalizeByID("crud.flag.crudPath.name"), "c", ".", f.Localizer.LocalizeByID("crud.flag.crudPath.description"))
+	cmd.Flags().StringVarP(&flagVars.localePath, f.Localizer.LocalizeByID("crud.flag.localePath.name"), "l", ".", f.Localizer.LocalizeByID("crud.flag.localePath.description"))
+	cmd.Flags().StringVarP(&flagVars.Singular, f.Localizer.LocalizeByID("crud.flag.singular.name"), "s", "", f.Localizer.LocalizeByID("crud.flag.singular.description"))
+	cmd.Flags().StringVarP(&flagVars.Plural, f.Localizer.LocalizeByID("crud.flag.plural.name"), "p", "", f.Localizer.LocalizeByID("crud.flag.plural.description"))
 
 	// Marks the `singular` flag as required.
 	// This causes the crud command to report an
@@ -65,11 +68,11 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 	return cmd, nil
 }
 
-// generateCrudFiles generates the CRUD files in the path specified by the `path` flag
+// generateCrudFiles generates the CRUD files in the path specified by the `crudPath` flag
 func generateCrudFiles() error {
 	// Stores path of the directory named `crud` that
 	// will be created to store generated CRUD files
-	crudDirPath := flagVars.path + "/crud"
+	crudDirPath := flagVars.crudPath + "/crud"
 
 	// Creates a directory using value in the `crudDirPath` variable
 	err := os.MkdirAll(crudDirPath, 0755)
@@ -112,19 +115,16 @@ func generateCrudFiles() error {
 // generateFileFromTemplate uses the passed contents and data object of a
 // template to generate a new file using the specified file name and output path
 func generateFileFromTemplate(name, path, tmplContent string, tmplData interface{}) error {
-	localePath, err := getLocalePath()
-	if err != nil {
-		// Removes the broken `crud` directory if there is an error
-		if e := os.RemoveAll(path); e != nil {
-			return e
+	// Sets appropriate target path for the locale file
+	if name == "crud.en.yaml" && flagVars.localePath != "." {
+		// Creates all necessary parent directories from the specified locale path
+		err := os.MkdirAll(flagVars.localePath, 0755)
+		if err != nil {
+			return err
 		}
 
-		return err
-	}
-
-	// Sets appropriate target path for the locale file
-	if name == "crud.en.yaml" {
-		path = fmt.Sprintf("./%s/en", localePath)
+		// Sets the target path
+		path = flagVars.localePath
 	}
 
 	// Creates a new file using the specified name and path
@@ -142,28 +142,4 @@ func generateFileFromTemplate(name, path, tmplContent string, tmplData interface
 	}
 
 	return nil
-}
-
-// getLocalePath returns the path of the `locale` directory of CLI
-func getLocalePath() (string, error) {
-	// Stores the path of `locale` directory
-	var localePath string
-
-	// Walks through each directory and file in `cmd` dir to find the `locale` dir
-	err := filepath.Walk("./cmd", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if info.IsDir() && info.Name() == "locales" {
-			localePath = path
-		}
-
-		return nil
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return localePath, nil
 }
