@@ -6,15 +6,14 @@ import (
 	"log"
 	"os"
 
+	"github.com/aerogear/charmil/cli/internal/cmd/crud"
+	"github.com/aerogear/charmil/cli/internal/cmd/root"
 	c "github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"
-
-	"github.com/aerogear/charmil/pkg/cmd/crud"
-	"github.com/aerogear/charmil/pkg/cmd/root"
 )
 
 // Defines the configuration keys of the host CLI.

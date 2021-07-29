@@ -9,6 +9,14 @@ The following should be to be installed on your device in order to contribute to
 
 ## Development
 
+### Folder Structure
+Charmil repository contains a number of components that can be consumed independently. In the root directory, the following folders can be found:
+
+- **cli**  -command line tool for using charmil.
+- **core** - charmil SDK 
+- **starter** - charmil starter template project
+- **validator** - validator and linter library to test cobra commands
+
 ### Running Charmil CLI Commands
 You can run the CLI commands files directly with go run. All commands and subcommands are in the ./pkg/cmd folder.
 ```bash

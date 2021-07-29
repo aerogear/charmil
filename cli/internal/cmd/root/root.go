@@ -1,8 +1,8 @@
 package root
 
 import (
+	initialize "github.com/aerogear/charmil/cli/internal/cmd/init"
 	"github.com/aerogear/charmil/core/factory"
-	initialize "github.com/aerogear/charmil/pkg/cmd/init"
 	"github.com/spf13/cobra"
 )
 
