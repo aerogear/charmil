@@ -1,4 +1,12 @@
 
+<a name="v0.6.1"></a>
+## [v0.6.1](https://github.com/aerogear/charmil/compare/v0.6.0...v0.6.1) (2021-07-29)
+
+### Bug Fixes
+
+* create crud dir along with necessary parents ([#192](https://github.com/aerogear/charmil/issues/192))
+
+
 <a name="v0.6.0"></a>
 ## [v0.6.0](https://github.com/aerogear/charmil/compare/v0.5.0...v0.6.0) (2021-07-28)
 
