@@ -72,15 +72,13 @@ func generateCrudFiles() error {
 	crudDirPath := flagVars.path + "/crud"
 
 	// Creates a directory using value in the `crudDirPath` variable
-	if _, err := os.Stat(crudDirPath); os.IsNotExist(err) {
-		err := os.Mkdir(crudDirPath, 0755)
-		if err != nil {
-			return err
-		}
+	err := os.MkdirAll(crudDirPath, 0755)
+	if err != nil {
+		return err
 	}
 
 	// Generates CRUD files in the `crud` directory by looping through the template files
-	err := fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
+	err = fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
