@@ -19,10 +19,10 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	opts := &deleteOptions{}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.LocalizeByID("crud.cmd.delete.use"),
-		Short:   f.Localizer.LocalizeByID("crud.cmd.delete.shortDescription"),
-		Long:    f.Localizer.LocalizeByID("crud.cmd.delete.longDescription"),
-		Example: f.Localizer.LocalizeByID("crud.cmd.delete.example"),
+		Use:     f.Localizer.LocalizeByID("{{.Singular}}.cmd.delete.use"),
+		Short:   f.Localizer.LocalizeByID("{{.Singular}}.cmd.delete.shortDescription"),
+		Long:    f.Localizer.LocalizeByID("{{.Singular}}.cmd.delete.longDescription"),
+		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.delete.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runDelete(opts, f)
@@ -30,8 +30,8 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// Adds local flags
-	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("crud.common.flag.id"))
-	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, f.Localizer.LocalizeByID("crud.common.flag.yes"))
+	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.common.flag.id"))
+	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, f.Localizer.LocalizeByID("{{.Singular}}.common.flag.yes"))
 
 	return cmd
 }

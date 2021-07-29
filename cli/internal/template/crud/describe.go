@@ -19,10 +19,10 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &describeOptions{}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.LocalizeByID("crud.cmd.describe.use"),
-		Short:   f.Localizer.LocalizeByID("crud.cmd.describe.shortDescription"),
-		Long:    f.Localizer.LocalizeByID("crud.cmd.describe.longDescription"),
-		Example: f.Localizer.LocalizeByID("crud.cmd.describe.example"),
+		Use:     f.Localizer.LocalizeByID("{{.Singular}}.cmd.describe.use"),
+		Short:   f.Localizer.LocalizeByID("{{.Singular}}.cmd.describe.shortDescription"),
+		Long:    f.Localizer.LocalizeByID("{{.Singular}}.cmd.describe.longDescription"),
+		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.describe.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runDescribe(opts, f)
@@ -30,8 +30,8 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// Adds local flags
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("crud.cmd.flag.output.description"))
-	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("crud.common.flag.id"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("{{.Singular}}.cmd.flag.output.description"))
+	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.common.flag.id"))
 
 	return cmd
 }
