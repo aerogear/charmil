@@ -1,7 +1,7 @@
 package zsh
 
 import (
-	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/starter/internal/factory"
 	"github.com/spf13/cobra"
 )
 

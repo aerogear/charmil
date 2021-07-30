@@ -8,8 +8,8 @@ import (
 
 	"github.com/aerogear/charmil/cli/internal/cmd/crud"
 	"github.com/aerogear/charmil/cli/internal/cmd/root"
+	"github.com/aerogear/charmil/cli/internal/factory"
 	c "github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 
 	"github.com/spf13/cobra"
