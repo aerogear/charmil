@@ -1,3 +1,5 @@
+# Commands
+
 crud.cmd.use:
   description: "Use of crud command"
   one: "crud"
@@ -12,7 +14,41 @@ crud.cmd.long:
     With the help of crud command, you can eliminate a lot of boilerplate in CLIs containing multiple services that perform standard CRUD operations.
     Using a set of pre-defined templates, this command generates CRUD files in the directory specified with the path flag.
     You can modify these generated files to fit your requirements.
-    
+
 crud.cmd.example:
   description: Examples
-  one: '$ charmil crud --path="./pkg" --singular=kafka --plural=kafkas'
+  one: '$ charmil crud --singular=kafka --plural=kafkas --crudpath="./kafka" --localepath="./cmd/locales/en"'
+
+# Flags
+
+crud.flag.crudPath.name:
+  description: Name of the flag
+  one: crudpath
+
+crud.flag.localePath.name:
+  description: Name of the flag
+  one: localepath
+
+crud.flag.singular.name:
+  description: Name of the flag
+  one: singular
+
+crud.flag.plural.name:
+  description: Name of the flag
+  one: plural
+
+crud.flag.crudPath.description:
+  description: Description for the --crudpath flag
+  one: path where CRUD files need to be generated
+
+crud.flag.localePath.description:
+  description: Description for the --localepath flag
+  one: path where the language file needs to be generated
+
+crud.flag.singular.description:
+  description: Description for the --singular flag
+  one: name in singular form
+
+crud.flag.plural.description:
+  description: Description for the --plural flag
+  one: name in plural form

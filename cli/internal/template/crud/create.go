@@ -19,10 +19,10 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &createOptions{}
 
 	cmd := &cobra.Command{
-		Use:     f.Localizer.LocalizeByID("crud.cmd.create.use"),
-		Short:   f.Localizer.LocalizeByID("crud.cmd.create.shortDescription"),
-		Long:    f.Localizer.LocalizeByID("crud.cmd.create.longDescription"),
-		Example: f.Localizer.LocalizeByID("crud.cmd.create.example"),
+		Use:     f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.use"),
+		Short:   f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.shortDescription"),
+		Long:    f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.longDescription"),
+		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runCreate(opts, f)
@@ -30,8 +30,8 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	}
 
 	// Adds local flags
-	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("crud.cmd.flag.output.description"))
-	cmd.Flags().BoolVar(&opts.autoUse, "use", true, f.Localizer.LocalizeByID("crud.cmd.create.flag.use.description"))
+	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("{{.Singular}}.cmd.flag.output.description"))
+	cmd.Flags().BoolVar(&opts.autoUse, "use", true, f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.flag.use.description"))
 
 	return cmd
 }
