@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	c "github.com/aerogear/charmil/core/config"
+	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/factory"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/spf13/cobra"
@@ -17,10 +17,9 @@ import (
 )
 
 // Defines the configuration keys of the host CLI.
-// CONSTRAINT: All fields of the config struct need to be exportable
-type config struct {
+// CONSTRAINT: All fields of the options struct need to be exportable
+type options struct {
 	LocConfig localize.Config
-	Plugins   map[string]interface{}
 }
 
 // Stores the path of the local config file
@@ -31,10 +30,10 @@ var (
 	cmdFactory *factory.Factory
 
 	// Stores an instance of the charmil config handler
-	h *c.CfgHandler
+	h *config.CfgHandler
 
 	// Initializes a zero-valued struct and stores its address
-	cfg = &config{}
+	opts = &options{}
 
 	// Stores embedded contents of all the locales files
 	//go:embed locales/*
@@ -47,7 +46,7 @@ var (
 func init() {
 	// Links the specified local config file path and current config
 	// struct pointer to a new charmil config handler instance and returns it
-	h = c.NewHandler(cfgFilePath, cfg)
+	h = config.NewHandler(cfgFilePath, opts)
 
 	// Loads config values from the local config file
 	err := h.Load()
@@ -56,14 +55,14 @@ func init() {
 	}
 
 	// Initializes localizer config and adds it's value to the CLI config
-	cfg.LocConfig = localize.Config{
+	opts.LocConfig = localize.Config{
 		Language: &language.English,
 		Files:    defaultLocales,
 		Format:   "yaml",
 	}
 
 	// Initializes the localizer by passing config
-	localizer, err = localize.New(&cfg.LocConfig)
+	localizer, err = localize.New(&opts.LocConfig)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -73,7 +72,7 @@ func init() {
 	cmdFactory = factory.Default(localizer, h)
 }
 
-func abc() *cobra.Command {
+func Root() *cobra.Command {
 	// root command
 	rootCmd := root.NewRootCommand(cmdFactory)
 	rootCmd.InitDefaultHelpCmd()
@@ -82,7 +81,7 @@ func abc() *cobra.Command {
 }
 
 func main() {
-	cmd := abc()
+	cmd := Root()
 
 	if err := doc.GenMarkdownTree(cmd, "./docs/commands"); err != nil {
 		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)

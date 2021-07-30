@@ -14,9 +14,7 @@ func NewRootCommand(f *factory.Factory) *cobra.Command {
 		Long:          f.Localizer.LocalizeByID("root.cmd.long"),
 		Example:       f.Localizer.LocalizeByID("root.cmd.example"),
 		SilenceErrors: true,
-		Run: func(cmd *cobra.Command, args []string) {
-
-		},
+		SilenceUsage:  true,
 	}
 
 	cmd.AddCommand(completion.NewCompletionCommand(f))
