@@ -19,3 +19,5 @@
 # vendor/
 
 /charmil
+
+.DS_Store

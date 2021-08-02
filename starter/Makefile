@@ -12,7 +12,7 @@ BUILDFLAGS := -gcflags "all=-N -l" $(BUILDFLAGS)
 endif
 
 # The details of the application:
-binary:=abc
+binary:=cli
 
 # Enable Go modules:
 export GO111MODULE=on
@@ -44,11 +44,11 @@ generate:
 # Build binaries
 # NOTE it may be necessary to use CGO_ENABLED=0 for backwards compatibility with centos7 if not using centos7
 binary:
-	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/abc
+	go build $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" -o ${binary} ./cmd/${binary}
 .PHONY: binary
 
 install:
-	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/abc
+	go install -trimpath $(BUILDFLAGS) -ldflags "${GO_LDFLAGS}" ./cmd/${binary}
 .PHONY: install
 
 test/unit: install
@@ -72,7 +72,7 @@ docs/check: docs/generate
 .PHONY: docs/check
 
 docs/generate:
-	GENERATE_DOCS=true go run ./cmd/abc
+	GENERATE_DOCS=true go run ./cmd/${binary}
 .PHONY: docs/generate
 
 docs/generate-modular-docs: docs/generate
