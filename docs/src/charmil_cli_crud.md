@@ -2,9 +2,9 @@
 
 - With the help of the `charmil crud` command, developers can eliminate a lot of boilerplate in CLIs containing multiple services that perform standard CRUD operations.
 
-- Using a set of pre-defined templates, this command generates CRUD command packages in the directory specified with the `crudpath` flag and the corresponding language file in the directory specified with the `localepath` flag.
+- Using a set of pre-defined templates, this command generates CRUD command packages in the directory specified by the `crudpath` flag as well as its corresponding language file in the directory specified by the `localepath` flag.
 
-- These generated files can be modified by developers to fit their own needs.
+- These generated files can then be modified by developers to fit their own needs.
 
 ## Usage:
 
@@ -22,7 +22,7 @@ charmil crud [flags]
   -s, --singular string     name in singular form (REQUIRED)
 ```
 
-## Example:
+## Steps to use:
 
 - Let's say you need to generate CRUD commands for managing your Kafka instances, the following command can be used for the same:
 
@@ -56,3 +56,15 @@ charmil crud [flags]
      ┃ ┗ 📜run.go
      ┗ 📜root.go
   ```
+
+- Once the CRUD packages have been generated, go to the generated `root.go` file and add all the missing imports there.
+
+- Using the following line, add the generated CRUD commands to your CLI:
+
+  ```go
+  cmd.AddCommand(kafka.NewCommand(cmdFactory))
+  ```
+
+  where `cmd` refers to your CLI's parent command and `cmdFactory` refers to the factory instance.
+
+Now you're all set to use the CRUD commands in your CLI.
