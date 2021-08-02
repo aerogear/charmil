@@ -85,7 +85,10 @@ func generateCrudPackages() error {
 				flagVars.localePath = flagVars.crudPath
 			}
 
-			generateCrudFile(info.Name(), ".", flagVars.localePath)
+			err = generateCrudFile(info.Name(), ".", flagVars.localePath)
+			if err != nil {
+				return err
+			}
 
 			return nil
 		}
@@ -112,7 +115,10 @@ func generateCrudPackages() error {
 
 		// Generates CRUD files in separate packages
 		for _, entry := range entries {
-			generateCrudFile(entry.Name(), path, targetPath)
+			err = generateCrudFile(entry.Name(), path, targetPath)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
