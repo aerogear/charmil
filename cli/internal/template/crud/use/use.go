@@ -1,6 +1,6 @@
 // Use file for {{.Singular}} instances
 
-package crud
+package use
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -32,10 +32,4 @@ func NewUseCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.use.flag.id"))
 
 	return cmd
-}
-
-func runUse(opts *useOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }

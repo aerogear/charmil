@@ -1,6 +1,6 @@
 // Create file for {{.Singular}} instances
 
-package crud
+package create
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -34,10 +34,4 @@ func NewCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVar(&opts.autoUse, "use", true, f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.flag.use.description"))
 
 	return cmd
-}
-
-func runCreate(opts *createOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }

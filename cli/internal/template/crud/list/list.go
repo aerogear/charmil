@@ -1,6 +1,6 @@
 // List file for {{.Singular}} instances
 
-package crud
+package list
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -38,10 +38,4 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", f.Localizer.LocalizeByID("{{.Singular}}.list.flag.search"))
 
 	return cmd
-}
-
-func runList(opts *listOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }

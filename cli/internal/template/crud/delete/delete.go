@@ -1,6 +1,6 @@
 // Delete file for {{.Singular}} instances
 
-package crud
+package delete
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -34,10 +34,4 @@ func NewDeleteCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.force, "yes", "y", false, f.Localizer.LocalizeByID("{{.Singular}}.common.flag.yes"))
 
 	return cmd
-}
-
-func runDelete(opts *deleteOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }

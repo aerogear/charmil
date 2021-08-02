@@ -1,6 +1,6 @@
 // Describe file for {{.Singular}} instances
 
-package crud
+package describe
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -34,10 +34,4 @@ func NewDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.common.flag.id"))
 
 	return cmd
-}
-
-func runDescribe(opts *describeOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }
