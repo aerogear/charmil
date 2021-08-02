@@ -1,7 +1,7 @@
 package completion
 
 import (
-	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/starter/internal/factory"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/bash"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/fish"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/zsh"

@@ -6,8 +6,8 @@ import (
 	"io/fs"
 	"os"
 
+	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/aerogear/charmil/cli/internal/template/crud"
-	"github.com/aerogear/charmil/core/factory"
 	"github.com/spf13/cobra"
 )
 

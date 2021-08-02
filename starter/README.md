@@ -1,4 +1,4 @@
-# starter-cli
+# charmil-starter
 Command line tool starter project
 
 ## Contributing

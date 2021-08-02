@@ -7,7 +7,7 @@ import (
 )
 
 func Test_ValidateCommandsUsingCharmilValidator(t *testing.T) {
-	cmd := abc()
+	cmd := Root()
 
 	// Testing cobra commands with default recommended config
 	vali := rules.ValidatorConfig{

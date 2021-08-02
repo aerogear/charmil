@@ -3,7 +3,7 @@
 package crud
 
 import (
-	"github.com/aerogear/charmil/core/factory"
+	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/spf13/cobra"
 )
 
