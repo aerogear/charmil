@@ -11,7 +11,7 @@ completion.cmd.longDescription:
   one: '''
   Outputs command completion for the given shell (bash, zsh, or fish).
   To find what shell you are currently running, run `echo $0`.
-  Run `{{ .CliName }} completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
+  Run `cli completion [bash|zsh|fish] -h` for instructions on installing command completions for your shell.
   When you have installed the command completion script, make sure you restart your shell for the changes to take effect.
   '''
 
@@ -31,11 +31,11 @@ completion.bash.cmd.longDescription:
   one: '''
   Generate command completion script for Bash shell.
   Installing on Linux:
-  1. Run `{{ .CliName }} completion bash > {{ .CliName }}_completions` to create the script file.
-  2. Run `sudo mv {{ .CliName }}_completions /etc/bash_completion.d/{{ .CliName }}` to place the script in a special Bash completions directory.
+  1. Run `cli completion bash > cli_completions` to create the script file.
+  2. Run `sudo mv cli_completions /etc/bash_completion.d/cli` to place the script in a special Bash completions directory.
   Installing on macOS:
-  1. Run `{{ .CliName }} completion bash > {{ .CliName }}_completions` to create the script file.
-  2. Run `sudo mv {{ .CliName }}_completions /usr/local/etc/bash_completion.d/{{ .CliName }}` to place the script in a special Bash completions directory.
+  1. Run `cli completion bash > cli_completions` to create the script file.
+  2. Run `sudo mv cli_completions /usr/local/etc/bash_completion.d/cli` to place the script in a special Bash completions directory.
   '''
 
 completion.zsh.cmd.use:
@@ -49,7 +49,7 @@ completion.zsh.cmd.shortDescription:
 completion.zsh.cmd.longDescription:
   one: '''
   Generate command completion script for Zsh shell.
-  1. Run `{{ .CliName }} completion zsh > "${fpath[1]}/_{{ .CliName }}"` to install the completion script.
+  1. Run `cli completion zsh > "${fpath[1]}/_cli"` to install the completion script.
   2. Unless already installed, run `echo "autoload -U compinit; compinit" >> ~/.zshrc` to enable shell completions for Zsh.
   '''
 
@@ -64,6 +64,6 @@ completion.fish.cmd.shortDescription:
 completion.fish.cmd.longDescription:
   one: '''
   Generate command completion script for fish shell.
-  Run `{{ .CliName }} command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
+  Run `cli command completion -s fish > ~/.config/fish/completion/gh.fish` to install fish completions.
   '''
   
