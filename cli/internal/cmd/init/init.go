@@ -104,7 +104,7 @@ func cloneStarter(f *factory.Factory) {
 	}
 
 	_, cloneErr := git.PlainClone(path, false, &git.CloneOptions{
-		URL:      "https://github.com/ankithans/charmil-starter-template",
+		URL:      "https://github.com/aerogear/charmil-starter",
 		Progress: f.IOStreams.Out,
 	})
 	if cloneErr != nil {
