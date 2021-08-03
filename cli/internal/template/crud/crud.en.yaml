@@ -1,3 +1,17 @@
+# Root CRUD Command
+
+{{.Singular}}.cmd.use:
+  one: {{.Singular}}
+
+{{.Singular}}.cmd.shortDescription:
+  one: {{.Singular}} CRUD commands
+
+{{.Singular}}.cmd.longDescription:
+  one: Contains the commands to perform CRUD operations on {{.Singular}} instances.
+
+{{.Singular}}.cmd.example:
+  one: cli_name {{.Singular}} [create/delete/describe/list/use] [args] [flags]
+
 # Create Command
 
 {{.Singular}}.cmd.create.use:

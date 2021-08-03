@@ -1,6 +1,6 @@
 // List file for {{.Singular}} instances
 
-package crud
+package list
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -16,8 +16,8 @@ type listOptions struct {
 	// You can add more fields here according to your requirements
 }
 
-// NewListCommand creates a new command for listing instances.
-func NewListCommand(f *factory.Factory) *cobra.Command {
+// GetListCommand returns a new command for listing {{.Singular}} instances.
+func GetListCommand(f *factory.Factory) *cobra.Command {
 	opts := &listOptions{}
 
 	cmd := &cobra.Command{
@@ -38,10 +38,4 @@ func NewListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", f.Localizer.LocalizeByID("{{.Singular}}.list.flag.search"))
 
 	return cmd
-}
-
-func runList(opts *listOptions, f *factory.Factory) error {
-	// Add your implementation here
-
-	return nil
 }
