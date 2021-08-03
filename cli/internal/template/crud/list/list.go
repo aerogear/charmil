@@ -16,8 +16,8 @@ type listOptions struct {
 	// You can add more fields here according to your requirements
 }
 
-// NewListCommand creates a new command for listing instances.
-func NewListCommand(f *factory.Factory) *cobra.Command {
+// GetListCommand returns a new command for listing {{.Singular}} instances.
+func GetListCommand(f *factory.Factory) *cobra.Command {
 	opts := &listOptions{}
 
 	cmd := &cobra.Command{

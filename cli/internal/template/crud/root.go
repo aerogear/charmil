@@ -18,11 +18,11 @@ func NewCommand(f *factory.Factory) *cobra.Command {
 
 	// Add sub-commands
 	cmd.AddCommand(
-		create.NewCreateCommand(f),
-		describe.NewDescribeCommand(f),
-		delete.NewDeleteCommand(f),
-		list.NewListCommand(f),
-		use.NewUseCommand(f),
+		create.GetCreateCommand(f),
+		describe.GetDescribeCommand(f),
+		delete.GetDeleteCommand(f),
+		list.GetListCommand(f),
+		use.GetUseCommand(f),
 	)
 
 	return cmd

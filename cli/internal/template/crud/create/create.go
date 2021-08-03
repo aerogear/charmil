@@ -14,8 +14,8 @@ type createOptions struct {
 	// You can add more fields here according to your requirements
 }
 
-// NewCreateCommand creates a new command for creating instances.
-func NewCreateCommand(f *factory.Factory) *cobra.Command {
+// GetCreateCommand returns a new command for creating {{.Singular}} instances.
+func GetCreateCommand(f *factory.Factory) *cobra.Command {
 	opts := &createOptions{}
 
 	cmd := &cobra.Command{

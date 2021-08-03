@@ -13,8 +13,8 @@ type useOptions struct {
 	// You can add more fields here according to your requirements
 }
 
-// NewUseCommand creates a new command for using instances.
-func NewUseCommand(f *factory.Factory) *cobra.Command {
+// GetUseCommand returns a new command for using {{.Singular}} instances.
+func GetUseCommand(f *factory.Factory) *cobra.Command {
 	opts := &useOptions{}
 
 	cmd := &cobra.Command{

@@ -14,8 +14,8 @@ type describeOptions struct {
 	// You can add more fields here according to your requirements
 }
 
-// NewDescribeCommand creates a new command for describing instances.
-func NewDescribeCommand(f *factory.Factory) *cobra.Command {
+// GetDescribeCommand returns a new command for describing {{.Singular}} instances.
+func GetDescribeCommand(f *factory.Factory) *cobra.Command {
 	opts := &describeOptions{}
 
 	cmd := &cobra.Command{
