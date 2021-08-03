@@ -54,10 +54,10 @@ charmil crud [flags]
      ┣ 📂use
      ┃ ┣ 📜use.go
      ┃ ┗ 📜run.go
-     ┗ 📜root.go
+     ┗ 📜kafka.go
   ```
 
-- Once the CRUD packages have been generated, go to the generated `root.go` file and add all the missing imports there.
+- Once the CRUD packages have been generated, go to the generated `kafka.go` file and add all the missing imports there.
 
 - Using the following line, add the generated CRUD commands to your CLI:
 

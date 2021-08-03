@@ -95,7 +95,7 @@ func generateCrudPackages() error {
 
 		// Generates the root CRUD command file from template
 		if info.Name() == "root.go" {
-			err = generateFileFromTemplate(info.Name(), flagVars.crudPath, string(crud.RootTemplate), flagVars)
+			err = generateFileFromTemplate(flagVars.Singular+".go", flagVars.crudPath, string(crud.RootTemplate), flagVars)
 			if err != nil {
 				return err
 			}
