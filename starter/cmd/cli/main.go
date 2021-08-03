@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/starter/internal/factory"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 	"golang.org/x/text/language"
