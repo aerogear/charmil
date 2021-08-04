@@ -59,6 +59,27 @@ for _, errs := range validationErr {
 }
 ```
 
+## Disable a Rule
+All the rules provided by charmil are enabled by default. If you want to turn off particular rule or rules, there is an `Disable` option in `RuleOptions` in each rule.
+
+```go
+ruleCfg := rules.ValidatorConfig{
+	ValidatorRules: rules.ValidatorRules{
+		Punctuation: Punctuation{
+			RuleOptions: validator.RuleOptions{
+				Disable: true,
+			},
+		},
+		UseMatches: UseMatches{
+			RuleOptions: validator.RuleOptions{
+				Disable: true,
+			},
+		},
+
+	},
+}
+```
+
 ## Ignore Commands
 Sometimes during development, you want to pass the tests for certain commands, but at the same time use Validator for tests. Validation can be skipped/ignored for the commands, mentioned in the validator configuration.
 To ignore the commands you need to specify the path of the command in validator configuration.

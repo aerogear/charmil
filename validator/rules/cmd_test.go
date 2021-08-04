@@ -3,6 +3,7 @@ package rules
 import (
 	"testing"
 
+	"github.com/aerogear/charmil/validator"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +23,9 @@ func Test_ExecuteCommand(t *testing.T) {
 					"Use":     {Min: 1},
 					"Example": {Min: 3},
 					"Long":    {Min: 5},
+				},
+				RuleOptions: validator.RuleOptions{
+					Disable: true,
 				},
 			},
 			MustExist: MustExist{

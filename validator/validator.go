@@ -7,6 +7,7 @@ import (
 // RuleOptions is present in each rule
 // to control the options limited to the rule
 type RuleOptions struct {
+	Disable      bool
 	Verbose      bool
 	SkipCommands map[string]bool
 }

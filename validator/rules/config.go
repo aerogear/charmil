@@ -81,12 +81,19 @@ func ValidatorConfigToRuleConfig(validatorConfig *ValidatorConfig, ruleConfig *R
 	validatorConfig = &configHelper
 
 	// append rules to execute
-	ruleConfig.Rules = append(
-		ruleConfig.Rules,
-		&validatorConfig.Length,
-		&validatorConfig.MustExist,
-		&validatorConfig.UseMatches,
-		&validatorConfig.ExampleMatches,
-		&validatorConfig.Punctuation,
-	)
+	if !validatorConfig.Length.RuleOptions.Disable {
+		ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.Length)
+	}
+	if !validatorConfig.MustExist.RuleOptions.Disable {
+		ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.MustExist)
+	}
+	if !validatorConfig.UseMatches.RuleOptions.Disable {
+		ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.UseMatches)
+	}
+	if !validatorConfig.ExampleMatches.RuleOptions.Disable {
+		ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.ExampleMatches)
+	}
+	if !validatorConfig.Punctuation.RuleOptions.Disable {
+		ruleConfig.Rules = append(ruleConfig.Rules, &validatorConfig.Punctuation)
+	}
 }
