@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"github.com/aerogear/charmil/core/config"
 	"github.com/aerogear/charmil/core/localize"
 	"github.com/aerogear/charmil/starter/internal/factory"
+	"github.com/aerogear/charmil/starter/internal/update"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 	"golang.org/x/text/language"
@@ -82,6 +84,8 @@ func Root() *cobra.Command {
 
 func main() {
 	cmd := Root()
+
+	update.CheckForUpdate(context.Background(), cmdFactory.Logger, cmdFactory.Localizer)
 
 	if err := doc.GenMarkdownTree(cmd, "./docs/commands"); err != nil {
 		cmdFactory.Logger.Errorln(cmdFactory.IOStreams.ErrOut, err)
