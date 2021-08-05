@@ -3,11 +3,16 @@
 package describe
 
 import (
+	"errors"
+
 	"github.com/aerogear/charmil/cli/internal/factory"
+	"github.com/aerogear/charmil/cli/internal/flagutil"
 	"github.com/spf13/cobra"
 )
 
 type describeOptions struct {
+	name string
+
 	id           string
 	outputFormat string
 
@@ -25,6 +30,15 @@ func GetDescribeCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.describe.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if len(args) > 0 {
+				opts.name = args[0]
+			}
+
+			if err := performValidation(opts, f); err != nil {
+				return err
+			}
+
 			return runDescribe(opts, f)
 		},
 	}
@@ -33,5 +47,30 @@ func GetDescribeCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("{{.Singular}}.cmd.flag.output.description"))
 	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.common.flag.id"))
 
+	// Enables completion for the `output` flag
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
+
 	return cmd
+}
+
+// performValidation validates the arguments and flag values of the Describe command
+func performValidation(opts *describeOptions, f *factory.Factory) error {
+
+	// Ensures that at least one of the name and id values are specified
+	if opts.name == "" && opts.id == "" {
+		return errors.New(f.Localizer.LocalizeByID("{{.Singular}}.error.idOrNameRequired"))
+	}
+
+	// Returns an error when both name and id values are specified together
+	if opts.name != "" && opts.id != "" {
+		return errors.New(f.Localizer.LocalizeByID("{{.Singular}}.error.idAndNameCannotBeUsed"))
+	}
+
+	// Ensures that the value of `output` flag is valid
+	validOutputFormats := flagutil.ValidOutputFormats
+	if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+		return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+	}
+
+	return nil
 }

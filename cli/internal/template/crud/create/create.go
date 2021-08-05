@@ -4,27 +4,46 @@ package create
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
+	"github.com/aerogear/charmil/cli/internal/flagutil"
+
 	"github.com/spf13/cobra"
 )
 
 type createOptions struct {
+	// Stores value of the `name` argument
+	name string
+
+	// Stores value of the `output` flag
 	outputFormat string
-	autoUse      bool
+	// Stores value of the `use` flag
+	autoUse bool
+
+	// Stores the valid regex for `name` argument validation
+	validNameRegexp string
 
 	// You can add more fields here according to your requirements
 }
 
 // GetCreateCommand returns a new command for creating {{.Singular}} instances.
 func GetCreateCommand(f *factory.Factory) *cobra.Command {
-	opts := &createOptions{}
+	opts := &createOptions{
+		validNameRegexp: `^[a-z]([-a-z0-9]*[a-z0-9])?$`,
+	}
 
 	cmd := &cobra.Command{
 		Use:     f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.use"),
 		Short:   f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.shortDescription"),
 		Long:    f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.longDescription"),
 		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.example"),
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			opts.name = args[0]
+
+			if err := performValidation(opts, f); err != nil {
+				return err
+			}
+
 			return runCreate(opts, f)
 		},
 	}
@@ -33,5 +52,30 @@ func GetCreateCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&opts.outputFormat, "output", "o", "json", f.Localizer.LocalizeByID("{{.Singular}}.cmd.flag.output.description"))
 	cmd.Flags().BoolVar(&opts.autoUse, "use", true, f.Localizer.LocalizeByID("{{.Singular}}.cmd.create.flag.use.description"))
 
+	// Enables completion for the `output` flag
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
+
 	return cmd
+}
+
+// performValidation validates the arguments and flag values of the Create command
+func performValidation(opts *createOptions, f *factory.Factory) error {
+
+	// Ensures that the `name` argument is specified
+	if opts.name == "" {
+		return flagutil.RequiredValueError("name")
+	}
+
+	// Ensures that the specified name is valid
+	if err := flagutil.ValidateName(opts.name, opts.validNameRegexp, 1, 32); err != nil {
+		return err
+	}
+
+	// Ensures that the value of `output` flag is valid
+	validOutputFormats := flagutil.ValidOutputFormats
+	if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, validOutputFormats...) {
+		return flagutil.InvalidValueError("output", opts.outputFormat, validOutputFormats...)
+	}
+
+	return nil
 }
