@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// TemplateData defines variables that will store the local flag values
+// TemplateData defines fields that will store all the data used for generating templates
 type TemplateData struct {
 	// Stores value of the `crudPath` local flag. Default Value: "."
 	crudPath string
@@ -29,6 +29,7 @@ type TemplateData struct {
 	// Stores value of the `plural` local flag
 	Plural string
 
+	// Stores the name of the root module (extracted from go.mod file)
 	ModName string
 }
 
@@ -45,11 +46,11 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 		Example:       f.Localizer.LocalizeByID("crud.cmd.example"),
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// Extracts the module name from `go.mod` file and stores it
 			modName, err := GetModuleName()
 			if err != nil {
 				return err
 			}
-
 			tmplData.ModName = modName
 
 			return generateCrudPackages()
@@ -83,14 +84,13 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 
 // generateCrudPackages generates the CRUD packages in the path specified by the `crudPath` flag
 func generateCrudPackages() error {
-
 	// Generates CRUD packages in the specified path by looping through the template files
 	err := fs.WalkDir(crud.CrudTemplates, ".", func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// Generates the language file
+		// Generates the language and the root command files
 		if info.Name() == "crud.en.yaml" || info.Name() == "root.tmpl" {
 			if err = generateCrudFile(info.Name(), ".", tmplData.crudPath); err != nil {
 				return err
@@ -108,18 +108,18 @@ func generateCrudPackages() error {
 			return err
 		}
 
-		// Stores the path where the CRUD file will be generated
+		// Stores the path where the current CRUD file will be generated
 		targetPath := fmt.Sprintf("%s/%s", tmplData.crudPath, info.Name())
 
 		// Generates CRUD files in separate packages
 		for _, entry := range entries {
-
 			// Ensures all parent directories in `targetPath` are created before file generation
 			err := os.MkdirAll(targetPath, 0755)
 			if err != nil {
 				return err
 			}
 
+			// Generates CRUD files in the corresponding packages
 			err = generateCrudFile(entry.Name(), path, targetPath)
 			if err != nil {
 				return err
@@ -192,12 +192,15 @@ func generateFileFromTemplate(name, path, tmplContent string, placeholderData in
 	return nil
 }
 
+// GetModuleName returns the module name extracted from the `go.mod` file
 func GetModuleName() (string, error) {
+	// Stores the contents of `go.mod` file as a byte array
 	goModBytes, err := ioutil.ReadFile("go.mod")
 	if err != nil {
 		return "", err
 	}
 
+	// Extracts module name from the passed `go.mod` file contents
 	modName := modfile.ModulePath(goModBytes)
 
 	return modName, nil
