@@ -4,6 +4,7 @@ package list
 
 import (
 	"github.com/aerogear/charmil/cli/internal/factory"
+	"github.com/aerogear/charmil/cli/internal/flagutil"
 	"github.com/spf13/cobra"
 )
 
@@ -27,6 +28,11 @@ func GetListCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.list.example"),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if err := performValidation(opts, f); err != nil {
+				return err
+			}
+
 			return runList(opts, f)
 		},
 	}
@@ -37,5 +43,19 @@ func GetListCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().Int32VarP(&opts.limit, "limit", "", 100, f.Localizer.LocalizeByID("{{.Singular}}.list.flag.limit"))
 	cmd.Flags().StringVarP(&opts.search, "search", "", "", f.Localizer.LocalizeByID("{{.Singular}}.list.flag.search"))
 
+	// Enables completion for the `output` flag
+	flagutil.EnableStaticFlagCompletion(cmd, "output", flagutil.ValidOutputFormats)
+
 	return cmd
+}
+
+// performValidation validates the arguments and flag values of the List command
+func performValidation(opts *listOptions, f *factory.Factory) error {
+
+	// Ensures that the value of `output` flag is valid
+	if opts.outputFormat != "" && !flagutil.IsValidInput(opts.outputFormat, flagutil.ValidOutputFormats...) {
+		return flagutil.InvalidValueError("output", opts.outputFormat, flagutil.ValidOutputFormats...)
+	}
+
+	return nil
 }

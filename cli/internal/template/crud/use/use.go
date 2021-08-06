@@ -3,11 +3,15 @@
 package use
 
 import (
+	"errors"
+
 	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/spf13/cobra"
 )
 
 type useOptions struct {
+	name string
+
 	id string
 
 	// You can add more fields here according to your requirements
@@ -24,6 +28,15 @@ func GetUseCommand(f *factory.Factory) *cobra.Command {
 		Example: f.Localizer.LocalizeByID("{{.Singular}}.cmd.use.example"),
 		Args:    cobra.RangeArgs(0, 1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if len(args) > 0 {
+				opts.name = args[0]
+			}
+
+			if err := performValidation(opts, f); err != nil {
+				return err
+			}
+
 			return runUse(opts, f)
 		},
 	}
@@ -32,4 +45,20 @@ func GetUseCommand(f *factory.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.id, "id", "", f.Localizer.LocalizeByID("{{.Singular}}.use.flag.id"))
 
 	return cmd
+}
+
+// performValidation validates the arguments and flag values of the Use command
+func performValidation(opts *useOptions, f *factory.Factory) error {
+
+	// Ensures that at least one of the name and id values are specified
+	if opts.name == "" && opts.id == "" {
+		return errors.New(f.Localizer.LocalizeByID("{{.Singular}}.error.idOrNameRequired"))
+	}
+
+	// Returns an error when both name and id values are specified together
+	if opts.name != "" && opts.id != "" {
+		return errors.New(f.Localizer.LocalizeByID("{{.Singular}}.error.idAndNameCannotBeUsed"))
+	}
+
+	return nil
 }

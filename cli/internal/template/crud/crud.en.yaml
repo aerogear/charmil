@@ -84,20 +84,8 @@
 
 # Flags
 
-{{.Singular}}.cmd.flag.output.description:
-  description: "Description for --output flag"
-  one: 'The format in which the {{.Singular}} instance should be displayed. Choose from: "json", "yml", "yaml".'
-
 {{.Singular}}.cmd.create.flag.use.description:
   one: "Set the new {{.Singular}} instance to the current instance"
-
-{{.Singular}}.common.flag.id:
-  description: "Description for the --id flag"
-  one: "Unique ID of the {{.Singular}} instance you want to delete. If not set, the current instance is used."
-
-{{.Singular}}.common.flag.yes:
-  description: "Description for the --yes flag"
-  one: "Skip confirmation to forcibly delete this {{.Singular}} instance."
 
 {{.Singular}}.list.flag.page:
   description: "Description for the --page flag"
@@ -114,3 +102,23 @@
 {{.Singular}}.use.flag.id:
   description: "Description for the --id flag"
   one: "Unique ID of the {{.Singular}} instance you want to set as the current instance."
+
+{{.Singular}}.common.flag.id:
+  description: "Description for the --id flag"
+  one: "Unique ID of the {{.Singular}} instance you want to delete. If not set, the current instance is used."
+
+{{.Singular}}.cmd.flag.output.description:
+  description: "Description for --output flag"
+  one: 'The format in which the {{.Singular}} instance should be displayed. Choose from: "json", "yml", "yaml".'
+
+# Errors
+
+{{.Singular}}.error.idOrNameRequired:
+  one: "name argument or --id flag required"
+
+{{.Singular}}.error.idAndNameCannotBeUsed:
+  one: "name argument and --id flag cannot be used at the same time"
+
+{{.Singular}}.error.idAndNameCannotBeUsed:
+  one: "name argument and --id flag cannot be used at the same time"
+
