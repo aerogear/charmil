@@ -92,7 +92,9 @@ func generateCrudPackages() error {
 
 		// Generates the language file
 		if info.Name() == "crud.en.yaml" || info.Name() == "root.tmpl" {
-			err = generateCrudFile(info.Name(), ".", tmplData.crudPath)
+			if err = generateCrudFile(info.Name(), ".", tmplData.crudPath); err != nil {
+				return err
+			}
 
 			return nil
 		}
@@ -111,6 +113,7 @@ func generateCrudPackages() error {
 
 		// Generates CRUD files in separate packages
 		for _, entry := range entries {
+
 			// Ensures all parent directories in `targetPath` are created before file generation
 			err := os.MkdirAll(targetPath, 0755)
 			if err != nil {
@@ -141,22 +144,22 @@ func generateCrudFile(fileName, currentPath, targetPath string) error {
 		return err
 	}
 
-	if fileName == "crud.en.yaml" {
+	switch fileName {
+	case "crud.en.yaml":
 		if tmplData.localePath != "." {
 			targetPath = tmplData.localePath
 
 			// Ensures all parent directories in `targetPath` are created before file generation
-			err := os.MkdirAll(targetPath, 0755)
-			if err != nil {
+			if err = os.MkdirAll(targetPath, 0755); err != nil {
 				return err
 			}
 		}
 
 		fileName = tmplData.Singular + "." + fileName
 
-	} else if fileName == "root.tmpl" {
+	case "root.tmpl":
 		fileName = tmplData.Singular + ".go"
-	} else {
+	default:
 		fileName = fileName[:len(fileName)-5] + ".go"
 	}
 
