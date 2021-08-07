@@ -1,0 +1,12 @@
+add.cmd.use:
+  description: "Use of add command"
+  one: "add"
+add.cmd.short:
+  description: "Short description of add command"
+  one: "add command creates a new command"
+add.cmd.long:
+  description: "Long description of add command"
+  one: "add command creates a new command in specified directory with locales"
+add.cmd.example: 
+  description: "Examples"
+  one: "$ charmil add cliname"

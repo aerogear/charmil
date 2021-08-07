@@ -1,0 +1,12 @@
+{{ .cmdName }}.cmd.use:
+  description: "Use of {{ .cmdName }} command"
+  one: "{{ .cmdName }}"
+{{ .cmdName }}.cmd.short:
+  description: "Short description of {{ .cmdName }} command"
+  one: "describe {{ .cmdName }}"
+{{ .cmdName }}.cmd.long:
+  description: "Long description of {{ .cmdName }} command"
+  one: "describe {{ .cmdName }}"
+{{ .cmdName }}.cmd.example: 
+  description: "Examples"
+  one: "$ give examples of {{ .cmdName }}"
