@@ -1,9 +1,7 @@
-package crud
-
-var RootTemplate = []byte(`package {{.Singular}}
+package {{.Singular}}
 
 import (
-	"github.com/aerogear/charmil/cli/internal/factory"
+	"{{.ModName}}/internal/factory"
 	"github.com/spf13/cobra"
 )
 
@@ -26,4 +24,4 @@ func NewCommand(f *factory.Factory) *cobra.Command {
 	)
 
 	return cmd
-}`)
+}
