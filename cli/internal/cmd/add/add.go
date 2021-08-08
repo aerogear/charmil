@@ -50,7 +50,7 @@ func AddCommand(f *factory.Factory) (*cobra.Command, error) {
 				return err
 			}
 
-			f.Logger.Infof(color.Success("%s command has been creates in %s directory\n"), tmplData.CmdName, tmplData.CmdPath+"/"+tmplData.CmdName)
+			f.Logger.Infof(color.Success("%s command has been created in %s directory\n"), tmplData.CmdName, tmplData.CmdPath+"/"+tmplData.CmdName)
 
 			return nil
 
