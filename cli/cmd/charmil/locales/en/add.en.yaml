@@ -10,3 +10,16 @@ add.cmd.long:
 add.cmd.example: 
   description: "Examples"
   one: "$ charmil add cliname"
+
+add.flag.cmdPath.name:
+  description: "command Path flag"
+  one: "cmdPath"
+add.flag.cmdPath.description:
+  description: "description of command path"
+  one: "command path where you want to create the command"
+add.flag.cmdName.name:
+  description: "command name"
+  one: "cmdName"
+add.flag.cmdName.description:
+  description: "abc"
+  one: "name of the new command"

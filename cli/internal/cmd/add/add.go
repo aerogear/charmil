@@ -2,8 +2,12 @@ package add
 
 import (
 	"fmt"
+	"html/template"
 	"io/fs"
+	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
 
 	"github.com/aerogear/charmil/cli/internal/common/modname"
 	"github.com/aerogear/charmil/cli/internal/factory"
@@ -13,17 +17,14 @@ import (
 
 // TemplateData defines fields that will store all the data used for generating templates
 type TemplateData struct {
-	// Stores value of the `cmdPath` local flag. Default Value: "."
-	cmdPath string
-
-	// Stores value of the `localePath` local flag. Default Value: "."
-	localePath string
+	// Stores value of the `CmdPath` local flag. Default Value: "."
+	CmdPath string
 
 	// Stores value of the `CmdName` local flag
-	cmdName string
+	CmdName string
 
 	// Stores the name of the root module (extracted from go.mod file)
-	modName string
+	ModName string
 }
 
 // Initializes a zero-valued struct
@@ -42,16 +43,15 @@ func AddCommand(f *factory.Factory) (*cobra.Command, error) {
 			if err != nil {
 				return err
 			}
-			tmplData.modName = modName
+			tmplData.ModName = modName
 
 			return generateCommand()
 		},
 	}
 
 	// Adds local flags
-	cmd.Flags().StringVarP(&tmplData.cmdPath, f.Localizer.LocalizeByID("add.flag.cmdPath.name"), "c", ".", f.Localizer.LocalizeByID("add.flag.cmdPath.description"))
-	cmd.Flags().StringVarP(&tmplData.localePath, f.Localizer.LocalizeByID("add.flag.localePath.name"), "l", ".", f.Localizer.LocalizeByID("add.flag.localePath.description"))
-	cmd.Flags().StringVarP(&tmplData.cmdName, f.Localizer.LocalizeByID("add.flag.cmdName.name"), "s", "", f.Localizer.LocalizeByID("add.flag.cmdName.description"))
+	cmd.Flags().StringVarP(&tmplData.CmdPath, f.Localizer.LocalizeByID("add.flag.cmdPath.name"), "c", ".", f.Localizer.LocalizeByID("add.flag.cmdPath.description"))
+	cmd.Flags().StringVarP(&tmplData.CmdName, f.Localizer.LocalizeByID("add.flag.cmdName.name"), "s", "", f.Localizer.LocalizeByID("add.flag.cmdName.description"))
 
 	// Marks the `cmdName` flag as required.
 	// This causes the add command to report an
@@ -64,40 +64,90 @@ func AddCommand(f *factory.Factory) (*cobra.Command, error) {
 	return cmd, nil
 }
 
+// generateCommand function generates a command with it's locales file
 func generateCommand() error {
 
-	err := fs.WalkDir(add.AddTemplates, ".", func(path string, info fs.DirEntry, err error) error {
+	// create a directory with command name
+	if mkdirerr := os.Mkdir(path.Join(tmplData.CmdPath, tmplData.CmdName), 0755); mkdirerr != nil {
+		return mkdirerr
+	}
+
+	// walk through add templates folder
+	err := fs.WalkDir(add.AddTemplates, ".", func(p string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 
-		if !info.IsDir() || info.Name() == "." {
-			return nil
+		// creating templates from add templates folder
+		// to the cmdPath directory(provided by user)
+		var buf []byte
+		if info.Name() == "cmdname.en.yaml" || info.Name() == "cmdname.tmpl" {
+			buf, err = add.AddTemplates.ReadFile(info.Name())
+			if err != nil {
+				return err
+			}
+			var ext string
+
+			if info.Name() == "cmdname.en.yaml" {
+				ext = ".en.yaml"
+			} else {
+				ext = ".go"
+			}
+
+			err = ioutil.WriteFile(path.Join(tmplData.CmdPath, tmplData.CmdName, tmplData.CmdName+ext), buf, 0755)
+			if err != nil {
+				fmt.Printf("Unable to write file: %v", err)
+			}
 		}
 
-		entries, err := add.AddTemplates.ReadDir(path)
-		if err != nil {
-			return err
-		}
+		// apply templates according to tmplData
+		err = applyTemplates()
+		return err
 
-		// Stores the path where the current CRUD file will be generated
-		targetPath := fmt.Sprintf("%s/%s", tmplData.cmdPath, info.Name())
+	})
 
-		// Generates CRUD files in separate packages
-		for _, entry := range entries {
-			// Ensures all parent directories in `targetPath` are created before file generation
-			err := os.MkdirAll(targetPath, 0755)
+	if err != nil {
+		return fmt.Errorf("failed to walk directory: %w", err)
+	}
+
+	return err
+}
+
+// applyTemplates parses the files and apply templates
+func applyTemplates() error {
+	err := filepath.Walk(path.Join(tmplData.CmdPath, tmplData.CmdName),
+		func(path string, info os.FileInfo, err error) error {
+
 			if err != nil {
 				return err
 			}
 
-			// Generates add files in the corresponding packages
-			fmt.Println(entry)
-		}
+			fi, err := os.Stat(path)
+			if err != nil {
+				return fmt.Errorf("failed to read file info: %w", err)
+			}
 
-		return nil
+			if fi.IsDir() {
+				return nil
+			}
 
-	})
+			tmpl, tmplErr := template.ParseFiles(path)
+			if tmplErr != nil {
+				return fmt.Errorf("failed to parse template: %w", err)
+			}
+
+			f, PathErr := os.Create(path)
+			if PathErr != nil {
+				return fmt.Errorf("failed to create file: %w", err)
+			}
+
+			// apply templateContext to the folder
+			if err := tmpl.Execute(f, tmplData); err != nil {
+				return fmt.Errorf("failed to execute template: %w", err)
+			}
+
+			return nil
+		})
 
 	return err
 }
