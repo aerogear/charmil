@@ -7,7 +7,7 @@ Localization has never been easier. Charmil provides out of the box support for 
 
 ## How to use
 
-1. Initialize a variable using go:embed, for storing the locales directory
+1. Embed provides access to files embedded in the running Go program meaning you can get your locales directory with the path to it.  
 ```go
 import (
     "github.com/aerogear/charmil/cli/internal/factory"
