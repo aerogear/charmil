@@ -7,30 +7,57 @@ Localization has never been easier. Charmil provides out of the box support for 
 
 ## How to use
 
-1. Provide the default language, the path to your locales, and the file format of your locales to initialize the localizer. Charmil accepts locales in the yaml, toml, and json formats.
+1. Embed provides access to files embedded in the running Go program meaning you can get your locales directory with the path to it.  
 ```go
+import (
+    "github.com/aerogear/charmil/cli/internal/factory"
+    "github.com/aerogear/charmil/core/config"
+    "github.com/aerogear/charmil/core/localize"
+)
+
+//go:embed locales/*
+defaultLocales embed.FS
+```
+2. Provide the default language, the path to your locales, and the file format of your locales to initialize the localizer. Charmil accepts locales in the yaml, toml, and json formats.
+```go
+
+// create a config handler
+h := config.NewHandler("./config.json", cfg)
+
+// Loads config values from the local config file
+err := h.Load()
+if err != nil {
+    log.Fatal(err)
+}
+
 // Initialize localizer providing the language, locales and format of locales file
-loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "examples/plugins/date/locales/en/en.yaml", Format: "yaml"})
+localizer, err := localize.New(
+    localize.Config{
+        Language: &language.English,
+        Files:    defaultLocales,
+        Format:   "yaml",
+    }
+)
 if err != nil {
     return nil, err
 }
 
-// Create new/default instance of factory
-newFactory := factory.Default(loc)
+// Creates a new factory instance with default settings
+cmdFactory := factory.Default(localizer, h)
 ```
 
-2. LocalizeByID is a Factory function that takes a message Id stored in locales and also allows you to give templateEntries for your locales.
+3. LocalizeByID is a Factory function that takes a message Id stored in locales and also allows you to give templateEntries for your locales.
 ```go
 // using Localizer for localization of cobra command
 cmd := &cobra.Command{
-    Use:          newFactory.Localize.LocalizeByID("sample.cmd.use"),
-    Short:        newFactory.Localize.LocalizeByID("sample.cmd.short"),
-    Example:      newFactory.Localize.LocalizeByID("sample.cmd.example"),
+      Use:          cmdFactory.Localizer.LocalizeByID("sample.cmd.use"),
+      Short:        cmdFactory.Localizer.LocalizeByID("sample.cmd.short"),
+      Example:      cmdFactory.Localizer.LocalizeByID("sample.cmd.example"),
 }
 ```
 ```go
 // providing template entries
-newFactory.Localize.LocalizeByID("sample.hi", {"Name": "John"})
+cmdFactory.Localizer.LocalizeByID("sample.hi", {"Name": "John"})
 ```
 
 ## Sample Locales file
