@@ -14,7 +14,7 @@ func {{ .CmdName }}(f *factory.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			return nil
-		}
+		},
 	}
 
 	return cmd

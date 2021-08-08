@@ -19,11 +19,16 @@ Fill in the prompted info(github owner, repository and cli name) to get started!
 
 ## Add Command
 
-Add command adds a new command into the CLI
+Add command adds a new command into the CLI, along with english locales for the command.
 
 ```bash
-$ charmil add CMD_NAME
+$ charmil add --cmdName="mycmd"
 ```
+if you want to specify the path for command to be created, use `--cmdPath` flag. By default `--cmdPath` is set to current directory.
+```bash
+$ charmil add --cmdName="mycmd" --cmdPath="./cmd"
+```
+
 
 ## Crud Command
 

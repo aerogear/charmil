@@ -12,6 +12,7 @@ import (
 	"github.com/aerogear/charmil/cli/internal/common/modname"
 	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/aerogear/charmil/cli/internal/template/add"
+	"github.com/aerogear/charmil/core/color"
 	"github.com/spf13/cobra"
 )
 
@@ -45,7 +46,14 @@ func AddCommand(f *factory.Factory) (*cobra.Command, error) {
 			}
 			tmplData.ModName = modName
 
-			return generateCommand()
+			if err := generateCommand(); err != nil {
+				return err
+			}
+
+			f.Logger.Infof(color.Success("%s command has been creates in %s directory\n"), tmplData.CmdName, tmplData.CmdPath+"/"+tmplData.CmdName)
+
+			return nil
+
 		},
 	}
 
@@ -94,7 +102,7 @@ func generateCommand() error {
 				ext = ".go"
 			}
 
-			err = ioutil.WriteFile(path.Join(tmplData.CmdPath, tmplData.CmdName, tmplData.CmdName+ext), buf, 0755)
+			err = ioutil.WriteFile(path.Join(tmplData.CmdPath, tmplData.CmdName, tmplData.CmdName+ext), buf, 0600)
 			if err != nil {
 				fmt.Printf("Unable to write file: %v", err)
 			}
@@ -110,7 +118,7 @@ func generateCommand() error {
 		return fmt.Errorf("failed to walk directory: %w", err)
 	}
 
-	return err
+	return nil
 }
 
 // applyTemplates parses the files and apply templates
