@@ -76,7 +76,7 @@ func AddCommand(f *factory.Factory) (*cobra.Command, error) {
 func generateCommand() error {
 
 	// create a directory with command name
-	if mkdirerr := os.Mkdir(path.Join(tmplData.CmdPath, tmplData.CmdName), 0755); mkdirerr != nil {
+	if mkdirerr := os.MkdirAll(path.Join(tmplData.CmdPath, tmplData.CmdName), 0755); mkdirerr != nil {
 		return mkdirerr
 	}
 
