@@ -1,4 +1,14 @@
 
+<a name="v0.8.0"></a>
+## [v0.8.0](https://github.com/aerogear/charmil/compare/v0.7.0...v0.8.0) (2021-08-09)
+
+### Features
+
+* check for updates in starter ([#203](https://github.com/aerogear/charmil/issues/203))
+* disable validation rule option
+* **charmil-crud:** add validations and flag completion ([#204](https://github.com/aerogear/charmil/issues/204))
+
+
 <a name="v0.7.0"></a>
 ## [v0.7.0](https://github.com/aerogear/charmil/compare/v0.6.1...v0.7.0) (2021-08-03)
 
@@ -29,7 +39,7 @@
 
 
 <a name="v0.4.0"></a>
-## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.0...v0.4.0) (2021-07-27)
+## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.4.0) (2021-07-27)
 
 ### Bug Fixes
 
@@ -41,12 +51,12 @@
 * charmil init command ([#170](https://github.com/aerogear/charmil/issues/170))
 
 
-<a name="v0.3.0"></a>
-## [v0.3.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.3.0) (2021-07-21)
-
-
 <a name="v0.3.1"></a>
-## [v0.3.1](https://github.com/aerogear/charmil/compare/0.3.0...v0.3.1) (2021-07-21)
+## [v0.3.1](https://github.com/aerogear/charmil/compare/v0.3.0...v0.3.1) (2021-07-21)
+
+
+<a name="v0.3.0"></a>
+## [v0.3.0](https://github.com/aerogear/charmil/compare/0.3.0...v0.3.0) (2021-07-21)
 
 ### Features
 
