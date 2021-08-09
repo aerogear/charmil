@@ -1,4 +1,12 @@
 
+<a name="v0.8.1"></a>
+## [v0.8.1](https://github.com/aerogear/charmil/compare/v0.8.0...v0.8.1) (2021-08-09)
+
+### Features
+
+* add command in charmil cli ([#207](https://github.com/aerogear/charmil/issues/207))
+
+
 <a name="v0.8.0"></a>
 ## [v0.8.0](https://github.com/aerogear/charmil/compare/v0.7.0...v0.8.0) (2021-08-09)
 
