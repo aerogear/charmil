@@ -2,13 +2,12 @@ package crud
 
 import (
 	"fmt"
-	"html/template"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"golang.org/x/mod/modfile"
+	"github.com/aerogear/charmil/cli/internal/common/generate"
+	"github.com/aerogear/charmil/cli/internal/common/modname"
 
 	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/aerogear/charmil/cli/internal/template/crud"
@@ -47,7 +46,7 @@ func CrudCommand(f *factory.Factory) (*cobra.Command, error) {
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Extracts the module name from `go.mod` file and stores it
-			modName, err := GetModuleName()
+			modName, err := modname.GetModuleName()
 			if err != nil {
 				return err
 			}
@@ -128,11 +127,8 @@ func generateCrudPackages() error {
 
 		return nil
 	})
-	if err != nil {
-		return err
-	}
 
-	return nil
+	return err
 }
 
 // generateCrudFile takes the target file name, target path and the path
@@ -164,44 +160,10 @@ func generateCrudFile(fileName, currentPath, targetPath string) error {
 	}
 
 	// Generate CRUD file from the current template
-	err = generateFileFromTemplate(fileName, targetPath, string(buf), tmplData)
+	err = generate.GenerateFileFromTemplate(fileName, targetPath, string(buf), tmplData)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-// generateFileFromTemplate uses the template to generate a
-// new file using the specified file name and output path
-func generateFileFromTemplate(name, path, tmplContent string, placeholderData interface{}) error {
-	// Creates a new file using the specified name and path
-	f, err := os.Create(fmt.Sprintf("%s/%s", path, name))
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	// Adds content to the generated file using the specified template
-	tmpl := template.Must(template.New(name).Parse(tmplContent))
-	err = tmpl.Execute(f, placeholderData)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// GetModuleName returns the module name extracted from the `go.mod` file
-func GetModuleName() (string, error) {
-	// Stores the contents of `go.mod` file as a byte array
-	goModBytes, err := ioutil.ReadFile("go.mod")
-	if err != nil {
-		return "", err
-	}
-
-	// Extracts module name from the passed `go.mod` file contents
-	modName := modfile.ModulePath(goModBytes)
-
-	return modName, nil
 }

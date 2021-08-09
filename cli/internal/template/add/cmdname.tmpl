@@ -1,0 +1,21 @@
+package {{ .CmdName }}
+
+import (
+	"{{ .ModName }}/internal/factory"
+	"github.com/spf13/cobra"
+)
+
+func {{ .CmdName }}(f *factory.Factory) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           f.Localizer.LocalizeByID("{{ .CmdName }}.cmd.use"),
+		Short:         f.Localizer.LocalizeByID("{{ .CmdName }}.cmd.short"),
+		Long:          f.Localizer.LocalizeByID("{{ .CmdName }}.cmd.long"),
+		Example:       f.Localizer.LocalizeByID("{{ .CmdName }}.cmd.example"),
+		RunE: func(cmd *cobra.Command, args []string) error {
+
+			return nil
+		},
+	}
+
+	return cmd
+}
