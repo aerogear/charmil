@@ -73,9 +73,7 @@ module.exports = {
       {
         docs: {
           path: '../docs/src',
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/aerogear/charmil/tree/main/docs/src',
+          sidebarPath: require.resolve('./sidebars.js')
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
