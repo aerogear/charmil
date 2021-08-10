@@ -23,12 +23,6 @@ defaultLocales embed.FS
 // create a config handler
 h := config.NewHandler("./config.json", cfg)
 
-// Loads config values from the local config file
-err := h.Load()
-if err != nil {
-    log.Fatal(err)
-}
-
 // Initialize localizer providing the language, locales and format of locales file
 localizer, err := localize.New(
     localize.Config{
