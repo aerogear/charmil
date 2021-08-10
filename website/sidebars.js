@@ -3,6 +3,6 @@ module.exports = {
     Introduction: ["intro"],
     "Charmil Features": ["charmil_factory", "charmil_i18n", "charmil_logger"],
     "Charmil Commands": ["charmil_commands"],
-    Validator: ["validator"],
+    Validator: ["charmil_validator"],
   },
 };

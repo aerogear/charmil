@@ -20,7 +20,7 @@ Errorln(args ...interface{})
 When the factory is initialized, the logger is provided by default. To know about factory visit [here](charmil_factory.md)
 
 ```go
-newFactory.Logger.Info("provide a message")
-newFactory.Logger.Errorf("Error: %s", err)
-newFactory.Logger.Infoln("provide a message")
+cmdFactory.Logger.Info("provide a message")
+cmdFactory.Logger.Errorf("Error: %s", err)
+cmdFactory.Logger.Infoln("provide a message")
 ```

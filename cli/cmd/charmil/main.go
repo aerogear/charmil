@@ -8,9 +8,9 @@ import (
 
 	"github.com/aerogear/charmil/cli/internal/cmd/crud"
 	"github.com/aerogear/charmil/cli/internal/cmd/root"
-	"github.com/aerogear/charmil/cli/internal/factory"
+	"github.com/aerogear/charmil/cli/pkg/factory"
 	c "github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/core/utils/localize"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/text/language"

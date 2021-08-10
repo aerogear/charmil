@@ -1,10 +1,10 @@
 package completion
 
 import (
-	"github.com/aerogear/charmil/starter/internal/factory"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/bash"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/fish"
 	"github.com/aerogear/charmil/starter/pkg/cmd/completion/zsh"
+	"github.com/aerogear/charmil/starter/pkg/factory"
 	"github.com/spf13/cobra"
 )
 

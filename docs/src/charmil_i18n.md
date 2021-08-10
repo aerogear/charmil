@@ -7,46 +7,8 @@ Localization has never been easier. Charmil provides out of the box support for 
 
 ## How to use
 
-1. Embed provides access to files embedded in the running Go program meaning you can get your locales directory with the path to it.  
-```go
-import (
-    "github.com/aerogear/charmil/cli/internal/factory"
-    "github.com/aerogear/charmil/core/config"
-    "github.com/aerogear/charmil/core/localize"
-)
-
-//go:embed locales/*
-defaultLocales embed.FS
-```
-2. Provide the default language, the path to your locales, and the file format of your locales to initialize the localizer. Charmil accepts locales in the yaml, toml, and json formats.
-```go
-
-// create a config handler
-h := config.NewHandler("./config.json", cfg)
-
-// Loads config values from the local config file
-err := h.Load()
-if err != nil {
-    log.Fatal(err)
-}
-
-// Initialize localizer providing the language, locales and format of locales file
-localizer, err := localize.New(
-    localize.Config{
-        Language: &language.English,
-        Files:    defaultLocales,
-        Format:   "yaml",
-    }
-)
-if err != nil {
-    return nil, err
-}
-
-// Creates a new factory instance with default settings
-cmdFactory := factory.Default(localizer, h)
-```
-
-3. LocalizeByID is a Factory function that takes a message Id stored in locales and also allows you to give templateEntries for your locales.
+1. Initialize factory in your command. Follow the [Factory documentation](./charmil_factory.md)
+2. LocalizeByID is a Factory function that takes a message Id stored in locales and also allows you to give templateEntries for your locales.
 ```go
 // using Localizer for localization of cobra command
 cmd := &cobra.Command{
