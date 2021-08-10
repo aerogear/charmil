@@ -5,7 +5,7 @@ import (
 
 	"github.com/aerogear/charmil/cli/internal/cmd/add"
 	initialize "github.com/aerogear/charmil/cli/internal/cmd/init"
-	"github.com/aerogear/charmil/cli/internal/factory"
+	"github.com/aerogear/charmil/cli/pkg/factory"
 	"github.com/spf13/cobra"
 )
 

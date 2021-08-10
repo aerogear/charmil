@@ -9,8 +9,8 @@ import (
 	"github.com/aerogear/charmil/cli/internal/common/generate"
 	"github.com/aerogear/charmil/cli/internal/common/modname"
 
-	"github.com/aerogear/charmil/cli/internal/factory"
 	"github.com/aerogear/charmil/cli/internal/template/crud"
+	"github.com/aerogear/charmil/cli/pkg/factory"
 	"github.com/spf13/cobra"
 )
 

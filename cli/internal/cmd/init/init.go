@@ -8,8 +8,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aerogear/charmil/cli/internal/factory"
-	"github.com/aerogear/charmil/core/color"
+	"github.com/aerogear/charmil/cli/pkg/factory"
+	"github.com/aerogear/charmil/core/utils/color"
 	"github.com/go-git/go-git/v5"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
