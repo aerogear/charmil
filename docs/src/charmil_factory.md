@@ -3,38 +3,49 @@ title: Charmil Factory
 slug: /charmil_factory
 ---
 
-The Charmil Factory offers you one-stop access to all of the Charmil packages all at once. So you just need to initialize factory in your cobra command and start using logging, i18n, etc. 
+The Charmil Factory offers you one-stop access to all of the Charmil packages all at once. So you just need to initialize factory in your cobra command and start using logging, i18n, etc.
 ```go
-import github.com/aerogear/charmil/core/factory
+import (
+    "<module-name>/<cli-name>/pkg/factory"
+    "github.com/aerogear/charmil/core/config"
+    "github.com/aerogear/charmil/core/utils/localize"
+)
 ```
 
 ## How to use
 
-1. Create a cobra command for your plugin
+1. Initialize factory in your command, by providing it an instance of charmil localizer and config handler.
 ```go
-func MyCommand() (*cobra.Command, error) {
-	cmd := &cobra.Command{
-		Use:   "my",
-		Short: "This is my command",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
-		},
-	}
+// Embed provides access to files embedded in the running Go program meaning you can get your locales directory with the path to it.
+//go:embed locales/*
+defaultLocales embed.FS
 
-	return cmd, nil
+// create a config handler
+h := config.NewHandler("./config.json", cfg)
+
+// Loads config values from the local config file
+err := h.Load()
+if err != nil {
+    log.Fatal(err)
 }
-```
 
-1. Create a factory instance in your command, which requires the localizer to be passed
-```go
-// Init Localizer
-loc, err := localize.InitLocalizer(localize.Config{Language: language.English, Path: "active.en.yaml"})
+// Initialize localizer providing the language, locales and format of locales file
+localizer, err := localize.New(
+    localize.Config{
+        Language: &language.English,
+        Files:    defaultLocales,
+        Format:   "yaml", // charmil accepts locales in the yaml, toml, and json formats.
+    }
+)
 if err != nil {
     return nil, err
 }
-// Create new/default instance of factory
-newFactory := factory.Default(loc)
+
+// Creates a new factory instance with default settings
+cmdFactory := factory.Default(localizer, h)
 ```
 
-3. Now you are ready to use the packages provided by factory.
-
+2. Now you are ready to use the packages/utilities provided by factory.
+	- [Charmil i18n](./charmil_i18n.md)
+	- [Charmil Config](./charmil_config.md)
+	- [charmil Logger](./charmil_logger.md)
