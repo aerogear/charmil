@@ -1,4 +1,12 @@
 
+<a name="v0.8.2"></a>
+## [v0.8.2](https://github.com/aerogear/charmil/compare/v0.8.1...v0.8.2) (2021-08-11)
+
+### Features
+
+* example builder utility ([#223](https://github.com/aerogear/charmil/issues/223))
+
+
 <a name="v0.8.1"></a>
 ## [v0.8.1](https://github.com/aerogear/charmil/compare/v0.8.0...v0.8.1) (2021-08-09)
 
@@ -47,7 +55,7 @@
 
 
 <a name="v0.4.0"></a>
-## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.4.0) (2021-07-27)
+## [v0.4.0](https://github.com/aerogear/charmil/compare/v0.3.0...v0.4.0) (2021-07-27)
 
 ### Bug Fixes
 
@@ -59,12 +67,12 @@
 * charmil init command ([#170](https://github.com/aerogear/charmil/issues/170))
 
 
-<a name="v0.3.1"></a>
-## [v0.3.1](https://github.com/aerogear/charmil/compare/v0.3.0...v0.3.1) (2021-07-21)
-
-
 <a name="v0.3.0"></a>
-## [v0.3.0](https://github.com/aerogear/charmil/compare/0.3.0...v0.3.0) (2021-07-21)
+## [v0.3.0](https://github.com/aerogear/charmil/compare/v0.3.1...v0.3.0) (2021-07-21)
+
+
+<a name="v0.3.1"></a>
+## [v0.3.1](https://github.com/aerogear/charmil/compare/0.3.0...v0.3.1) (2021-07-21)
 
 ### Features
 
