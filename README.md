@@ -73,7 +73,7 @@ We would love to have you contribute. For contributing guidance please refer to 
 
 ## Documentation
 
-Visit the [Charmil Documentation](https://aerogear.github.io/charmil/docs/)
+Visit the [Charmil Documentation](https://github.com/aerogear/charmil/blob/main/starter/CONTRIBUTING.md#documentation)
 
 ## License
 
