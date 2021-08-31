@@ -4,6 +4,7 @@ slug: /charmil_factory
 ---
 
 The Charmil Factory offers you one-stop access to all of the Charmil packages all at once. So you just need to initialize factory in your cobra command and start using logging, i18n, etc.
+
 ```go
 import (
     "<module-name>/<cli-name>/pkg/factory"
@@ -15,6 +16,7 @@ import (
 ## How to use
 
 1. Initialize factory in your command, by providing it an instance of charmil localizer and config handler.
+
 ```go
 // Embed provides access to files embedded in the running Go program meaning you can get your locales directory with the path to it.
 //go:embed locales/*
@@ -40,6 +42,6 @@ cmdFactory := factory.Default(localizer, h)
 ```
 
 2. Now you are ready to use the packages/utilities provided by factory.
-	- [Charmil i18n](./charmil_i18n.md)
-	- [Charmil Config](./charmil_config.md)
-	- [charmil Logger](./charmil_logger.md)
+   - [Charmil i18n](./utils/charmil_i18n.md)
+   - [Charmil Config](./charmil_config.md)
+   - [Charmil Logger](./utils/charmil_logger.md)

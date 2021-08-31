@@ -1,5 +1,5 @@
 ---
-title: Getting Started Guide
+title: Getting Started
 slug: /getting_started
 ---
 
@@ -45,11 +45,3 @@ The Charmil Starter Template allows users to quickly create plugins and host com
     ```bash
     $ git clone https://github.com/aerogear/charmil-starter.git
     ```
-
-## Charmil SDK
-
-Click [here](./sdk.md) for the detailed guide.
-
-## Charmil Validator
-
-Click [here](./validator.md) for the detailed guide.
