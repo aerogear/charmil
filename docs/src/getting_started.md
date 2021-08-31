@@ -38,7 +38,10 @@ This is the component responsible for constructing modular, multi-repo Golang CL
 
 - ### Usage:
 
-  For usage instructions on Charmil SDK, please refer to the docs [over here](./).
+  Links to usage docs:
+
+  - [Config](./charmil_config.md)
+  - [Utils](./utils)
 
 ## Charmil Validator
 
