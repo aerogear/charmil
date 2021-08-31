@@ -1,4 +1,9 @@
-# Getting started with the Charmil SDK
+---
+title: Charmil SDK Quickstart
+slug: /sdk_quickstart
+---
+
+# Charmil SDK Quickstart
 
 This is the component responsible for constructing modular, multi-repo Golang CLIs with Cobra while providing a variety of high-level solutions for typical challenges like configuration, internationalization, etc.
 

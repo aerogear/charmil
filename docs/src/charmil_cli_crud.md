@@ -1,3 +1,8 @@
+---
+title: Charmil CRUD Generator Command
+slug: /charmil_cli_crud
+---
+
 # Charmil CRUD Generator
 
 - With the help of the `charmil crud` command, developers can eliminate a lot of boilerplate in CLIs containing multiple services that perform standard CRUD operations.

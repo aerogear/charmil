@@ -1,4 +1,9 @@
-# Charmil Config
+---
+title: Charmil Config Management Package
+slug: /charmil_config
+---
+
+# Charmil Config Management Package
 
 The Charmil Config package offers a convenient mechanism for both host and plugin developers to manage configurations in their command-line interface (CLI) applications made using [Cobra](https://github.com/spf13/cobra).
 
@@ -19,20 +24,21 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
       import c "github.com/aerogear/charmil/core/config"
       ```
   3.  Define a struct whose fields represent the keys to all the values that you want to store as config and create an instance of it.
+
       **Important**: Every field of the defined struct needs to be exportable (ie. start with an uppercase letter). The unexportable fields cannot be stored as config.
 
-            _Example:_
+      _Example:_
 
-            ```go
-          	type config struct {
-          		Key1 string
-          		Key2 string
-          		Key3 string
-          		Key4 string
-          	}
+      ```go
+      type config struct {
+        Key1 string
+        Key2 string
+        Key3 string
+        Key4 string
+      }
 
-          	cfg = &config{}
-            ```
+      cfg = &config{}
+      ```
 
   4.  Store a new instance of the Charmil Config handler by calling the `NewHandler` function while passing the path of local config file and the instance of the config struct (initialized in the last step) as arguments.
 
@@ -70,14 +76,14 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
 
   7.  Write current config into the local config file using the `Save` method.
 
-          _Example:_
+      _Example:_
 
-          ```go
-          err = h.Save()
-          if err != nil {
-          	log.Fatal(err)
-          }
-          ```
+      ```go
+      err = h.Save()
+      if err != nil {
+        log.Fatal(err)
+      }
+      ```
 
 - ### For plugin developers:
 
@@ -90,18 +96,18 @@ The Charmil Config package offers a convenient mechanism for both host and plugi
   3.  Define a struct whose fields represent the keys to all the values that you want to store as config and create an instance of it.
       **Important**: Every field of the defined struct needs to be exportable (ie. start with an uppercase letter). The unexportable fields cannot be stored as config.
 
-            _Example:_
+      _Example:_
 
-            ```go
-          	type config struct {
-          		Key5 string
-          		Key6 string
-          		Key7 string
-          		Key8 string
-          	}
+      ```go
+      type config struct {
+        Key5 string
+        Key6 string
+        Key7 string
+        Key8 string
+      }
 
-          	cfg = &config{}
-            ```
+      cfg = &config{}
+      ```
 
   4.  You can set/get/modify values under any key of config using the idiomatic way to interact with structs in Golang.
 

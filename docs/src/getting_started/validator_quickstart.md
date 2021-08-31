@@ -1,4 +1,9 @@
-# Getting started with the Charmil Validator
+---
+title: Charmil Validator Quickstart
+slug: /validator_quickstart
+---
+
+# Charmil Validator Quickstart
 
 - ## Installation:
 
