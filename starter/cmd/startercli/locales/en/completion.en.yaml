@@ -31,11 +31,11 @@ completion.bash.cmd.longDescription:
   one: '''
   Generate command completion script for Bash shell.
   Installing on Linux:
-  1. Run `startercli completion bash > cli_completions` to create the script file.
-  2. Run `sudo mv cli_completions /etc/bash_completion.d/startercli` to place the script in a special Bash completions directory.
+  1. Run `startercli completion bash > startercli_completions` to create the script file.
+  2. Run `sudo mv startercli_completions /etc/bash_completion.d/startercli` to place the script in a special Bash completions directory.
   Installing on macOS:
-  1. Run `startercli completion bash > cli_completions` to create the script file.
-  2. Run `sudo mv cli_completions /usr/local/etc/bash_completion.d/startercli` to place the script in a special Bash completions directory.
+  1. Run `startercli completion bash > startercli_completions` to create the script file.
+  2. Run `sudo mv startercli_completions /usr/local/etc/bash_completion.d/startercli` to place the script in a special Bash completions directory.
   '''
 
 completion.zsh.cmd.use:
