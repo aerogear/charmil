@@ -120,7 +120,7 @@ func cloneStarter(f *factory.Factory) {
 // replaceText replaces the default values in files with the user-specified values
 func replaceText(templateContext TemplateContext) error {
 	replacerList := []string{
-		"aerogear/charmil/starter", fmt.Sprintf("%s/%s", templateContext.Owner, templateContext.Repo),
+		"aerogear/charmil-starter", fmt.Sprintf("%s/%s", templateContext.Owner, templateContext.Repo),
 		"startercli", templateContext.CliName,
 	}
 
