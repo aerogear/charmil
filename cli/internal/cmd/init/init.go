@@ -3,10 +3,10 @@ package init
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 
 	"github.com/aerogear/charmil/cli/pkg/factory"
 	"github.com/aerogear/charmil/core/utils/color"
@@ -58,11 +58,15 @@ func InitCommand(f *factory.Factory) *cobra.Command {
 			}
 
 			cloneStarter(f)
+
 			f.Logger.Infoln(color.Info("updating starter code with names"))
-			if err := renderTemplates(templateContext, f); err != nil {
+
+			// Searches the generated files for default values and replaces it with the user-specified values
+			if err := replaceText(templateContext); err != nil {
 				f.Logger.Error(err)
 				os.Exit(1)
 			}
+
 			f.Logger.Infof(color.Success("Your %s CLI has been initialized in this directory.\n"), templateContext.CliName)
 		},
 	}
@@ -113,79 +117,58 @@ func cloneStarter(f *factory.Factory) {
 	}
 }
 
-// render templates
-func renderTemplates(templateContext TemplateContext, f *factory.Factory) error {
-	path, pathErr := os.Getwd()
-	if pathErr != nil {
-		f.Logger.Error(pathErr)
-		os.Exit(1)
+// replaceText replaces the default values in files with the user-specified values
+func replaceText(templateContext TemplateContext) error {
+	replacerList := []string{
+		"aerogear/charmil/starter", fmt.Sprintf("%s/%s", templateContext.Owner, templateContext.Repo),
+		"startercli", templateContext.CliName,
+	}
+
+	rep := strings.NewReplacer(replacerList...)
+
+	path, err := os.Getwd()
+	if err != nil {
+		return err
 	}
 
 	// rename cli name as given by user
-	oldPath := path + "/cmd/cli"
+	oldPath := path + "/cmd/startercli"
 	newPath := path + "/cmd/" + templateContext.CliName
 	if err := os.Rename(oldPath, newPath); err != nil {
 		return err
 	}
 
-	err := filepath.Walk(path,
+	err = filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
 
-			// ignore folders
-			ignoreSlice := []string{".git", ".github", ".chglog", ".goreleaser.yml", "CONTRIBUTING.md", "bin"}
-			pathSplit := strings.Split(path, string(os.PathSeparator))
-			intersected := intersection(pathSplit, ignoreSlice)
-			if len(intersected) > 0 {
+			// Skips directories
+			if info.IsDir() || info.Name() == "." {
 				return nil
 			}
 
-			fi, err := os.Stat(path)
+			// Stores contents of the current file
+			fileContents, err := ioutil.ReadFile(path)
 			if err != nil {
-				return fmt.Errorf("failed to read file info: %w", err)
+				return err
 			}
 
-			if fi.IsDir() {
-				return nil
-			}
+			// Replaces default values
+			updatedFileContents := rep.Replace(string(fileContents))
 
-			tmpl, tmplErr := template.ParseFiles(path)
-			if tmplErr != nil {
-				return fmt.Errorf("failed to parse template: %w", err)
-			}
-
-			f, PathErr := os.Create(path)
-			if PathErr != nil {
-				return fmt.Errorf("failed to create file: %w", err)
-			}
-
-			// apply templateContext to cloned repo
-			if err := tmpl.Execute(f, templateContext); err != nil {
-				return fmt.Errorf("failed to execute template: %w", err)
+			// Writes the updated contents to the current file
+			err = ioutil.WriteFile(path, []byte(updatedFileContents), 0644)
+			if err != nil {
+				return err
 			}
 
 			return nil
 		})
 	if err != nil {
-		return fmt.Errorf("failed to walk directory: %w", err)
+		return err
 	}
 
 	return nil
-}
-
-// find intersection between two slices
-func intersection(s1, s2 []string) (inter []string) {
-	hash := make(map[string]bool)
-	for _, e := range s1 {
-		hash[e] = true
-	}
-	for _, e := range s2 {
-		// If elements present in the hashmap then append intersection list.
-		if hash[e] {
-			inter = append(inter, e)
-		}
-	}
-	return
 }

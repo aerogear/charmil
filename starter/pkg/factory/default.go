@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/iostreams"
-	"github.com/aerogear/charmil/core/localize"
-	"github.com/aerogear/charmil/core/logging"
+	"github.com/aerogear/charmil/core/utils/iostreams"
+	"github.com/aerogear/charmil/core/utils/localize"
+	"github.com/aerogear/charmil/core/utils/logging"
 )
 
 // Default creates new instance of factory for plugins

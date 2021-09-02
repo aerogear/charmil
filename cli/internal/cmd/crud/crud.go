@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aerogear/charmil/cli/internal/common/generate"
-	"github.com/aerogear/charmil/cli/internal/common/modname"
+	"github.com/aerogear/charmil/cli/pkg/common/generate"
+	"github.com/aerogear/charmil/cli/pkg/common/modname"
 
 	"github.com/aerogear/charmil/cli/internal/template/crud"
 	"github.com/aerogear/charmil/cli/pkg/factory"
