@@ -134,7 +134,7 @@ func replaceText(templateContext TemplateContext) error {
 	// rename cli name as given by user
 	oldPath := path + "/cmd/startercli"
 	newPath := path + "/cmd/" + templateContext.CliName
-	if err := os.Rename(oldPath, newPath); err != nil {
+	if err = os.Rename(oldPath, newPath); err != nil {
 		return err
 	}
 
@@ -159,7 +159,7 @@ func replaceText(templateContext TemplateContext) error {
 			updatedFileContents := rep.Replace(string(fileContents))
 
 			// Writes the updated contents to the current file
-			err = ioutil.WriteFile(path, []byte(updatedFileContents), 0644)
+			err = ioutil.WriteFile(path, []byte(updatedFileContents), 0600)
 			if err != nil {
 				return err
 			}
