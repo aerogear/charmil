@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/localize"
+	"github.com/aerogear/charmil/core/utils/localize"
 	"github.com/aerogear/charmil/starter/internal/update"
 	"github.com/aerogear/charmil/starter/pkg/factory"
 	"github.com/spf13/cobra"

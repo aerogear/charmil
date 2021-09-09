@@ -2,9 +2,9 @@ package factory
 
 import (
 	"github.com/aerogear/charmil/core/config"
-	"github.com/aerogear/charmil/core/iostreams"
-	"github.com/aerogear/charmil/core/localize"
-	"github.com/aerogear/charmil/core/logging"
+	"github.com/aerogear/charmil/core/utils/iostreams"
+	"github.com/aerogear/charmil/core/utils/localize"
+	"github.com/aerogear/charmil/core/utils/logging"
 )
 
 // Factory is an abstract type which provides

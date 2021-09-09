@@ -2,21 +2,39 @@ package update
 
 import (
 	"context"
+	"log"
 	"runtime/debug"
+	"strings"
 
-	"github.com/aerogear/charmil/core/color"
-	"github.com/aerogear/charmil/core/localize"
-	"github.com/aerogear/charmil/core/logging"
+	"github.com/aerogear/charmil/cli/pkg/common/modname"
+	"github.com/aerogear/charmil/core/utils/color"
+	"github.com/aerogear/charmil/core/utils/localize"
+	"github.com/aerogear/charmil/core/utils/logging"
 	"github.com/google/go-github/github"
 )
 
 var (
+	modName string
 	Version = "dev"
-	Owner   = "aerogear"
-	Repo    = "charmil"
+	Owner   string
+	Repo    string
 )
 
 func init() {
+	// Extracts the module name from `go.mod` file and stores it
+	modName, err := modname.GetModuleName()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	splitModName := strings.Split(modName, "/")
+	if len(splitModName) < 3 {
+		log.Fatal("Invalid module name format")
+	}
+
+	Owner = splitModName[1]
+	Repo = splitModName[2]
+
 	if isDevBuild() {
 		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "(devel)" {
 			Version = info.Main.Version
