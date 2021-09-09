@@ -121,7 +121,8 @@ func cloneStarter(f *factory.Factory) {
 func replaceText(templateContext TemplateContext) error {
 	replacerList := []string{
 		"aerogear/charmil-starter", fmt.Sprintf("%s/%s", templateContext.Owner, templateContext.Repo),
-		"startercli", templateContext.CliName,
+		"placeholdercli", templateContext.CliName,
+		"[name of copyright owner]", templateContext.Owner,
 	}
 
 	rep := strings.NewReplacer(replacerList...)
@@ -132,7 +133,7 @@ func replaceText(templateContext TemplateContext) error {
 	}
 
 	// rename cli name as given by user
-	oldPath := path + "/cmd/startercli"
+	oldPath := path + "/cmd/placeholdercli"
 	newPath := path + "/cmd/" + templateContext.CliName
 	if err = os.Rename(oldPath, newPath); err != nil {
 		return err

@@ -12,7 +12,7 @@ BUILDFLAGS := -gcflags "all=-N -l" $(BUILDFLAGS)
 endif
 
 # The details of the application:
-binary:=startercli
+binary:=placeholdercli
 
 # Enable Go modules:
 export GO111MODULE=on
