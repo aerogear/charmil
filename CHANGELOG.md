@@ -1,4 +1,12 @@
 
+<a name="v0.8.3"></a>
+## [v0.8.3](https://github.com/aerogear/charmil/compare/v0.8.2...v0.8.3) (2021-09-09)
+
+### Features
+
+* modify init command to not use templates ([#243](https://github.com/aerogear/charmil/issues/243))
+
+
 <a name="v0.8.2"></a>
 ## [v0.8.2](https://github.com/aerogear/charmil/compare/v0.8.1...v0.8.2) (2021-08-11)
 
