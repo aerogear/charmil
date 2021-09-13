@@ -139,6 +139,12 @@ func replaceText(templateContext TemplateContext) error {
 		return err
 	}
 
+	// remove .git folder
+	err = os.RemoveAll(path + "/.git")
+	if err != nil {
+		return err
+	}
+
 	err = filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
